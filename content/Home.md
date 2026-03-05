@@ -3,17 +3,15 @@ cssclasses:
   - homepage
 ---
 
-欢迎来到我的主页。我是一名 Technical Artist。
+欢迎来到我的主页。我是一名热爱渲染的 Technical Artist。
 
 <div class="gallery-grid">
 
-[![NPR Rendering Research]()](Portfolio/NPR Rendering Research.md)
-
 [![GLF2 Rendering Reconstruction]()](Portfolio/Subjective Rendering Reconstruction Analysis in Girls' Frontline 2)
 
-[![作品三展示](Assets_UI/Cover3.png)](Portfolio/作品3的文件名)
+[![NPR Rendering Research]()](Portfolio/PBR + NPR Rendering Research.md)
 
-[![作品三展示]()](Portfolio/NPR Rendering Research.md)
+[![作品三展示](Assets_UI/Cover3.png)](Portfolio/作品3的文件名)
 
 </div>
 
