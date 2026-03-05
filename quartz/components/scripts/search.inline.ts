@@ -220,8 +220,44 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
     appendLayout(preview)
   }
 
+  const resetSearchViewport = () => {
+    container.style.removeProperty("--search-vv-left")
+    container.style.removeProperty("--search-vv-top")
+    container.style.removeProperty("--search-vv-width")
+    container.style.removeProperty("--search-vv-height")
+  }
+
+  const applySearchViewport = () => {
+    const vv = window.visualViewport
+    if (!vv) {
+      resetSearchViewport()
+      return
+    }
+
+    container.style.setProperty("--search-vv-left", `${Math.max(vv.offsetLeft, 0)}px`)
+    container.style.setProperty("--search-vv-top", `${Math.max(vv.offsetTop, 0)}px`)
+    container.style.setProperty("--search-vv-width", `${Math.max(vv.width, 0)}px`)
+    container.style.setProperty("--search-vv-height", `${Math.max(vv.height, 0)}px`)
+  }
+
+  let viewportSyncFrame = 0
+  const syncSearchViewport = () => {
+    if (!container.classList.contains("active")) return
+    if (viewportSyncFrame !== 0) return
+
+    viewportSyncFrame = window.requestAnimationFrame(() => {
+      viewportSyncFrame = 0
+      applySearchViewport()
+    })
+  }
+
   function hideSearch() {
+    if (viewportSyncFrame !== 0) {
+      window.cancelAnimationFrame(viewportSyncFrame)
+      viewportSyncFrame = 0
+    }
     container.classList.remove("active")
+    resetSearchViewport()
     searchBar.value = "" // clear the input when we dismiss the search
     if (sidebar) sidebar.style.zIndex = ""
     removeAllChildren(results)
@@ -237,7 +273,10 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
     searchType = searchTypeNew
     if (sidebar) sidebar.style.zIndex = "1"
     container.classList.add("active")
+    applySearchViewport()
+    syncSearchViewport()
     searchBar.focus()
+    window.requestAnimationFrame(syncSearchViewport)
   }
 
   let currentHover: HTMLInputElement | null = null
@@ -495,10 +534,24 @@ async function setupSearch(searchElement: Element, currentSlug: FullSlug, data: 
 
   document.addEventListener("keydown", shortcutHandler)
   window.addCleanup(() => document.removeEventListener("keydown", shortcutHandler))
-  searchButton.addEventListener("click", () => showSearch("basic"))
-  window.addCleanup(() => searchButton.removeEventListener("click", () => showSearch("basic")))
+  const onSearchButtonClick = () => showSearch("basic")
+  searchButton.addEventListener("click", onSearchButtonClick)
+  window.addCleanup(() => searchButton.removeEventListener("click", onSearchButtonClick))
   searchBar.addEventListener("input", onType)
   window.addCleanup(() => searchBar.removeEventListener("input", onType))
+
+  window.addEventListener("resize", syncSearchViewport)
+  window.addEventListener("orientationchange", syncSearchViewport)
+  window.addCleanup(() => window.removeEventListener("resize", syncSearchViewport))
+  window.addCleanup(() => window.removeEventListener("orientationchange", syncSearchViewport))
+
+  const visualViewport = window.visualViewport
+  if (visualViewport) {
+    visualViewport.addEventListener("resize", syncSearchViewport)
+    visualViewport.addEventListener("scroll", syncSearchViewport)
+    window.addCleanup(() => visualViewport.removeEventListener("resize", syncSearchViewport))
+    window.addCleanup(() => visualViewport.removeEventListener("scroll", syncSearchViewport))
+  }
 
   registerEscapeHandler(container, hideSearch)
   await fillDocument(data)
