@@ -20,6 +20,54 @@ type FolderState = {
 }
 
 let currentExplorerState: Array<FolderState>
+let explorerViewportSyncFrame = 0
+
+function resetExplorerViewport(explorer: HTMLElement) {
+  explorer.style.removeProperty("--explorer-vv-left")
+  explorer.style.removeProperty("--explorer-vv-top")
+  explorer.style.removeProperty("--explorer-vv-width")
+  explorer.style.removeProperty("--explorer-vv-height")
+}
+
+function applyExplorerViewport(explorer: HTMLElement) {
+  const vv = window.visualViewport
+  if (!vv) {
+    resetExplorerViewport(explorer)
+    return
+  }
+
+  explorer.style.setProperty("--explorer-vv-left", `${Math.max(vv.offsetLeft, 0)}px`)
+  explorer.style.setProperty("--explorer-vv-top", `${Math.max(vv.offsetTop, 0)}px`)
+  explorer.style.setProperty("--explorer-vv-width", `${Math.max(vv.width, 0)}px`)
+  explorer.style.setProperty("--explorer-vv-height", `${Math.max(vv.height, 0)}px`)
+}
+
+function syncExplorerViewport(explorer: HTMLElement) {
+  const mobileExplorer = explorer.querySelector(".mobile-explorer") as HTMLElement | null
+  if (!mobileExplorer?.checkVisibility()) {
+    resetExplorerViewport(explorer)
+    return
+  }
+
+  applyExplorerViewport(explorer)
+}
+
+function syncAllExplorerViewport() {
+  const allExplorers = document.querySelectorAll("div.explorer") as NodeListOf<HTMLElement>
+  for (const explorer of allExplorers) {
+    syncExplorerViewport(explorer)
+  }
+}
+
+function queueExplorerViewportSync() {
+  if (explorerViewportSyncFrame !== 0) return
+
+  explorerViewportSyncFrame = window.requestAnimationFrame(() => {
+    explorerViewportSyncFrame = 0
+    syncAllExplorerViewport()
+  })
+}
+
 function toggleExplorer(this: HTMLElement) {
   const nearestExplorer = this.closest(".explorer") as HTMLElement
   if (!nearestExplorer) return
@@ -32,8 +80,11 @@ function toggleExplorer(this: HTMLElement) {
   if (!explorerCollapsed) {
     // Stop <html> from being scrollable when mobile explorer is open
     document.documentElement.classList.add("mobile-no-scroll")
+    applyExplorerViewport(nearestExplorer)
+    queueExplorerViewportSync()
   } else {
     document.documentElement.classList.remove("mobile-no-scroll")
+    resetExplorerViewport(nearestExplorer)
   }
 }
 
@@ -274,9 +325,10 @@ document.addEventListener("nav", async (e: CustomEventMap["nav"]) => {
   await setupExplorer(currentSlug)
 
   // if mobile hamburger is visible, collapse by default
-  for (const explorer of document.getElementsByClassName("explorer")) {
+  for (const explorerElement of document.getElementsByClassName("explorer")) {
+    const explorer = explorerElement as HTMLElement
     const mobileExplorer = explorer.querySelector(".mobile-explorer")
-    if (!mobileExplorer) return
+    if (!mobileExplorer) continue
 
     if (mobileExplorer.checkVisibility()) {
       explorer.classList.add("collapsed")
@@ -287,18 +339,31 @@ document.addEventListener("nav", async (e: CustomEventMap["nav"]) => {
     }
 
     mobileExplorer.classList.remove("hide-until-loaded")
+    syncExplorerViewport(explorer)
   }
+
+  queueExplorerViewportSync()
 })
 
 window.addEventListener("resize", function () {
   // Desktop explorer opens by default, and it stays open when the window is resized
   // to mobile screen size. Applies `no-scroll` to <html> in this edge case.
-  const explorer = document.querySelector(".explorer")
+  const explorer = document.querySelector(".explorer") as HTMLElement | null
   if (explorer && !explorer.classList.contains("collapsed")) {
     document.documentElement.classList.add("mobile-no-scroll")
-    return
+  } else {
+    document.documentElement.classList.remove("mobile-no-scroll")
   }
+
+  queueExplorerViewportSync()
 })
+
+window.addEventListener("orientationchange", queueExplorerViewportSync)
+const visualViewport = window.visualViewport
+if (visualViewport) {
+  visualViewport.addEventListener("resize", queueExplorerViewportSync)
+  visualViewport.addEventListener("scroll", queueExplorerViewportSync)
+}
 
 function setFolderState(folderElement: HTMLElement, collapsed: boolean) {
   return collapsed ? folderElement.classList.remove("open") : folderElement.classList.add("open")

@@ -3,16 +3,18 @@
 // put your custom CSS here!
 
 /* ==========================================
-   配合 YAML 暗号隐藏首页自带标题
+   首页视觉净化：隐藏 index 标题与元信息
+   说明：cssclasses: [homepage] 作用在 article 上，
+        page-header 不在其子树中，因此用 slug 精确匹配首页
    ========================================== */
-.homepage .article-title,
-.homepage .content-meta {
+body[data-slug="index"] .center > .page-header .article-title,
+body[data-slug="index"] .center > .page-header .content-meta {
   display: none !important;
 }
 
-/* 隐藏首页的底部分页导航 */
-hr + .page-footer {
-  margin-top: 4rem;
+/* 隐藏首页底部分页导航 */
+body[data-slug="index"] .center > hr + .page-footer {
+  display: none !important;
 }
 
 /* ==========================================
@@ -54,7 +56,9 @@ hr + .page-footer {
   overflow: hidden;
   border-radius: 8px;
   background-color: #1e1e1e;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out;
   text-decoration: none;
 }
 
