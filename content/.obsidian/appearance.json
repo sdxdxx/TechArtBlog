@@ -10,13 +10,13 @@
     "auto-attribute-hide",
     "center-image",
     "editor-full",
-    "emphasis-colors",
     "real-link-style",
     "One Dark Pro",
     "One Dark Plus",
-    "math-block-white",
     "rainbow-folders",
-    "table-borders"
+    "table-borders",
+    "math-block-white",
+    "emphasis-colors"
   ],
   "cssTheme": "Composer",
   "showRibbon": true

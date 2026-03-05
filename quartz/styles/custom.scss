@@ -42,6 +42,102 @@ body[data-slug="Home"] .center > hr + .page-footer {
 }
 
 /* ==========================================
+   公式渲染优化：块级 LaTeX 固定白底黑字（不影响行内公式）
+   ========================================== */
+.center article .katex-display {
+  display: block !important;
+  background: #fff !important;
+  color: #000 !important;
+  padding: 0.6em 0.8em !important;
+  border-radius: 8px !important;
+  margin: 0.8em 0 !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.center article .katex-display .katex,
+.center article .katex-display .katex * {
+  color: #000 !important;
+  fill: #000 !important;
+  stroke: #000 !important;
+}
+
+/* ==========================================
+   Rainbow Headings + Emphasis Colors
+   ========================================== */
+:root {
+  --rainbow-h1: rgb(171, 180, 207);
+  --rainbow-h2: rgb(235, 203, 139);
+  --rainbow-h3: rgb(163, 190, 140);
+  --rainbow-h4: rgb(180, 142, 173);
+  --rainbow-h5: rgb(143, 188, 187);
+  --rainbow-h6: rgb(129, 161, 193);
+
+  --em-italic-color: #4cc496;
+  --em-bold-color: #e04c4c;
+  --em-bold-italic-color: #467bd2;
+  --em-underline-color: #e0be2e;
+}
+
+/* 彩虹标题：仅正文和弹窗预览内生效，避免影响侧栏/导航 */
+:is(.center article, .popover .popover-inner) h1 {
+  color: var(--rainbow-h1) !important;
+}
+
+:is(.center article, .popover .popover-inner) h2 {
+  color: var(--rainbow-h2) !important;
+}
+
+:is(.center article, .popover .popover-inner) h3 {
+  color: var(--rainbow-h3) !important;
+}
+
+:is(.center article, .popover .popover-inner) h4 {
+  color: var(--rainbow-h4) !important;
+}
+
+:is(.center article, .popover .popover-inner) h5 {
+  color: var(--rainbow-h5) !important;
+}
+
+:is(.center article, .popover .popover-inner) h6 {
+  color: var(--rainbow-h6) !important;
+}
+
+/* Quartz 会给标题锚点单独设色，这里强制继承标题颜色 */
+:is(.center article, .popover .popover-inner) :is(h1, h2, h3, h4, h5, h6) > a[role="anchor"] {
+  color: inherit !important;
+}
+
+/* 强调色：斜体 */
+:is(.center article, .popover .popover-inner) :is(em, i) {
+  color: var(--em-italic-color);
+}
+
+/* 强调色：粗体 */
+:is(.center article, .popover .popover-inner) :is(strong, b) {
+  color: var(--em-bold-color);
+}
+
+/* 强调色：粗斜体（嵌套组合） */
+:is(.center article, .popover .popover-inner) :is(strong, b) :is(em, i),
+:is(.center article, .popover .popover-inner) :is(em, i) :is(strong, b) {
+  color: var(--em-bold-italic-color);
+}
+
+/* 强调色：下划线线条和文字 */
+:is(.center article, .popover .popover-inner) :is(u, ins) {
+  text-decoration-color: var(--em-underline-color);
+  color: var(--em-underline-color);
+}
+
+/* Keep Link Color：强调文本中的链接保持主题链接色 */
+:is(.center article, .popover .popover-inner) :is(em, strong, u, ins) a {
+  color: var(--secondary) !important;
+}
+
+/* ==========================================
    ArtStation 风格画廊网格 (Homepage Gallery)
    ========================================== */
 .gallery-grid {

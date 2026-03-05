@@ -193,7 +193,7 @@ $$
 
 Result:
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305045219.gif|500]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305045219.gif|800]]
 
 ## Face Rendering
 
@@ -277,15 +277,21 @@ Eye highlight and eye shadow are layered using transparent materials.
 
 In Unity shaders, the transparency blending formula is:
 
-$$C_{final} = (C_{source} \times Factor_{source}) + (C_{destination} \times Factor_{destination})$$
+$$
+C_{final} = (C_{source} \times Factor_{source}) + (C_{destination} \times Factor_{destination})
+$$
 
 Eye Specular uses **Blend One One**, so:
 
-$$C_{final} = C_{source} + C_{destination}$$
+$$
+C_{final} = C_{source} + C_{destination}
+$$
 
 Eye Shadow uses **Blend DstColor Zero**, so:
 
-$$C_{final} = C_{source} \times C_{destination}$$
+$$
+C_{final} = C_{source} \times C_{destination}
+$$
 
 Result:
 
