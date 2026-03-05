@@ -53,7 +53,9 @@ Based on other Tech Artists’ research plus my own investigation, I believe the
 
 Combining the BRDF rendering equation with IBL, the analysis suggests using the Ramp Texture to “ramp” the shading term:
 
-$$L_o(\omega_o) = \int_{\Omega} \left( \frac{c_{diff}}{\pi} + \frac{DFG}{4 \cos\theta_i \cos\theta_o} \right) L_i(\omega_i) \cos\theta_i d\omega_i$$
+$$
+L_o(\omega_o) = \int_{\Omega} \left( \frac{c_{diff}}{\pi} + \frac{DFG}{4 \cos\theta_i \cos\theta_o} \right) L_i(\omega_i) \cos\theta_i d\omega_i
+$$
 
 ![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305045218-5.png|Ramp BRDF|800]]
 
@@ -353,7 +355,7 @@ The principle is the same as ShadowMap, but scoped to the target mesh’s boundi
 
 Because this is toon rendering, I personally don’t want the PCSS soft‑transition look, so I use **pre‑integrated Poisson disk + PCF filtering**.
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305045220.mp4]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305045220.mp4|800]]
 
 ![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305045220-2.png|Final|800]]
 
