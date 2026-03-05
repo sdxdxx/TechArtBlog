@@ -5,7 +5,7 @@ import HeaderConstructor from "../../components/Header"
 import BodyConstructor from "../../components/Body"
 import { pageResources, renderPage } from "../../components/renderPage"
 import { FullPageLayout } from "../../cfg"
-import { pathToRoot } from "../../util/path"
+import { FullSlug, pathToRoot, resolveRelative } from "../../util/path"
 import { defaultContentPageLayout, sharedPageComponents } from "../../../quartz.layout"
 import { Content } from "../../components"
 import { styleText } from "util"
@@ -14,6 +14,37 @@ import { BuildCtx } from "../../util/ctx"
 import { Node } from "unist"
 import { StaticResources } from "../../util/resources"
 import { QuartzPluginData } from "../vfile"
+
+const INDEX_SLUG = "index" as FullSlug
+
+function isRootHomeSlug(slug: string): boolean {
+  return slug.toLowerCase() === "home"
+}
+
+function findRootHomeSlug(allFiles: QuartzPluginData[]): FullSlug | null {
+  const homeFile = allFiles.find((file) => file.slug && isRootHomeSlug(file.slug))
+  return (homeFile?.slug as FullSlug | undefined) ?? null
+}
+
+async function writeRootIndexRedirect(ctx: BuildCtx, homeSlug: FullSlug) {
+  const redirectUrl = resolveRelative(INDEX_SLUG, homeSlug)
+  return write({
+    ctx,
+    slug: INDEX_SLUG,
+    ext: ".html",
+    content: `<!DOCTYPE html>
+<html lang="en-us">
+<head>
+<title>${homeSlug}</title>
+<link rel="canonical" href="${redirectUrl}">
+<meta name="robots" content="noindex">
+<meta charset="utf-8">
+<meta http-equiv="refresh" content="0; url=${redirectUrl}">
+</head>
+</html>
+`,
+  })
+}
 
 async function processContent(
   ctx: BuildCtx,
@@ -76,10 +107,11 @@ export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOp
     async *emit(ctx, content, resources) {
       const allFiles = content.map((c) => c[1].data)
       let containsIndex = false
+      const rootHomeSlug = findRootHomeSlug(allFiles)
 
       for (const [tree, file] of content) {
         const slug = file.data.slug!
-        if (slug === "index") {
+        if (slug === INDEX_SLUG) {
           containsIndex = true
         }
 
@@ -88,17 +120,21 @@ export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOp
         yield processContent(ctx, tree, file.data, allFiles, opts, resources)
       }
 
-      if (!containsIndex) {
+      if (!containsIndex && rootHomeSlug) {
+        yield writeRootIndexRedirect(ctx, rootHomeSlug)
+      } else if (!containsIndex) {
         console.log(
           styleText(
             "yellow",
-            `\nWarning: you seem to be missing an \`index.md\` home page file at the root of your \`${ctx.argv.directory}\` folder (\`${path.join(ctx.argv.directory, "index.md")} does not exist\`). This may cause errors when deploying.`,
+            `\nWarning: you seem to be missing a root home page file. Add \`index.md\` or \`Home.md\` under \`${ctx.argv.directory}\` (\`${path.join(ctx.argv.directory, "index.md")}\` / \`${path.join(ctx.argv.directory, "Home.md")}\`). This may cause errors when deploying.`,
           ),
         )
       }
     },
     async *partialEmit(ctx, content, resources, changeEvents) {
       const allFiles = content.map((c) => c[1].data)
+      const containsIndex = allFiles.some((file) => file.slug === INDEX_SLUG)
+      const rootHomeSlug = findRootHomeSlug(allFiles)
 
       // find all slugs that changed or were added
       const changedSlugs = new Set<string>()
@@ -115,6 +151,14 @@ export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOp
         if (slug.endsWith("/index") || slug.startsWith("tags/")) continue
 
         yield processContent(ctx, tree, file.data, allFiles, opts, resources)
+      }
+
+      if (
+        !containsIndex &&
+        rootHomeSlug &&
+        (changedSlugs.has(rootHomeSlug) || changedSlugs.has(INDEX_SLUG))
+      ) {
+        yield writeRootIndexRedirect(ctx, rootHomeSlug)
       }
     },
   }

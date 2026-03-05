@@ -120,7 +120,54 @@ function clearActivePopover() {
   allPopoverElements.forEach((popoverElement) => popoverElement.classList.remove("active-popover"))
 }
 
+function parseCardTitleFromSlug(link: HTMLAnchorElement): string {
+  const rawSlug = link.dataset.slug ?? link.getAttribute("href") ?? ""
+  const slugWithoutHash = rawSlug.split("#")[0]?.split("?")[0] ?? ""
+  const lastSegment = slugWithoutHash.split("/").filter(Boolean).at(-1) ?? ""
+
+  try {
+    return decodeURIComponent(lastSegment).replaceAll(/[-_]/g, " ").trim()
+  } catch {
+    return lastSegment.replaceAll(/[-_]/g, " ").trim()
+  }
+}
+
+function setupGalleryCards() {
+  const galleryLinks = [
+    ...document.querySelectorAll(".gallery-grid a.internal"),
+  ] as HTMLAnchorElement[]
+
+  for (const link of galleryLinks) {
+    // Gallery cards keep Quartz popovers, while also adding ArtStation-like title overlays.
+    link.removeAttribute("data-no-popover")
+
+    if (!link.dataset.cardTitle) {
+      const imageAlt = link.querySelector("img")?.getAttribute("alt")?.trim() ?? ""
+      const parsedTitle = parseCardTitleFromSlug(link)
+      link.dataset.cardTitle = imageAlt.length > 0 ? imageAlt : parsedTitle
+    }
+  }
+}
+
+function setupTextContentNoPopover() {
+  const articleLinks = [
+    ...document.querySelectorAll(".center article a.internal"),
+  ] as HTMLAnchorElement[]
+
+  for (const link of articleLinks) {
+    if (link.closest(".gallery-grid")) {
+      continue
+    }
+
+    // Disable popovers for in-article text links to reduce reading distractions.
+    link.dataset.noPopover = "true"
+  }
+}
+
 document.addEventListener("nav", () => {
+  setupGalleryCards()
+  setupTextContentNoPopover()
+
   const links = [...document.querySelectorAll("a.internal")] as HTMLAnchorElement[]
   for (const link of links) {
     link.addEventListener("mouseenter", mouseEnterHandler)

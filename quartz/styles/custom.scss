@@ -3,14 +3,19 @@
 // put your custom CSS here!
 
 /* ==========================================
-   首页视觉净化：保留 index 标题，仅隐藏元信息
+   首页视觉净化：保留 Home 标题，仅隐藏元信息
    ========================================== */
-body[data-slug="index"] .center > .page-header .content-meta {
+body[data-slug="Home"] .center > .page-header .content-meta {
+  display: none !important;
+}
+
+/* 首页不显示顶部 Home 面包屑 */
+body[data-slug="Home"] .center > .page-header .breadcrumb-container {
   display: none !important;
 }
 
 /* 隐藏首页底部分页导航 */
-body[data-slug="index"] .center > hr + .page-footer {
+body[data-slug="Home"] .center > hr + .page-footer {
   display: none !important;
 }
 
@@ -47,9 +52,15 @@ body[data-slug="index"] .center > hr + .page-footer {
   margin-bottom: 3rem;
 }
 
+/* Markdown 生成的 p 容器去掉默认外边距，避免卡片间距异常 */
+.gallery-grid > p {
+  margin: 0 !important;
+}
+
 /* 卡片容器样式 */
 .gallery-grid a {
   display: block;
+  position: relative;
   overflow: hidden;
   border-radius: 8px;
   background-color: #1e1e1e;
@@ -69,10 +80,61 @@ body[data-slug="index"] .center > hr + .page-footer {
   transition: opacity 0.2s ease-in-out;
 }
 
+/* 悬浮时显示底部渐变遮罩，提升标题可读性 */
+.gallery-grid a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(0, 0, 0, 0.35) 35%,
+    rgba(0, 0, 0, 0) 70%
+  );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+}
+
+/* ArtStation 风格：左下角显示作品标题（由脚本注入 data-card-title） */
+.gallery-grid a::after {
+  content: attr(data-card-title);
+  position: absolute;
+  left: 0.9rem;
+  right: 0.9rem;
+  bottom: 0.8rem;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.75);
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+  pointer-events: none;
+}
+
 /* 鼠标悬浮时的动态交互效果 (Hover Effect) */
 .gallery-grid a:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.gallery-grid a:hover::before,
+.gallery-grid a:hover::after,
+.gallery-grid a:focus-visible::before,
+.gallery-grid a:focus-visible::after {
+  opacity: 1;
+}
+
+.gallery-grid a:hover::after,
+.gallery-grid a:focus-visible::after {
+  transform: translateY(0);
 }
 
 .gallery-grid a:hover img {
