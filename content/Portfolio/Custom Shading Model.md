@@ -1,0 +1,1 @@
+![[Custom Shading Model 20260305050759.png|PBR+NPR|500]]

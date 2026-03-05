@@ -42,5 +42,29 @@ export async function fetchCanonical(url: URL): Promise<Response> {
   // to allow the caller to read it if it's was not a redirect
   const text = await res.clone().text()
   const [_, redirect] = text.match(canonicalRegex) ?? []
-  return redirect ? fetch(`${new URL(redirect, url)}`) : res
+  if (!redirect) {
+    return res
+  }
+
+  const canonicalUrl = new URL(redirect, url)
+  const isRedirectPage =
+    canonicalUrl.pathname !== url.pathname || canonicalUrl.search !== url.search
+
+  // Regular content pages also have canonical tags. Only follow canonical when
+  // this HTML is actually a redirect stub (e.g. alias redirect pages).
+  if (!isRedirectPage) {
+    return res
+  }
+
+  // When baseUrl and current host differ (custom domain), following canonical
+  // can become cross-origin and fail under browser CORS. Keep original response.
+  if (canonicalUrl.origin !== url.origin) {
+    return res
+  }
+
+  try {
+    return await fetch(`${canonicalUrl}`)
+  } catch {
+    return res
+  }
 }

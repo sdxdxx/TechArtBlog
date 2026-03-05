@@ -7,13 +7,13 @@ cssclasses:
 
 <div class="gallery-grid">
 
-[![作品一展示]()](Portfolio/CustomShadingModel)
+[![作品一展示]()](Portfolio/Custom Shading Model.md)
 
-[![作品二展示](Assets_UI/Cover2.png)](Portfolio/作品2的文件名)
+[![GLF2 Rendering Reconstruction]()](Portfolio/Subjective Rendering Reconstruction Analysis in Girls' Frontline 2)
 
 [![作品三展示](Assets_UI/Cover3.png)](Portfolio/作品3的文件名)
 
-[![作品三展示](CustomShadingModel 20260305041529.png)](Portfolio/CustomShadingModel)
+[![作品三展示]()](Portfolio/Custom Shading Model.md)
 
 </div>
 

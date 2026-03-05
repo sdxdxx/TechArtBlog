@@ -147,10 +147,10 @@ const videoExtensionRegex = new RegExp(/\.(mp4|webm|ogg|avi|mov|flv|wmv|mkv|mpg|
 const wikilinkImageEmbedRegex = new RegExp(
   /^(?<alt>(?!^\d*x?\d*$).*?)?(\|?\s*?(?<width>\d+)(x(?<height>\d+))?)?$/,
 )
-const markdownImageRegex = /!\[[^\]]*]\(([^)\n]+)\)/g
+const markdownParenDestRegex = /\]\(([^)\n]+)\)/g
 
-function normalizeSpacedMarkdownImageDest(src: string): string {
-  return src.replace(markdownImageRegex, (fullMatch, rawDest: string) => {
+function normalizeSpacedMarkdownParenDest(src: string): string {
+  return src.replace(markdownParenDestRegex, (fullMatch, rawDest: string) => {
     const dest = rawDest.trim()
 
     // Already wrapped in <> or has no spaces: keep original.
@@ -181,7 +181,7 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>>
   return {
     name: "ObsidianFlavoredMarkdown",
     textTransform(_ctx, src) {
-      src = normalizeSpacedMarkdownImageDest(src)
+      src = normalizeSpacedMarkdownParenDest(src)
 
       // do comments at text level
       if (opts.comments) {
