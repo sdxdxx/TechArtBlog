@@ -13,7 +13,7 @@ Welcome to my website. I am a Technical Artist specializing in rendering and sha
 
 [![Stylized Shading Model]()](Portfolio/Stylized Shading Model.md)
 
-[![3D Pixelization](Assets_UI/3DPixelizationCover.png)](Portfolio/3D Pixelization Rendering Pipeline.md)
+[![3D Pixelization](Assets_UI/3DPixelizationCover.png)](Portfolio/3D Pixelization.md)
 
 [![Comfy Houdini](Assets_UI/ComfyHoudiniCover.png)](Portfolio/Comfy Houdini.md)
 
@@ -22,5 +22,5 @@ Welcome to my website. I am a Technical Artist specializing in rendering and sha
 ---
 
 - [[About]]
-- [[Resume]]
 - [[Contact]]
+- [[Resume]]
