@@ -4,6 +4,7 @@ import { fetchCanonical } from "./util"
 
 const p = new DOMParser()
 let activeAnchor: HTMLAnchorElement | null = null
+const galleryCoverCache = new Map<string, string | null>()
 
 async function mouseEnterHandler(
   this: HTMLAnchorElement,
@@ -132,7 +133,86 @@ function parseCardTitleFromSlug(link: HTMLAnchorElement): string {
   }
 }
 
-function setupGalleryCards() {
+function isEmptyInlineCoverSrc(src: string): boolean {
+  const normalized = src.trim()
+  return normalized.length === 0 || normalized === "." || normalized === "./" || normalized === "#"
+}
+
+async function resolveGalleryCoverFromTarget(link: HTMLAnchorElement): Promise<string | null> {
+  const targetUrl = new URL(link.href)
+  targetUrl.hash = ""
+  targetUrl.search = ""
+  const cacheKey = targetUrl.toString()
+
+  if (galleryCoverCache.has(cacheKey)) {
+    return galleryCoverCache.get(cacheKey) ?? null
+  }
+
+  try {
+    const response = await fetchCanonical(targetUrl)
+    const [contentType] = response.headers.get("Content-Type")?.split(";") ?? [""]
+    if (!contentType.startsWith("text/html")) {
+      galleryCoverCache.set(cacheKey, null)
+      return null
+    }
+
+    const html = p.parseFromString(await response.text(), "text/html")
+    normalizeRelativeURLs(html, targetUrl)
+
+    const firstImage = html.querySelector(
+      ".center article img[src], article img[src]",
+    ) as HTMLImageElement | null
+    const firstImageSrc = firstImage?.getAttribute("src")?.trim() ?? ""
+    if (!firstImageSrc) {
+      galleryCoverCache.set(cacheKey, null)
+      return null
+    }
+
+    const resolvedSrc = new URL(firstImageSrc, targetUrl).toString()
+    galleryCoverCache.set(cacheKey, resolvedSrc)
+    return resolvedSrc
+  } catch (err) {
+    console.error(err)
+    galleryCoverCache.set(cacheKey, null)
+    return null
+  }
+}
+
+async function applyGalleryCover(link: HTMLAnchorElement) {
+  let img = link.querySelector("img")
+  const inlineSrc = img?.getAttribute("src")?.trim() ?? ""
+
+  // Keep manually configured cover image; if it 404s, retain Quartz default behavior.
+  if (!isEmptyInlineCoverSrc(inlineSrc)) {
+    link.classList.remove("gallery-card-placeholder")
+    link.querySelector(".gallery-cover-placeholder")?.remove()
+    return
+  }
+
+  const fallbackCover = await resolveGalleryCoverFromTarget(link)
+  if (fallbackCover) {
+    if (!img) {
+      img = document.createElement("img")
+      link.prepend(img)
+    }
+    img.setAttribute("src", fallbackCover)
+    link.classList.remove("gallery-card-placeholder")
+    link.querySelector(".gallery-cover-placeholder")?.remove()
+    return
+  }
+
+  // no inline cover and no target-page cover: render gray placeholder square
+  img?.remove()
+  if (!link.querySelector(".gallery-cover-placeholder")) {
+    const placeholder = document.createElement("span")
+    placeholder.className = "gallery-cover-placeholder"
+    placeholder.setAttribute("aria-hidden", "true")
+    link.prepend(placeholder)
+  }
+  link.classList.add("gallery-card-placeholder")
+}
+
+async function setupGalleryCards() {
   const galleryLinks = [
     ...document.querySelectorAll(".gallery-grid a.internal"),
   ] as HTMLAnchorElement[]
@@ -146,6 +226,8 @@ function setupGalleryCards() {
       const parsedTitle = parseCardTitleFromSlug(link)
       link.dataset.cardTitle = imageAlt.length > 0 ? imageAlt : parsedTitle
     }
+
+    await applyGalleryCover(link)
   }
 }
 
@@ -165,7 +247,7 @@ function setupTextContentNoPopover() {
 }
 
 document.addEventListener("nav", () => {
-  setupGalleryCards()
+  void setupGalleryCards()
   setupTextContentNoPopover()
 
   const links = [...document.querySelectorAll("a.internal")] as HTMLAnchorElement[]

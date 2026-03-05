@@ -147,6 +147,28 @@ const videoExtensionRegex = new RegExp(/\.(mp4|webm|ogg|avi|mov|flv|wmv|mkv|mpg|
 const wikilinkImageEmbedRegex = new RegExp(
   /^(?<alt>(?!^\d*x?\d*$).*?)?(\|?\s*?(?<width>\d+)(x(?<height>\d+))?)?$/,
 )
+const markdownImageRegex = /!\[[^\]]*]\(([^)\n]+)\)/g
+
+function normalizeSpacedMarkdownImageDest(src: string): string {
+  return src.replace(markdownImageRegex, (fullMatch, rawDest: string) => {
+    const dest = rawDest.trim()
+
+    // Already wrapped in <> or has no spaces: keep original.
+    if ((dest.startsWith("<") && dest.endsWith(">")) || !dest.includes(" ")) {
+      return fullMatch
+    }
+
+    // Markdown also supports optional titles:
+    // ![alt](image.png "title"), ![alt](image.png 'title'), ![alt](image.png (title))
+    // If title syntax is present, do not rewrite.
+    const hasTitle = /\s+("[^"]*"|'[^']*'|\([^)]+\))\s*$/.test(dest)
+    if (hasTitle) {
+      return fullMatch
+    }
+
+    return fullMatch.replace(rawDest, `<${dest}>`)
+  })
+}
 
 export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>> = (userOpts) => {
   const opts = { ...defaultOptions, ...userOpts }
@@ -159,6 +181,8 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>>
   return {
     name: "ObsidianFlavoredMarkdown",
     textTransform(_ctx, src) {
+      src = normalizeSpacedMarkdownImageDest(src)
+
       // do comments at text level
       if (opts.comments) {
         src = src.replace(commentRegex, "")
