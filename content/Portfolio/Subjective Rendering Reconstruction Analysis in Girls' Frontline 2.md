@@ -346,11 +346,11 @@ I stored this outline width weight in the **A channel** of vertex color.
 
 ![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062208-5.png|Outline|800]]
 
-## PerObject Shadow
+## Per Object Shadow
 
 ![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062208-6.png|PerObject Shadow|800]]
 
-PerObjectShadow is a “character‑dedicated shadow” feature I built in Unity to obtain higher‑quality character shadows. The scene still uses Unity’s built‑in cascaded shadows, but for key characters I allocate an extra, higher‑resolution and more stable local shadow map dedicated to the character. This improves shadow edge clarity, detail reliability, and close‑up quality—without pushing the entire scene’s shadow cost to the maximum.
+**Per Object Shadow** is a “character‑dedicated shadow” feature I built in Unity to obtain higher‑quality character shadows. The scene still uses Unity’s built‑in cascaded shadows, but for key characters I allocate an extra, higher‑resolution and more stable local shadow map dedicated to the character. This improves shadow edge clarity, detail reliability, and close‑up quality—without pushing the entire scene’s shadow cost to the maximum.
 
 The principle is the same as ShadowMap, but scoped to the target mesh’s bounding box to render an extra shadow map (as shown by the additional virtual light camera projection matrix). The biggest advantage is that the main character always gets a high‑resolution shadow map, and it effectively breaks through Unity’s built‑in cascaded shadow resolution limit (4096) in terms of per‑character shadow precision.
 

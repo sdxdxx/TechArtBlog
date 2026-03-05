@@ -17,6 +17,10 @@ const defaultOptions: Options = {
   layout: "modern",
 }
 
+function toSingleLineTitle(text: string): string {
+  return text.replace(/\s+/g, " ").trim()
+}
+
 let numTocs = 0
 export default ((opts?: Partial<Options>) => {
   const layout = opts?.layout ?? defaultOptions.layout
@@ -61,7 +65,12 @@ export default ((opts?: Partial<Options>) => {
         >
           {fileData.toc.map((tocEntry) => (
             <li key={tocEntry.slug} class={`depth-${tocEntry.depth}`}>
-              <a href={`#${tocEntry.slug}`} data-for={tocEntry.slug}>
+              <a
+                href={`#${tocEntry.slug}`}
+                data-for={tocEntry.slug}
+                class="toc-title-ellipsis"
+                title={toSingleLineTitle(tocEntry.text)}
+              >
                 {tocEntry.text}
               </a>
             </li>
@@ -86,7 +95,12 @@ export default ((opts?: Partial<Options>) => {
         <ul>
           {fileData.toc.map((tocEntry) => (
             <li key={tocEntry.slug} class={`depth-${tocEntry.depth}`}>
-              <a href={`#${tocEntry.slug}`} data-for={tocEntry.slug}>
+              <a
+                href={`#${tocEntry.slug}`}
+                data-for={tocEntry.slug}
+                class="toc-title-ellipsis"
+                title={toSingleLineTitle(tocEntry.text)}
+              >
                 {tocEntry.text}
               </a>
             </li>

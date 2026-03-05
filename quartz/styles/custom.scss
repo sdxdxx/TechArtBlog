@@ -1,49 +1,84 @@
-﻿@use "./base.scss";
+@use "./base.scss";
 
-// put your custom CSS here!
+/* =========================================================
+   0. Variables / Tokens
+   ========================================================= */
+:root {
+  /* About / Contact / Resume UI tokens */
+  --as-radius-lg: 14px;
+  --as-radius-md: 10px;
+  --as-radius-sm: 8px;
+  --as-card-bg: color-mix(in srgb, var(--light) 92%, var(--secondary) 8%);
+  --as-card-border: color-mix(in srgb, var(--lightgray) 74%, var(--secondary) 26%);
+  --as-shadow-soft: 0 12px 28px rgba(0, 0, 0, 0.12);
+  --as-shadow-hover: 0 14px 30px rgba(0, 0, 0, 0.18);
 
-/* ==========================================
-   首页视觉净化：保留 Home 标题，仅隐藏元信息
-   ========================================== */
+  /* Rainbow headings + emphasis colors */
+  --rainbow-h1: rgb(171, 180, 207);
+  --rainbow-h2: rgb(235, 203, 139);
+  --rainbow-h3: rgb(163, 190, 140);
+  --rainbow-h4: rgb(180, 142, 173);
+  --rainbow-h5: rgb(143, 188, 187);
+  --rainbow-h6: rgb(129, 161, 193);
+
+  --heading-h1-size: 1.69em;
+  --heading-h2-size: 1.51em;
+  --heading-h3-size: 1.35em;
+  --heading-h4-size: 1.21em;
+  --heading-h5-size: 1.1em;
+  --heading-h6-size: 1em;
+
+  --em-italic-color: #4cc496;
+  --em-bold-color: #e04c4c;
+  --em-bold-italic-color: #467bd2;
+  --em-underline-color: #e0be2e;
+}
+
+/* =========================================================
+   1. Layout Helpers
+   ========================================================= */
+/* Home page cleanup: hide meta, breadcrumb, and footer pagination */
 body[data-slug="Home"] .center > .page-header .content-meta {
   display: none !important;
 }
 
-/* 首页不显示顶部 Home 面包屑 */
 body[data-slug="Home"] .center > .page-header .breadcrumb-container {
   display: none !important;
 }
 
-/* 隐藏首页底部分页导航 */
 body[data-slug="Home"] .center > hr + .page-footer {
   display: none !important;
 }
 
-/* ==========================================
-   左上角 Logo 与副标题优化 (Branding)
-   ========================================== */
+/* Brand title block (top-left) */
 .page-title {
-  font-size: 2rem !important; /* 把名字放大，像个真正的 Logo */
-  font-weight: 900 !important; /* 字体加粗 */
-  letter-spacing: 1px; /* 稍微增加字间距 */
+  font-size: 2rem !important;
+  font-weight: 900 !important;
+  letter-spacing: 1px;
   line-height: 1.1;
-  margin-bottom: 2rem; /* 和下方的目录拉开呼吸感 */
+  margin-bottom: 2rem;
 }
 
-/* 用伪元素自动在名字下方生成职位头衔 */
 .page-title a::after {
-  content: "Technical Artist"; /* 你的专属职位 */
-  display: block; /* 强制换行到名字正下方 */
-  font-size: 1rem; /* 字号改小 */
-  font-weight: 500; /* 字体变细 */
-  color: var(--gray); /* 使用主题自带的高级灰 */
+  content: "Technical Artist";
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--gray);
   letter-spacing: 0.5px;
-  margin-top: 0.3rem; /* 和名字拉开一点点距离 */
+  margin-top: 0.3rem;
 }
 
-/* ==========================================
-   公式渲染优化：块级 LaTeX 固定白底黑字（不影响行内公式）
-   ========================================== */
+/* Layout helper classes */
+.as-stack > * + * {
+  margin-top: 0.9rem;
+}
+
+.as-muted {
+  color: var(--gray);
+}
+
+/* Math rendering: block LaTeX with white background and black text */
 .center article .katex-display {
   display: block !important;
   background: #fff !important;
@@ -63,32 +98,7 @@ body[data-slug="Home"] .center > hr + .page-footer {
   stroke: #000 !important;
 }
 
-/* ==========================================
-   Rainbow Headings + Emphasis Colors
-   ========================================== */
-:root {
-  --rainbow-h1: rgb(171, 180, 207);
-  --rainbow-h2: rgb(235, 203, 139);
-  --rainbow-h3: rgb(163, 190, 140);
-  --rainbow-h4: rgb(180, 142, 173);
-  --rainbow-h5: rgb(143, 188, 187);
-  --rainbow-h6: rgb(129, 161, 193);
-
-  /* 标题字号（H1-H6）：对齐你 Obsidian 的配置 */
-  --heading-h1-size: 1.69em;
-  --heading-h2-size: 1.51em;
-  --heading-h3-size: 1.35em;
-  --heading-h4-size: 1.21em;
-  --heading-h5-size: 1.1em;
-  --heading-h6-size: 1em;
-
-  --em-italic-color: #4cc496;
-  --em-bold-color: #e04c4c;
-  --em-bold-italic-color: #467bd2;
-  --em-underline-color: #e0be2e;
-}
-
-/* 标题字号：仅作用于正文和弹窗预览，不影响页面主标题 */
+/* Heading font sizes: article + popover only (exclude sidebars) */
 :is(.center article, .popover .popover-inner) h1 {
   font-size: var(--heading-h1-size) !important;
 }
@@ -113,7 +123,7 @@ body[data-slug="Home"] .center > hr + .page-footer {
   font-size: var(--heading-h6-size) !important;
 }
 
-/* 彩虹标题：仅正文和弹窗预览内生效，避免影响侧栏/导航 */
+/* Rainbow heading colors: article + popover only */
 :is(.center article, .popover .popover-inner) h1 {
   color: var(--rainbow-h1) !important;
 }
@@ -138,41 +148,34 @@ body[data-slug="Home"] .center > hr + .page-footer {
   color: var(--rainbow-h6) !important;
 }
 
-/* Quartz 会给标题锚点单独设色，这里强制继承标题颜色 */
 :is(.center article, .popover .popover-inner) :is(h1, h2, h3, h4, h5, h6) > a[role="anchor"] {
   color: inherit !important;
 }
 
-/* 强调色：斜体 */
+/* Emphasis colors */
 :is(.center article, .popover .popover-inner) :is(em, i) {
   color: var(--em-italic-color);
 }
 
-/* 强调色：粗体 */
 :is(.center article, .popover .popover-inner) :is(strong, b) {
   color: var(--em-bold-color);
 }
 
-/* 强调色：粗斜体（嵌套组合） */
 :is(.center article, .popover .popover-inner) :is(strong, b) :is(em, i),
 :is(.center article, .popover .popover-inner) :is(em, i) :is(strong, b) {
   color: var(--em-bold-italic-color);
 }
 
-/* 强调色：下划线线条和文字 */
 :is(.center article, .popover .popover-inner) :is(u, ins) {
   text-decoration-color: var(--em-underline-color);
   color: var(--em-underline-color);
 }
 
-/* Keep Link Color：强调文本中的链接保持主题链接色 */
 :is(.center article, .popover .popover-inner) :is(em, strong, u, ins) a {
   color: var(--secondary) !important;
 }
 
-/* ==========================================
-   ArtStation 风格画廊网格 (Homepage Gallery)
-   ========================================== */
+/* Home gallery grid */
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -181,12 +184,10 @@ body[data-slug="Home"] .center > hr + .page-footer {
   margin-bottom: 3rem;
 }
 
-/* Markdown 生成的 p 容器去掉默认外边距，避免卡片间距异常 */
 .gallery-grid > p {
   margin: 0 !important;
 }
 
-/* 卡片容器样式 */
 .gallery-grid a {
   display: block;
   position: relative;
@@ -199,7 +200,6 @@ body[data-slug="Home"] .center > hr + .page-footer {
   text-decoration: none;
 }
 
-/* 封面图片样式 */
 .gallery-grid img {
   width: 100%;
   aspect-ratio: 1 / 1;
@@ -209,7 +209,6 @@ body[data-slug="Home"] .center > hr + .page-footer {
   transition: opacity 0.2s ease-in-out;
 }
 
-/* 无手动封面且目标笔记无图片时，显示固定灰色占位块 */
 .gallery-grid .gallery-cover-placeholder {
   display: block;
   width: 100%;
@@ -217,7 +216,6 @@ body[data-slug="Home"] .center > hr + .page-footer {
   background: rgba(21.8%, 21.8%, 21.8%, 1);
 }
 
-/* 悬浮时显示底部渐变遮罩，提升标题可读性 */
 .gallery-grid a::before {
   content: "";
   position: absolute;
@@ -233,7 +231,6 @@ body[data-slug="Home"] .center > hr + .page-footer {
   pointer-events: none;
 }
 
-/* ArtStation 风格：左下角显示作品标题（由脚本注入 data-card-title） */
 .gallery-grid a::after {
   content: attr(data-card-title);
   position: absolute;
@@ -256,7 +253,6 @@ body[data-slug="Home"] .center > hr + .page-footer {
   pointer-events: none;
 }
 
-/* 鼠标悬浮时的动态交互效果 (Hover Effect) */
 .gallery-grid a:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
@@ -278,16 +274,12 @@ body[data-slug="Home"] .center > hr + .page-footer {
   opacity: 0.85;
 }
 
-/* ==========================================
-   桌面端布局微调：左栏 + 正文 + 右侧 TOC 常驻
-   ========================================== */
+/* Desktop layout: left sidebar + center content + right TOC */
 @media screen and (min-width: 1200px) {
-  /* 提升整体可用宽度，给正文更多空间 */
   .page {
     max-width: 1700px !important;
   }
 
-  /* 三列布局：左栏常驻 + 正文 + 右侧 TOC 常驻 */
   .page > #quartz-body {
     grid-template-columns: 300px minmax(0, 1fr) 280px !important;
     grid-template-rows: auto auto auto !important;
@@ -297,13 +289,11 @@ body[data-slug="Home"] .center > hr + .page-footer {
       "grid-sidebar-left grid-footer grid-sidebar-right" !important;
   }
 
-  /* 让左侧栏整体更靠左 */
   .page > #quartz-body .sidebar.left {
     padding-left: 0.75rem !important;
     padding-right: 1rem !important;
   }
 
-  /* 让正文区域吃满剩余空间 */
   .page > #quartz-body .center,
   .page > #quartz-body .center > article {
     width: 100% !important;
@@ -311,7 +301,6 @@ body[data-slug="Home"] .center > hr + .page-footer {
     min-width: 0 !important;
   }
 
-  /* 右侧 TOC 在桌面端常驻显示，便于快速跳转 */
   .page > #quartz-body .sidebar.right {
     padding-left: 1rem !important;
     padding-right: 0.75rem !important;
@@ -321,7 +310,7 @@ body[data-slug="Home"] .center > hr + .page-footer {
     display: flex !important;
   }
 
-  /* 主页例外：不显示右侧 TOC，内容区占满右侧空间 */
+  /* Hide right TOC sidebar on Home page */
   body[data-slug="Home"] .page > #quartz-body {
     grid-template-columns: 300px minmax(0, 1fr) !important;
     grid-template-rows: auto auto auto !important;
@@ -336,11 +325,349 @@ body[data-slug="Home"] .center > hr + .page-footer {
   }
 }
 
-/* ==========================================
-   移动端交互修正：顶栏对齐 + 防遮挡
-   ========================================== */
+/* =========================================================
+   2. Components: Buttons
+   ========================================================= */
+.as-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border-radius: var(--as-radius-sm);
+  border: 1px solid var(--secondary);
+  background: var(--secondary);
+  color: var(--light) !important;
+  text-decoration: none !important;
+  font-weight: 700;
+  line-height: 1;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
+}
+
+.as-btn:hover,
+.as-btn:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
+  color: var(--light) !important;
+}
+
+.as-btn--ghost {
+  background: transparent;
+  color: var(--secondary) !important;
+}
+
+.as-btn--ghost:hover,
+.as-btn--ghost:focus-visible {
+  background: var(--highlight);
+  color: var(--tertiary) !important;
+}
+
+/* =========================================================
+   3. Components: Cards / Chips
+   ========================================================= */
+.as-card {
+  background: var(--as-card-bg);
+  border: 1px solid var(--as-card-border);
+  border-radius: var(--as-radius-lg);
+  box-shadow: var(--as-shadow-soft);
+  padding: 1.2rem 1.3rem;
+}
+
+.as-card h2,
+.as-card h3,
+.as-card h4 {
+  margin-top: 0;
+}
+
+.as-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0.7rem 0 0;
+}
+
+.as-tag {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid var(--as-card-border);
+  border-radius: 999px;
+  padding: 0.28rem 0.68rem;
+  font-size: 0.86rem;
+  color: var(--darkgray);
+  background: color-mix(in srgb, var(--highlight) 55%, var(--light) 45%);
+}
+
+/* =========================================================
+   4. Pages: About (Hero, Facts)
+   ========================================================= */
+.as-about .as-hero {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 1.25rem;
+  align-items: center;
+}
+
+.as-about .as-avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--light);
+  background: linear-gradient(135deg, var(--secondary), var(--tertiary));
+}
+
+.as-about .as-name {
+  font-size: clamp(1.55rem, 2.3vw, 2rem);
+  font-weight: 800;
+  line-height: 1.12;
+  color: var(--dark);
+}
+
+.as-about .as-role {
+  margin-top: 0.3rem;
+  font-size: 1rem;
+  color: var(--secondary);
+  font-weight: 600;
+}
+
+.as-about .as-blurb {
+  margin-top: 0.72rem;
+  margin-bottom: 0;
+  line-height: 1.68;
+  color: var(--darkgray);
+}
+
+.as-about .as-cta {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.as-about .as-facts {
+  margin-top: 1rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.as-about .as-factRow {
+  border: 1px solid var(--as-card-border);
+  border-radius: var(--as-radius-md);
+  background: color-mix(in srgb, var(--light) 86%, var(--highlight) 14%);
+  padding: 0.75rem 0.85rem;
+  display: grid;
+  gap: 0.24rem;
+}
+
+.as-about .as-factKey {
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--gray);
+  font-weight: 700;
+}
+
+.as-about .as-factVal {
+  color: var(--darkgray);
+  font-weight: 600;
+}
+
+.as-about .as-socials {
+  margin-top: 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.as-about .as-socialLink {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none !important;
+  border: 1px solid var(--as-card-border);
+  border-radius: var(--as-radius-sm);
+  padding: 0.4rem 0.75rem;
+  font-weight: 700;
+  color: var(--secondary);
+  background: color-mix(in srgb, var(--highlight) 50%, var(--light) 50%);
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    color 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.as-about .as-socialLink:hover,
+.as-about .as-socialLink:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: var(--as-shadow-hover);
+  color: var(--tertiary);
+  border-color: color-mix(in srgb, var(--secondary) 45%, var(--lightgray) 55%);
+}
+
+/* =========================================================
+   5. Pages: Contact (Cards grid)
+   ========================================================= */
+.as-contact .as-contactIntro {
+  margin-bottom: 1rem;
+}
+
+.as-contact .as-contactIntro h2 {
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+}
+
+.as-contact .as-contactResponse {
+  margin-top: 0.45rem;
+  color: var(--gray);
+  font-size: 0.95rem;
+}
+
+.as-contact .as-contactGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.as-contact .as-contactCard {
+  display: grid;
+  gap: 0.2rem;
+  border: 1px solid var(--as-card-border);
+  border-radius: var(--as-radius-md);
+  background: color-mix(in srgb, var(--light) 90%, var(--highlight) 10%);
+  padding: 0.85rem 0.95rem;
+  text-decoration: none !important;
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.as-contact .as-contactCard:hover,
+.as-contact .as-contactCard:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: var(--as-shadow-hover);
+  border-color: color-mix(in srgb, var(--secondary) 45%, var(--lightgray) 55%);
+}
+
+.as-contact .as-contactLabel {
+  font-size: 0.82rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--gray);
+  font-weight: 700;
+}
+
+.as-contact .as-contactValue {
+  color: var(--secondary);
+  font-weight: 700;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+/* =========================================================
+   6. Pages: Resume (Typography / Sections)
+   ========================================================= */
+.as-resume .as-resumeHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.as-resume .as-resumeIdentity .as-name {
+  font-size: clamp(1.5rem, 2.1vw, 1.95rem);
+  font-weight: 800;
+  line-height: 1.12;
+  color: var(--dark);
+}
+
+.as-resume .as-resumeIdentity .as-role {
+  margin-top: 0.26rem;
+  color: var(--secondary);
+  font-weight: 700;
+}
+
+.as-resume .as-resumeSummary {
+  margin: 0.75rem 0 0;
+  line-height: 1.64;
+}
+
+.as-resume .as-resumeMeta {
+  display: grid;
+  gap: 0.42rem;
+  align-content: start;
+  font-size: 0.95rem;
+}
+
+.as-resume .as-resumeMeta a {
+  color: var(--secondary);
+  text-decoration: none;
+}
+
+.as-resume .as-resumeMeta a:hover,
+.as-resume .as-resumeMeta a:focus-visible {
+  color: var(--tertiary);
+  text-decoration: underline;
+}
+
+.as-resume h2 {
+  margin-top: 1.7rem;
+  margin-bottom: 0.55rem;
+}
+
+.as-resume h3 {
+  margin-top: 1.2rem;
+  margin-bottom: 0.45rem;
+}
+
+.as-resume ul,
+.as-resume ol {
+  margin-top: 0.35rem;
+}
+
+/* =========================================================
+   7. Responsive (Mobile)
+   ========================================================= */
+@media screen and (max-width: 700px) {
+  .as-about .as-hero {
+    grid-template-columns: 1fr;
+    justify-items: start;
+  }
+
+  .as-about .as-avatar {
+    width: 82px;
+    height: 82px;
+    font-size: 1.35rem;
+  }
+
+  .as-about .as-facts {
+    grid-template-columns: 1fr;
+  }
+
+  .as-about .as-socials {
+    justify-content: flex-start;
+  }
+
+  .as-contact .as-contactGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .as-resume .as-resumeHeader {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Existing mobile top-bar interaction fixes (kept as-is) */
 @media screen and (max-width: 800px) {
-  /* 移动端保持品牌标题与头衔可见 */
   .page-title {
     font-size: clamp(1.55rem, 7vw, 1.95rem) !important;
     line-height: 1.1 !important;
@@ -352,14 +679,12 @@ body[data-slug="Home"] .center > hr + .page-footer {
     white-space: nowrap !important;
   }
 
-  /* 恢复副标题显示 */
   .page-title a::after {
     display: block !important;
     font-size: 1rem !important;
     margin-top: 0.2rem !important;
   }
 
-  /* 统一移动端顶栏垂直居中 */
   .page > #quartz-body .sidebar.left {
     align-items: center !important;
     gap: 0.5rem !important;
@@ -369,7 +694,6 @@ body[data-slug="Home"] .center > hr + .page-footer {
     padding-right: 1rem !important;
   }
 
-  /* 修正三条线按钮位置 */
   .page > #quartz-body .sidebar.left .explorer {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
@@ -394,30 +718,25 @@ body[data-slug="Home"] .center > hr + .page-footer {
     margin-left: -20px !important;
   }
 
-  /* 移动端去掉占位空白，避免标题和功能按钮之间出现“断层” */
   .page > #quartz-body .sidebar.left .spacer.mobile-only {
     display: none !important;
   }
 
-  /* 让功能按钮组靠右，但保持更舒展的间距 */
   .page > #quartz-body .sidebar.left > .flex-component {
     margin-left: auto !important;
     gap: 0.5rem !important;
     align-items: center !important;
   }
 
-  /* 清理内联 flex-grow，防止搜索区域被拉成一段空白 */
   .page > #quartz-body .sidebar.left > .flex-component > div {
     flex: 0 0 auto !important;
   }
 
-  /* 搜索和阅读模式都保留，维持与桌面端一致的交互逻辑 */
   .page > #quartz-body .sidebar.left > .flex-component .readermode,
   .page > #quartz-body .sidebar.left > .flex-component .search {
     display: block !important;
   }
 
-  /* 恢复小型搜索框，兼顾可见性和顶部空间 */
   .page > #quartz-body .sidebar.left > .flex-component .search {
     min-width: 6rem !important;
     max-width: 6rem !important;
@@ -449,7 +768,6 @@ body[data-slug="Home"] .center > hr + .page-footer {
     min-width: 14px !important;
   }
 
-  /* 还原暗色/阅读按钮为无边框图标态，避免“方框感” */
   .page > #quartz-body .sidebar.left > .flex-component .darkmode,
   .page > #quartz-body .sidebar.left > .flex-component .readermode {
     width: 2.1rem !important;

@@ -1,4 +1,4 @@
-const observer = new IntersectionObserver((entries) => {
+﻿const observer = new IntersectionObserver((entries) => {
   for (const entry of entries) {
     const slug = entry.target.id
     const tocEntryElements = document.querySelectorAll(`a[data-for="${slug}"]`)
@@ -28,13 +28,13 @@ function handleTocHeaderClick(this: HTMLElement, e: Event) {
   const target = e.target as HTMLElement | null
   if (!target) return
 
-  // Keep original collapse animation: only fold icon click toggles TOC.
+  // 仅点击折叠箭头时执行收缩逻辑，保持原有动画行为。
   if (target.closest(".fold")) {
     toggleToc.call(this)
     return
   }
 
-  // Clicking title text (or any non-fold area) scrolls to page top.
+  // 点击标题文本（或按钮内其他区域）时回到页面顶部。
   e.preventDefault()
   window.scrollTo({ top: 0, behavior: "smooth" })
 }

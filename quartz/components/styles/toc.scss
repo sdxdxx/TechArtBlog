@@ -47,14 +47,33 @@ ul.toc-content.overflow {
   overscroll-behavior: contain;
   list-style: none;
 
+  & > li {
+    min-width: 0;
+  }
+
   & > li > a {
     color: var(--dark);
     opacity: 0.35;
+    display: block;
+    min-width: 0;
+    max-width: 100%;
+    white-space: nowrap !important;
+    text-wrap: nowrap;
+    overflow-wrap: normal !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    font-size: 0.95rem;
     transition:
       0.5s ease opacity,
-      0.3s ease color;
+      0.3s ease color,
+      0.16s ease font-size;
     &.in-view {
       opacity: 0.75;
+    }
+    &:hover,
+    &:focus-visible {
+      color: var(--tertiary);
+      font-size: 0.98rem;
     }
   }
 

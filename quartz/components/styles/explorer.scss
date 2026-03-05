@@ -130,11 +130,32 @@ button.desktop-explorer {
       color: var(--dark);
       opacity: 0.75;
       pointer-events: all;
+      display: block;
+      min-width: 0;
+      border-radius: 0.4rem;
+      font-size: 0.95rem;
+      line-height: 1.5rem;
+      transition:
+        color 160ms ease,
+        font-size 160ms ease;
 
       &.active {
         opacity: 1;
         color: var(--tertiary);
       }
+    }
+
+    & .explorer-title-ellipsis {
+      max-width: 100%;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+
+    & li > a.explorer-title-ellipsis:hover,
+    & li > a.explorer-title-ellipsis:focus-visible {
+      color: var(--tertiary);
+      font-size: 0.98rem;
     }
   }
 
@@ -166,17 +187,27 @@ button.desktop-explorer {
   align-items: center;
   user-select: none;
 
+  & > div {
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
   & div > a {
     color: var(--secondary);
     font-family: var(--headerFont);
     font-size: 0.95rem;
     font-weight: $semiBoldWeight;
     line-height: 1.5rem;
-    display: inline-block;
+    display: block;
+    border-radius: 0.4rem;
+    transition:
+      color 160ms ease,
+      font-size 160ms ease;
   }
 
   & div > a:hover {
     color: var(--tertiary);
+    font-size: 0.98rem;
   }
 
   & div > button {
@@ -190,16 +221,31 @@ button.desktop-explorer {
     display: flex;
     align-items: center;
     font-family: var(--headerFont);
+    width: 100%;
+    min-width: 0;
+    border-radius: 0.4rem;
+    transition: color 160ms ease;
 
     & span {
       font-size: 0.95rem;
-      display: inline-block;
+      display: block;
+      width: 100%;
+      min-width: 0;
       color: var(--secondary);
       font-weight: $semiBoldWeight;
       margin: 0;
       line-height: 1.5rem;
       pointer-events: none;
+      transition:
+        color 160ms ease,
+        font-size 160ms ease;
     }
+  }
+
+  & div > button:hover > span,
+  & div > button:focus-visible > span {
+    color: var(--tertiary);
+    font-size: 0.98rem;
   }
 }
 

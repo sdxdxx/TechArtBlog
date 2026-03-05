@@ -13,6 +13,10 @@ Welcome to my website. I am a Technical Artist specializing in rendering and sha
 
 [![Stylized Shading Model]()](Portfolio/Stylized Shading Model.md)
 
+[![3D Pixelization Rendering Pipeline]()](Portfolio/3D Pixelization Rendering Pipeline.md)
+
+[![Comfy Houdini (WIP)](Assets_UI/ComfyHoudiniCover.png)](Portfolio/Comfy Houdini.md)
+
 </div>
 
 ---

@@ -22,6 +22,15 @@ type FolderState = {
 let currentExplorerState: Array<FolderState>
 let explorerViewportSyncFrame = 0
 
+function toSingleLineTitle(text: string): string {
+  return text.replace(/\s+/g, " ").trim()
+}
+
+function applyExplorerItemTitle(el: HTMLElement, fullTitle: string) {
+  el.classList.add("explorer-title-ellipsis")
+  el.title = toSingleLineTitle(fullTitle)
+}
+
 function resetExplorerViewport(explorer: HTMLElement) {
   explorer.style.removeProperty("--explorer-vv-left")
   explorer.style.removeProperty("--explorer-vv-top")
@@ -138,6 +147,7 @@ function createFileNode(currentSlug: FullSlug, node: FileTrieNode): HTMLLIElemen
   a.href = resolveRelative(currentSlug, node.slug)
   a.dataset.for = node.slug
   a.textContent = node.displayName
+  applyExplorerItemTitle(a, node.displayName)
 
   if (currentSlug === node.slug) {
     a.classList.add("active")
@@ -174,10 +184,14 @@ function createFolderNode(
     a.dataset.for = folderPath
     a.className = "folder-title"
     a.textContent = node.displayName
+    applyExplorerItemTitle(a, node.displayName)
     button.replaceWith(a)
   } else {
+    const button = titleContainer.querySelector(".folder-button") as HTMLButtonElement
     const span = titleContainer.querySelector(".folder-title") as HTMLElement
     span.textContent = node.displayName
+    applyExplorerItemTitle(span, node.displayName)
+    button.title = toSingleLineTitle(node.displayName)
   }
 
   // if the saved state is collapsed or the default state is collapsed
