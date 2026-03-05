@@ -50,12 +50,46 @@ type LinkRenderData = GraphicsInfo & {
 type NodeRenderData = GraphicsInfo & {
   simulationData: NodeData
   label: Text
+  fullLabelText: string
+  previewLabelText: string
 }
 
 // Hide root entry notes by default so Home/Index stay out of graph view.
 const hiddenGraphSlugNames = new Set(["home", "index"])
 function isHiddenGraphSlug(slug: SimpleSlug): boolean {
   return hiddenGraphSlugNames.has(slug.toLowerCase())
+}
+
+function buildGraphPreviewLabel(text: string, maxChars = 20): string {
+  if (text.length <= maxChars) return text
+
+  const words = text.trim().split(/\s+/).filter((word) => word.length > 0)
+  if (words.length === 0) return text.slice(0, maxChars) + "..."
+
+  let preview = ""
+  for (const word of words) {
+    if (preview.length === 0) {
+      if (word.length > maxChars) {
+        return word.slice(0, maxChars) + "..."
+      }
+      preview = word
+      continue
+    }
+
+    const remaining = maxChars - preview.length - 1
+    if (remaining <= 0) {
+      return preview + "..."
+    }
+
+    if (word.length <= remaining) {
+      preview = `${preview} ${word}`
+    } else {
+      preview = `${preview} ${word.slice(0, remaining)}`
+      return preview + "..."
+    }
+  }
+
+  return preview.length < text.length ? preview + "..." : preview
 }
 
 const localStorageKey = "graph-visited"
@@ -291,6 +325,8 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     const activeScale = defaultScale * 1.1
     for (const n of nodeRenderData) {
       const nodeId = n.simulationData.id
+      const showFullLabel = hoveredNodeId === nodeId
+      n.label.text = showFullLabel ? n.fullLabelText : n.previewLabelText
 
       if (hoveredNodeId === nodeId) {
         tweenGroup.add(
@@ -381,11 +417,13 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
 
   for (const n of graphData.nodes) {
     const nodeId = n.id
+    const fullLabelText = n.text
+    const previewLabelText = buildGraphPreviewLabel(fullLabelText)
 
     const label = new Text({
       interactive: false,
       eventMode: "none",
-      text: n.text,
+      text: previewLabelText,
       alpha: 0,
       anchor: { x: 0.5, y: 1.2 },
       style: {
@@ -434,6 +472,8 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
       simulationData: n,
       gfx,
       label,
+      fullLabelText,
+      previewLabelText,
       color: color(n),
       alpha: 1,
       active: false,
