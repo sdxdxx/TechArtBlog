@@ -3,7 +3,7 @@ cssclasses:
   - homepage
 ---
 
-欢迎来到我的主页。我是一名热爱渲染的 Technical Artist。
+Welcome to my website. I am a Technical Artist specializing in rendering and shader development.
 
 <div class="gallery-grid">
 
@@ -11,12 +11,12 @@ cssclasses:
 
 [![NPR Rendering Research]()](Portfolio/PBR + NPR Rendering Research.md)
 
-[![作品三展示](Assets_UI/Cover3.png)](Portfolio/作品3的文件名)
+[![Stylized Shading Model]()](Portfolio/Stylized Shading Model.md)
 
 </div>
 
 ---
 
-- [[About|关于我]]
-- [[Resume|我的简历]]
-- [[Contact|联系我]]
+- [[About|About Me]]
+- [[Resume|My Resume]]
+- [[Contact|Contact Me]]

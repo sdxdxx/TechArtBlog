@@ -1,8 +1,3 @@
----
-area: Technical Art
-tags:
-  - note
----
 
 ![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062206.png|800]]
 
