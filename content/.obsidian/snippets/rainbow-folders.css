@@ -1,0 +1,432 @@
+/* @settings
+name: Rainbow Tree – Folders
+id: obsidian-rainbow-tree-folders
+settings:
+  - id: rt-folder-heading
+    title: Colored Folders
+    title.zh: 彩虹文件夹（可调）
+    type: heading
+    level: 2
+
+  - id: rt-folder-bg-initial-setting
+    title: Initial Opacity (Background)
+    title.zh: 初始不透明度（背景）
+    description: Base opacity for folder background at depth 0 (0–1)
+    description.zh: 深度 0 的文件夹背景基础不透明度（0–1）
+    type: variable-number
+    default: 0.08
+    min: 0
+    max: 1
+    step: 0.01
+
+  - id: rt-folder-text-initial-setting
+    title: Initial Opacity (Text/Icon)
+    title.zh: 初始不透明度（文字/图标）
+    description: Base opacity for folder text & icons at depth 0 (0–1)
+    description.zh: 深度 0 的文件夹文本与图标基础不透明度（0–1）
+    type: variable-number
+    default: 0.85
+    min: 0
+    max: 1
+    step: 0.01
+
+  - id: rt-folder-decay-setting
+    title: Decay Factor
+    title.zh: 衰减系数
+    description: Each deeper level multiplies opacity by this factor (0–1)
+    description.zh: 每深入一层，不透明度乘以该系数（0–1）
+    type: variable-number
+    default: 0.5
+    min: 0
+    max: 1
+    step: 0.01
+
+  - id: rt-folder-min-bg-setting
+    title: Min Opacity (Background)
+    title.zh: 最小不透明度（背景）
+    description: Lower bound for background opacity after decay
+    description.zh: 衰减后背景不透明度的下限
+    type: variable-number
+    default: 0.02
+    min: 0
+    max: 1
+    step: 0.01
+
+  - id: rt-folder-min-text-setting
+    title: Min Opacity (Text/Icon)
+    title.zh: 最小不透明度（文字/图标）
+    description: Lower bound for text/icon opacity after decay
+    description.zh: 衰减后文本/图标不透明度的下限
+    type: variable-number
+    default: 0.2
+    min: 0
+    max: 1
+    step: 0.01
+
+  - id: rt-folder-hover-setting
+    title: Hover Boost
+    title.zh: 悬停增强
+    description: Multiplies the current opacity on hover (e.g. 1.25 makes it stronger)
+    description.zh: 悬停时对当前不透明度的乘法增强（如 1.25 更醒目）
+    type: variable-number
+    default: 1.25
+    min: 0
+    max: 2
+    step: 0.01
+*/
+
+.workspace-leaf-content[data-type="file-explorer"] {
+  /* ====== 参数映射 ====== */
+  --rt-folder-bg-init:   var(--rt-folder-bg-initial-setting, 0.08);
+  --rt-folder-text-init: var(--rt-folder-text-initial-setting, 0.85);
+  --rt-folder-decay:     var(--rt-folder-decay-setting, 0.5);
+  --rt-folder-hover:     var(--rt-folder-hover-setting, 1.25);
+  --rt-folder-bg-min:    var(--rt-folder-min-bg-setting, 0.02);
+  --rt-folder-text-min:  var(--rt-folder-min-text-setting, 0.2);
+
+  /* 0–6 层递减（连乘），并做下限钳制（_c 为 clamped） */
+  --rtf-bg-d0: var(--rt-folder-bg-init);
+  --rtf-bg-d1: calc(var(--rtf-bg-d0) * var(--rt-folder-decay));
+  --rtf-bg-d2: calc(var(--rtf-bg-d1) * var(--rt-folder-decay));
+  --rtf-bg-d3: calc(var(--rtf-bg-d2) * var(--rt-folder-decay));
+  --rtf-bg-d4: calc(var(--rtf-bg-d3) * var(--rt-folder-decay));
+  --rtf-bg-d5: calc(var(--rtf-bg-d4) * var(--rt-folder-decay));
+  --rtf-bg-d6: calc(var(--rtf-bg-d5) * var(--rt-folder-decay));
+
+  --rtf-tx-d0: var(--rt-folder-text-init);
+  --rtf-tx-d1: calc(var(--rtf-tx-d0) * var(--rt-folder-decay));
+  --rtf-tx-d2: calc(var(--rtf-tx-d1) * var(--rt-folder-decay));
+  --rtf-tx-d3: calc(var(--rtf-tx-d2) * var(--rt-folder-decay));
+  --rtf-tx-d4: calc(var(--rtf-tx-d3) * var(--rt-folder-decay));
+  --rtf-tx-d5: calc(var(--rtf-tx-d4) * var(--rt-folder-decay));
+  --rtf-tx-d6: calc(var(--rtf-tx-d5) * var(--rt-folder-decay));
+
+  /* 下限钳制，避免“看起来像 0” */
+  --rtf-bg-d0c: max(var(--rtf-bg-d0), var(--rt-folder-bg-min));
+  --rtf-bg-d1c: max(var(--rtf-bg-d1), var(--rt-folder-bg-min));
+  --rtf-bg-d2c: max(var(--rtf-bg-d2), var(--rt-folder-bg-min));
+  --rtf-bg-d3c: max(var(--rtf-bg-d3), var(--rt-folder-bg-min));
+  --rtf-bg-d4c: max(var(--rtf-bg-d4), var(--rt-folder-bg-min));
+  --rtf-bg-d5c: max(var(--rtf-bg-d5), var(--rt-folder-bg-min));
+  --rtf-bg-d6c: max(var(--rtf-bg-d6), var(--rt-folder-bg-min));
+
+  --rtf-tx-d0c: max(var(--rtf-tx-d0), var(--rt-folder-text-min));
+  --rtf-tx-d1c: max(var(--rtf-tx-d1), var(--rt-folder-text-min));
+  --rtf-tx-d2c: max(var(--rtf-tx-d2), var(--rt-folder-text-min));
+  --rtf-tx-d3c: max(var(--rtf-tx-d3), var(--rt-folder-text-min));
+  --rtf-tx-d4c: max(var(--rtf-tx-d4), var(--rt-folder-text-min));
+  --rtf-tx-d5c: max(var(--rtf-tx-d5), var(--rt-folder-text-min));
+  --rtf-tx-d6c: max(var(--rtf-tx-d6), var(--rt-folder-text-min));
+
+  /* 原配色方案（7 色轮转不变） */
+  --rt-folder-rgb-1: var(--color-red-rgb);
+  --rt-folder-rgb-2: var(--color-blue-rgb);
+  --rt-folder-rgb-3: var(--color-green-rgb);
+  --rt-folder-rgb-4: var(--color-orange-rgb);
+  --rt-folder-rgb-5: var(--color-purple-rgb);
+  --rt-folder-rgb-6: var(--color-cyan-rgb);
+  --rt-folder-rgb-7: var(--color-pink-rgb);
+}
+
+/* 顶级分支确定“本分支的 RGB 基色”，并将色相传递给标题与子容器（保证继承链） */
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 1) { --rt-folder-rgb: var(--rt-folder-rgb-1); }
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 2) { --rt-folder-rgb: var(--rt-folder-rgb-2); }
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 3) { --rt-folder-rgb: var(--rt-folder-rgb-3); }
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 4) { --rt-folder-rgb: var(--rt-folder-rgb-4); }
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 5) { --rt-folder-rgb: var(--rt-folder-rgb-5); }
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 6) { --rt-folder-rgb: var(--rt-folder-rgb-6); }
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n)       { --rt-folder-rgb: var(--rt-folder-rgb-7); }
+
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 1) > .nav-folder-title,
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 1) > .tree-item-children { --rt-folder-rgb: var(--rt-folder-rgb-1); }
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 2) > .nav-folder-title,
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 2) > .tree-item-children { --rt-folder-rgb: var(--rt-folder-rgb-2); }
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 3) > .nav-folder-title,
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 3) > .tree-item-children { --rt-folder-rgb: var(--rt-folder-rgb-3); }
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 4) > .nav-folder-title,
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 4) > .tree-item-children { --rt-folder-rgb: var(--rt-folder-rgb-4); }
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 5) > .nav-folder-title,
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 5) > .tree-item-children { --rt-folder-rgb: var(--rt-folder-rgb-5); }
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 6) > .nav-folder-title,
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n + 6) > .tree-item-children { --rt-folder-rgb: var(--rt-folder-rgb-6); }
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n) > .nav-folder-title,
+.nav-files-container > div > .tree-item.nav-folder:nth-child(7n) > .tree-item-children { --rt-folder-rgb: var(--rt-folder-rgb-7); }
+
+/* ===== Folders by depth =====
+   注意：0–5 用严格的 >（精准深度），第 6 层及“更深层”使用后续的“通配回退”选择器（非 >），
+   确保 6 以及 6+ 都显示为第 6 层样式，不会出现“6 以后没颜色”的问题。 */
+
+/* 深度 0 */
+.nav-files-container > div > .tree-item.nav-folder > .nav-folder-title {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-bg-d0c) * 100%), transparent);
+  color:           color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d0c) * 100%), transparent);
+  --nav-collapse-icon-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d0c) * 100%), transparent);
+  --icon-color: var(--nav-collapse-icon-color);
+}
+.nav-files-container > div > .tree-item.nav-folder > .nav-folder-title:hover {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(min(1, calc(var(--rtf-bg-d0c) * var(--rt-folder-hover))) * 100%), transparent);
+}
+
+/* 深度 1 */
+.nav-files-container > div > .tree-item.nav-folder > .tree-item-children > .tree-item.nav-folder > .nav-folder-title {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-bg-d1c) * 100%), transparent);
+  color:           color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d1c) * 100%), transparent);
+  --nav-collapse-icon-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d1c) * 100%), transparent);
+  --icon-color: var(--nav-collapse-icon-color);
+}
+.nav-files-container > div > .tree-item.nav-folder > .tree-item-children > .tree-item.nav-folder > .nav-folder-title:hover {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(min(1, calc(var(--rtf-bg-d1c) * var(--rt-folder-hover))) * 100%), transparent);
+}
+
+/* 深度 2 */
+.nav-files-container > div > .tree-item.nav-folder > .tree-item-children > .tree-item > .tree-item-children > .tree-item.nav-folder > .nav-folder-title {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-bg-d2c) * 100%), transparent);
+  color:           color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d2c) * 100%), transparent);
+  --nav-collapse-icon-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d2c) * 100%), transparent);
+  --icon-color: var(--nav-collapse-icon-color);
+}
+.nav-files-container > div > .tree-item.nav-folder > .tree-item-children > .tree-item > .tree-item-children > .tree-item.nav-folder > .nav-folder-title:hover {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(min(1, calc(var(--rtf-bg-d2c) * var(--rt-folder-hover))) * 100%), transparent);
+}
+
+/* 深度 3 */
+.nav-files-container > div > .tree-item.nav-folder > .tree-item-children > .tree-item > .tree-item-children > .tree-item > .tree-item-children > .tree-item.nav-folder > .nav-folder-title {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-bg-d3c) * 100%), transparent);
+  color:           color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d3c) * 100%), transparent);
+  --nav-collapse-icon-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d3c) * 100%), transparent);
+  --icon-color: var(--nav-collapse-icon-color);
+}
+.nav-files-container > div > .tree-item.nav-folder > .tree-item-children > .tree-item > .tree-item-children > .tree-item > .tree-item-children > .tree-item.nav-folder > .nav-folder-title:hover {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(min(1, calc(var(--rtf-bg-d3c) * var(--rt-folder-hover))) * 100%), transparent);
+}
+
+/* 深度 4 */
+.nav-files-container > div > .tree-item.nav-folder
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item.nav-folder > .nav-folder-title {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-bg-d4c) * 100%), transparent);
+  color:           color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d4c) * 100%), transparent);
+  --nav-collapse-icon-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d4c) * 100%), transparent);
+  --icon-color: var(--nav-collapse-icon-color);
+}
+.nav-files-container > div > .tree-item.nav-folder
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item.nav-folder > .nav-folder-title:hover {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(min(1, calc(var(--rtf-bg-d4c) * var(--rt-folder-hover))) * 100%), transparent);
+}
+
+/* 深度 5 */
+.nav-files-container > div > .tree-item.nav-folder
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item.nav-folder > .nav-folder-title {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-bg-d5c) * 100%), transparent);
+  color:           color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d5c) * 100%), transparent);
+  --nav-collapse-icon-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d5c) * 100%), transparent);
+  --icon-color: var(--nav-collapse-icon-color);
+}
+.nav-files-container > div > .tree-item.nav-folder
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item
+  > .tree-item-children > .tree-item.nav-folder > .nav-folder-title:hover {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(min(1, calc(var(--rtf-bg-d5c) * var(--rt-folder-hover))) * 100%), transparent);
+}
+
+/* 深度 6 及“更深层”（通配回退：使用非 > 的后代选择，覆盖所有 6+ 层） */
+.nav-files-container > div > .tree-item.nav-folder
+  .tree-item-children .tree-item-children .tree-item-children
+  .tree-item-children .tree-item-children .tree-item-children
+  .tree-item.nav-folder .nav-folder-title {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-bg-d6c) * 100%), transparent);
+  color:           color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d6c) * 100%), transparent);
+  --nav-collapse-icon-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(var(--rtf-tx-d6c) * 100%), transparent);
+  --icon-color: var(--nav-collapse-icon-color);
+}
+.nav-files-container > div > .tree-item.nav-folder
+  .tree-item-children .tree-item-children .tree-item-children
+  .tree-item-children .tree-item-children .tree-item-children
+  .tree-item.nav-folder .nav-folder-title:hover {
+  background-color: color-mix(in oklab, rgb(var(--rt-folder-rgb)) calc(min(1, calc(var(--rtf-bg-d6c) * var(--rt-folder-hover))) * 100%), transparent);
+}
+
+/* ============ Rainbow Tree — Indentation Guides (正确变量 & 继承) ============ */
+
+/* @settings
+name: Rainbow Tree – Indentation Guides
+id: obsidian-rainbow-tree-guides
+settings:
+  - id: rt-guides-heading
+    title: Indentation Guides
+    title.zh: 引导线（可调）
+    type: heading
+    level: 2
+
+  - id: rt-guide-width-setting
+    title: Guide Width
+    title.zh: 引导线宽度
+    description: Thickness of indentation guides (px)
+    description.zh: 缩进引导线粗细（像素）
+    type: variable-number
+    default: 2
+    min: 0
+    max: 6
+    step: 0.5
+
+  - id: rt-guide-initial-setting
+    title: Initial Opacity
+    title.zh: 初始不透明度
+    description: Base opacity at depth 0 (0–1). Deeper levels multiply by the decay factor.
+    description.zh: 深度 0 的基础不透明度（0–1）。更深层按衰减系数相乘。
+    type: variable-number
+    default: 0.9
+    min: 0
+    max: 1
+    step: 0.01
+
+  - id: rt-guide-multiplier-setting
+    title: Decay Factor
+    title.zh: 衰减系数
+    description: Each deeper level multiplies opacity by this factor (0–1).
+    description.zh: 每深入一层，不透明度乘以该系数（0–1）。
+    type: variable-number
+    default: 0.7
+    min: 0
+    max: 1
+    step: 0.01
+
+  - id: rt-guide-min-setting
+    title: Min Opacity
+    title.zh: 最小不透明度
+    description: Lower bound for guide opacity after decay
+    description.zh: 衰减后引导线不透明度的下限
+    type: variable-number
+    default: 0.18
+    min: 0
+    max: 1
+    step: 0.01
+
+  - id: rt-guide-hover-setting
+    title: Hover Intensity
+    title.zh: 悬停强度
+    description: How strong the guide color becomes on hover (0–1, mixed with the branch base color).
+    description.zh: 悬停时混合到分支基色的强度（0–1）。
+    type: variable-number
+    default: 0.85
+    min: 0
+    max: 1
+    step: 0.01
+*/
+
+/* 变量映射 + 逐层不透明度（0..6，含最小值钳制） */
+.workspace-leaf-content[data-type="file-explorer"] {
+    --rt-guide-width: var(--rt-guide-width-setting, 2);
+    --rt-guide-hover: var(--rt-guide-hover-setting, 0.85);
+    --rt-guide-init: var(--rt-guide-initial-setting, 0.9);
+    --rt-guide-mul: var(--rt-guide-multiplier-setting, 0.7);
+    --rt-guide-min: var(--rt-guide-min-setting, 0.18);
+    --rtg-d0: var(--rt-guide-init);
+    --rtg-d1: calc(var(--rtg-d0) * var(--rt-guide-mul));
+    --rtg-d2: calc(var(--rtg-d1) * var(--rt-guide-mul));
+    --rtg-d3: calc(var(--rtg-d2) * var(--rt-guide-mul));
+    --rtg-d4: calc(var(--rtg-d3) * var(--rt-guide-mul));
+    --rtg-d5: calc(var(--rtg-d4) * var(--rt-guide-mul));
+    --rtg-d6: calc(var(--rtg-d5) * var(--rt-guide-mul));
+    --rtgc-d0: max(var(--rtg-d0), var(--rt-guide-min));
+    --rtgc-d1: max(var(--rtg-d1), var(--rt-guide-min));
+    --rtgc-d2: max(var(--rtg-d2), var(--rt-guide-min));
+    --rtgc-d3: max(var(--rtg-d3), var(--rt-guide-min));
+    --rtgc-d4: max(var(--rtg-d4), var(--rt-guide-min));
+    --rtgc-d5: max(var(--rtg-d5), var(--rt-guide-min));
+    --rtgc-d6: max(var(--rtg-d6), var(--rt-guide-min));
+}
+
+    /* 让线宽对“核心变量名”和“主题变量名”都生效（两套都写） */
+    .workspace-leaf-content[data-type="file-explorer"] .nav-files-container {
+        --indentation-guide-width: calc(var(--rt-guide-width) * 1px); /* 核心变量名（Obsidian 内核） */
+        --nav-indentation-guide-width: calc(var(--rt-guide-width) * 1px); /* 兼容部分主题 */
+    }
+
+/* 兜底：即使主题没读到我们的变量，也给个默认值 */
+.nav-files-container .tree-item,
+.nav-files-container .tree-item-children {
+    --indentation-guide-color: var(--indentation-guide-color, rgba(127,127,127,0.35));
+    --nav-indentation-guide-color: var(--nav-indentation-guide-color, rgba(127,127,127,0.35));
+}
+
+/* 关键修复：引导线“基色”直接复用分支的 --rt-folder-rgb（来自“彩虹文件夹”逻辑）
+   → 不再依赖早先的 --folder-text-1..7，避免变量为空导致整条声明被忽略 */
+.nav-files-container > div > .tree-item.nav-folder,
+.nav-files-container > div > .tree-item.nav-folder > .nav-folder-title,
+.nav-files-container > div > .tree-item.nav-folder > .tree-item-children {
+    --rt-guide-base: rgb(var(--rt-folder-rgb));
+}
+
+/* ===== Guides by depth =====
+   在真正承载伪元素的节点范围（.tree-item/.tree-item-children）上写入两套颜色变量名； */
+
+/* 深度 0：顶级目录本身（容器内所有引导线默认颜色） */
+.nav-files-container > div > .tree-item.nav-folder {
+    --indentation-guide-color: color-mix(in oklab, var(--rt-guide-base) calc(var(--rtgc-d0) * 100%), transparent);
+    --nav-indentation-guide-color: var(--indentation-guide-color);
+}
+
+    /* 深度 1 */
+    .nav-files-container > div > .tree-item.nav-folder > .tree-item-children {
+        --indentation-guide-color: color-mix(in oklab, var(--rt-guide-base) calc(var(--rtgc-d1) * 100%), transparent);
+        --nav-indentation-guide-color: var(--indentation-guide-color);
+    }
+
+        /* 深度 2 */
+        .nav-files-container > div > .tree-item.nav-folder > .tree-item-children > .tree-item > .tree-item-children {
+            --indentation-guide-color: color-mix(in oklab, var(--rt-guide-base) calc(var(--rtgc-d2) * 100%), transparent);
+            --nav-indentation-guide-color: var(--indentation-guide-color);
+        }
+
+            /* 深度 3 */
+            .nav-files-container > div > .tree-item.nav-folder > .tree-item-children > .tree-item > .tree-item-children > .tree-item > .tree-item-children {
+                --indentation-guide-color: color-mix(in oklab, var(--rt-guide-base) calc(var(--rtgc-d3) * 100%), transparent);
+                --nav-indentation-guide-color: var(--indentation-guide-color);
+            }
+
+                /* 深度 4 */
+                .nav-files-container > div > .tree-item.nav-folder > .tree-item-children > .tree-item > .tree-item-children > .tree-item > .tree-item-children > .tree-item > .tree-item-children {
+                    --indentation-guide-color: color-mix(in oklab, var(--rt-guide-base) calc(var(--rtgc-d4) * 100%), transparent);
+                    --nav-indentation-guide-color: var(--indentation-guide-color);
+                }
+
+                    /* 深度 5 */
+                    .nav-files-container > div > .tree-item.nav-folder > .tree-item-children > .tree-item > .tree-item-children > .tree-item > .tree-item-children > .tree-item > .tree-item-children > .tree-item > .tree-item-children {
+                        --indentation-guide-color: color-mix(in oklab, var(--rt-guide-base) calc(var(--rtgc-d5) * 100%), transparent);
+                        --nav-indentation-guide-color: var(--indentation-guide-color);
+                    }
+
+    /* 深度 6+ 通配回退：任意比上面更深的嵌套，统一使用第 6 层颜色 */
+    .nav-files-container > div > .tree-item.nav-folder
+    .tree-item-children .tree-item-children .tree-item-children
+    .tree-item-children .tree-item-children .tree-item-children {
+        --indentation-guide-color: color-mix(in oklab, var(--rt-guide-base) calc(var(--rtgc-d6) * 100%), transparent);
+        --nav-indentation-guide-color: var(--indentation-guide-color);
+    }
+
+/* 把颜色和宽度真正“喂给”伪元素；用 !important 兜住强优先级主题 */
+.workspace-leaf-content[data-type="file-explorer"] .nav-files-container.mod-indentation-guide .tree-item::before,
+.workspace-leaf-content[data-type="file-explorer"] .nav-files-container.mod-indentation-guide .tree-item-children::before {
+    border-left-color: var(--indentation-guide-color) !important;
+    border-color: var(--indentation-guide-color) !important;
+    width: var(--indentation-guide-width) !important;
+}
+
+/* 悬停微增强：把当前作用域的引导线颜色稍微向基色靠拢 */
+.nav-files-container .nav-folder-title:hover {
+    --indentation-guide-color: color-mix(in oklab, var(--rt-guide-base) calc(var(--rt-guide-hover) * 100%), transparent);
+    --nav-indentation-guide-color: var(--indentation-guide-color);
+}
+

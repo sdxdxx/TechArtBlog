@@ -1,0 +1,28 @@
+{
+  "language": "en",
+  "attachPath": {
+    "attachmentRoot": "",
+    "saveAttE": "inFolderBelow",
+    "attachmentPath": "Assets/NoteAssets_${notename}",
+    "attachFormat": "${notename} ${date}",
+    "type": "GLOBAL",
+    "extensionOverride": [
+      {
+        "extension": "mp4",
+        "attachmentRoot": "",
+        "saveAttE": "obsFolder",
+        "attachmentPath": "/Assets/NoteAssets_${notename}",
+        "attachFormat": "${notename} ${date}"
+      }
+    ]
+  },
+  "dateFormat": "YYYYMMDDHHmmss",
+  "excludeExtensionPattern": "docx|pdf|excalidraw.md",
+  "autoRenameAttachment": true,
+  "excludedPaths": "",
+  "excludePathsArray": [],
+  "excludeSubpaths": false,
+  "originalNameStorage": [],
+  "overridePath": {},
+  "disableNotification": false
+}

@@ -1,0 +1,103 @@
+/* =================================================================
+   VS Code Dark+ (Default Dark) Theme for Obsidian Code Blocks
+   Author: Gemini & sdxdxx007
+   ================================================================= */
+
+body {
+  /* VS Code Dark+ Color Palette */
+  --vs-bg: #1e1e1e;          /* 经典深灰背景 */
+  --vs-fg: #d4d4d4;          /* 浅灰文本 */
+  --vs-keyword-control: #c586c0; /* 粉色: if, return, else */
+  --vs-keyword-type: #569cd6;    /* 蓝色: void, int, float, bool */
+  --vs-function: #dcdcaa;    /* 黄色: main, tex2D */
+  --vs-string: #ce9178;      /* 橙褐色: "Texture" */
+  --vs-comment: #6a9955;     /* 绿色: // comment */
+  --vs-number: #b5cea8;      /* 浅绿: 1.0, 0 */
+  --vs-class: #4ec9b0;       /* 青色: 结构体名, 类名 */
+  --vs-variable: #9cdcfe;    /* 浅蓝: 变量名 */
+  --vs-macro: #c586c0;       /* 粉色: #pragma, #define */
+}
+
+/* -----------------------------------------------------------------
+   1. 强制覆盖代码块背景和字体 (Live Preview & Reading)
+   ----------------------------------------------------------------- */
+.markdown-source-view.mod-cm6 .HyperMD-codeblock,
+.markdown-preview-view pre code {
+    background-color: var(--vs-bg) !important;
+    color: var(--vs-fg) !important;
+    font-family: Consolas, 'Courier New', monospace !important; /* VS Code 默认字体 */
+}
+
+/* 阅读模式下的内边距优化，让它更像 IDE */
+.markdown-preview-view pre code {
+    display: block;
+    padding: 12px !important;
+    border-radius: 4px;
+    border: 1px solid #2d2d2d;
+}
+
+/* -----------------------------------------------------------------
+   2. 语法高亮映射 (尽力还原 VS Code 逻辑)
+   ----------------------------------------------------------------- */
+
+/* 注释 (Comments) -> 绿色 */
+.cm-comment, .token.comment {
+    color: var(--vs-comment) !important;
+}
+
+/* 字符串 (Strings) -> 橙褐色 */
+.cm-string, .token.string {
+    color: var(--vs-string) !important;
+}
+
+/* 数字 (Numbers) -> 浅绿 */
+.cm-number, .token.number {
+    color: var(--vs-number) !important;
+}
+
+/* 关键字 (Keywords) - 这里比较难分，Obsidian 往往混在一起 */
+/* 尝试把基础类型(int, float)和控制流(return)分开 */
+
+/* 通用关键字 -> 默认设为粉色 (控制流居多) */
+.cm-keyword, .token.keyword {
+    color: var(--vs-keyword-control) !important;
+}
+
+/* 类型/存储修饰符 -> 设为蓝色 (int, void, float, const) */
+/* 注意：Obsidian 的解析器不一定能完美区分，这里利用常见类名尝试命中 */
+.cm-type, .token.builtin, .token.class-name, .cm-builtin {
+    color: var(--vs-keyword-type) !important;
+}
+
+/* 如果是 GLSL/HLSL，很多 vector 类型会被识别为 variable 或 builtin */
+.cm-variable-3 {
+    color: var(--vs-keyword-type) !important; /* 补充命中类型 */
+}
+
+/* 函数 (Functions) -> 黄色 */
+.cm-def, .token.function {
+    color: var(--vs-function) !important;
+}
+
+/* 变量 (Variables) -> 浅蓝 */
+.cm-variable, .token.variable, .cm-variable-2 {
+    color: var(--vs-variable) !important;
+}
+
+/* 宏定义 (Macros) -> 粉色 */
+.cm-meta, .token.macro {
+    color: var(--vs-macro) !important;
+}
+
+/* 操作符 (Operators) -> 保持文本色或微调 */
+.cm-operator, .token.operator {
+    color: var(--vs-fg) !important;
+}
+
+/* -----------------------------------------------------------------
+   3. 特殊修补: 针对 C++/GLSL 语境的微调
+   ----------------------------------------------------------------- */
+/* 让 void, bool, float 这些更倾向于显示为蓝色 */
+.cm-type {
+    color: var(--vs-keyword-type) !important;
+}

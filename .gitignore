@@ -1,0 +1,35 @@
+# ==========================================
+# 1. 屏蔽你提到的插件密钥文件夹 (核心需求)
+# ==========================================
+content/.obsidian/plugins/translate/
+content/.obsidian/plugins/obsidian-translator/
+
+# ==========================================
+# 2. 屏蔽 Obsidian 内部缓存与本地设置
+# ==========================================
+content/.obsidian/workspace.json
+content/.obsidian/workspace-mobile.json
+content/.obsidian/cache/
+content/.obsidian/indexed-db/
+
+# ==========================================
+# 3. 屏蔽 Quartz/Node.js 开发冗余
+# ==========================================
+node_modules/
+public/
+.quartz-cache/
+
+# ==========================================
+# 4. 屏蔽操作系统垃圾文件
+# ==========================================
+.DS_Store
+Thumbs.db
+*.log
+
+# ==========================================
+# 5. 屏蔽敏感信息备选 (双重保险)
+# ==========================================
+.env
+*.key
+*.pem
+credentials.json

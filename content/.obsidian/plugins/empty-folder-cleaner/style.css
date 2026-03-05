@@ -1,0 +1,9 @@
+/* Minimal styling for the modal */
+.aefc-modal .aefc-list {
+  max-height: 50vh;
+  overflow: auto;
+  padding-left: 1.25rem;
+}
+.aefc-modal .aefc-btns .setting-item {
+  margin-top: 0.5rem;
+}

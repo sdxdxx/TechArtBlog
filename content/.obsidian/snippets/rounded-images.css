@@ -1,0 +1,11 @@
+/* 预览模式图片圆角 */
+.markdown-preview-view img {
+  border-radius: 8px;      /* 调整圆角大小 */
+  overflow: hidden;
+}
+
+/* 编辑模式（Live Preview）中的图片圆角 */
+.markdown-source-view.mod-cm6 img {
+  border-radius: 8px;
+  overflow: hidden;
+}

@@ -1,0 +1,48 @@
+{
+  "confirmDeletion": true,
+  "showAddCommand": true,
+  "debug": false,
+  "editorMenu": [],
+  "fileMenu": [],
+  "leftRibbon": [
+    {
+      "id": "obsidian-excalidraw-plugin:Excalidraw Attachment Management",
+      "icon": "lucide-airplay",
+      "name": "Excalidraw: (Script) Excalidraw Attachment Management",
+      "mode": "any"
+    },
+    {
+      "id": "image-alias-manager:alias-images-offscreen-add",
+      "icon": "lucide-a-arrow-down",
+      "name": "Image Alias Manager: 按层级路径添加/更新图片别名（整篇，离屏）",
+      "mode": "any"
+    },
+    {
+      "id": "image-alias-manager:uniform-size-offscreen-whole",
+      "icon": "lucide-album",
+      "name": "Image Alias Manager: 统一图片尺寸（整篇，离屏）",
+      "mode": "any"
+    }
+  ],
+  "rightRibbon": [],
+  "titleBar": [],
+  "statusBar": [],
+  "pageHeader": [],
+  "macros": [],
+  "explorer": [],
+  "hide": {
+    "statusbar": [],
+    "leftRibbon": []
+  },
+  "spacing": 8,
+  "advancedToolbar": {
+    "rowHeight": 48,
+    "rowCount": 1,
+    "spacing": 0,
+    "buttonWidth": 48,
+    "columnLayout": false,
+    "mappedIcons": [],
+    "tooltips": false,
+    "heightOffset": 0
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "enableWikilink": true,
+  "enableMarkdown": true,
+  "imageExtensions": "png,jpg,jpeg,gif,webp,avif,svg,mp4",
+  "aliasTemplate": "{nearestHeading} {index}",
+  "fallbackWhenNoHeading": "{fileBase} {index}",
+  "headingPathSep": "_",
+  "trimAlias": true,
+  "replaceIllegal": true,
+  "addIndexWhenHeading": true,
+  "addIndexWhenNoHeading": true,
+  "headingCutPattern": "、",
+  "clearAliasForWikilink": true,
+  "clearAltForMarkdown": true,
+  "uniformWidth": 800,
+  "uniformAlsoSetHeight": false,
+  "uniformAffectsWikilink": true,
+  "uniformAffectsMarkdown": false
+}

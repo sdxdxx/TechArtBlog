@@ -1,0 +1,10 @@
+{
+	"id": "simple-file-icons",
+	"name": "Simple File Icons",
+	"version": "2.0.0",
+	"minAppVersion": "1.0.0",
+	"description": "一个轻量级的插件，用于为特定的文件类型和文件夹路径设置 Emoji 图标。",
+	"author": "sdxdxx007",
+	"authorUrl": "",
+	"isDesktopOnly": false
+}

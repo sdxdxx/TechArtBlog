@@ -1,0 +1,11 @@
+{
+  "zoom": 1,
+  "settings": {
+    "step": 0.05,
+    "resetOnStartup": true,
+    "showRibbonReset": true,
+    "showStatus": true,
+    "anchorToMouse": true,
+    "keepFocus": true
+  }
+}

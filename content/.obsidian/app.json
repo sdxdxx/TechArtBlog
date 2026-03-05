@@ -1,0 +1,26 @@
+{
+  "legacyEditor": false,
+  "alwaysUpdateLinks": true,
+  "newLinkFormat": "shortest",
+  "newFileLocation": "root",
+  "showUnsupportedFiles": true,
+  "attachmentFolderPath": "/",
+  "readableLineLength": false,
+  "showLineNumber": true,
+  "spellcheck": false,
+  "promptDelete": false,
+  "showIndentGuide": true,
+  "propertiesInDocument": "visible",
+  "userIgnoreFilters": [
+    "Assets_Plugin/",
+    "Assets/"
+  ],
+  "livePreview": true,
+  "pdfExportSettings": {
+    "includeName": true,
+    "pageSize": "A5",
+    "landscape": false,
+    "margin": "0",
+    "downscalePercent": 100
+  }
+}

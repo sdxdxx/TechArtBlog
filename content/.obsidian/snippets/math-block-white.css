@@ -1,0 +1,29 @@
+/* =========================================================
+   Obsidian: Block math only ( $$ ... $$ ) white background + black text
+   Inline math ( $ ... $ ) is NOT affected.
+   ========================================================= */
+
+/* Block math container */
+.markdown-preview-view .math-block,
+.markdown-source-view.mod-cm6 .math-block {
+  background: #fff !important;
+  color: #000 !important;
+
+  padding: 0.6em 0.8em;
+  border-radius: 8px;
+  margin: 0.8em 0;
+}
+
+/* Force KaTeX content inside block math to be black */
+.markdown-preview-view .math-block .katex,
+.markdown-preview-view .math-block .katex *,
+.markdown-source-view.mod-cm6 .math-block .katex,
+.markdown-source-view.mod-cm6 .math-block .katex * {
+  color: #000 !important;
+}
+
+/* Optional: keep the block centered nicely */
+.markdown-preview-view .math-block .katex-display,
+.markdown-source-view.mod-cm6 .math-block .katex-display {
+  margin: 0 !important;
+}

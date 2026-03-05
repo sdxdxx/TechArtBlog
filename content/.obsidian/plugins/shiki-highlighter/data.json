@@ -1,0 +1,12 @@
+{
+  "disabledLanguages": [],
+  "customThemeFolder": "",
+  "customLanguageFolder": "Assets_Plugin/CodeStyle",
+  "darkTheme": "dark-plus",
+  "lightTheme": "dark-plus",
+  "preferThemeColors": true,
+  "inlineHighlighting": false,
+  "ecDefaultShowLineNumbers": false,
+  "ecDefaultWrap": false,
+  "ecDefaultFrame": "auto"
+}

@@ -1,0 +1,181 @@
+/* @settings
+name: 🔗 Link Styles
+id: advanced-link-styles-v14
+settings:
+  - 
+    id: title_internal
+    title: 📃 内部链接 (Internal)
+    type: heading
+    level: 1
+  - 
+    id: color_internal_normal
+    title: 默认状态颜色
+    description: 链接平时的颜色
+    type: variable-color
+    default: "#B1BFF7"
+  - 
+    id: sep_internal_title
+    title: ⬇️ 鼠标悬停状态
+    type: heading
+    level: 4
+  - 
+    id: color_internal_hover
+    title: 悬停高亮颜色
+    description: 鼠标放上去变什么色
+    type: variable-color
+    default: "#C5B7FB"
+  - 
+    id: title_external
+    title: 🔗 外部链接 (External)
+    type: heading
+    level: 1
+  - 
+    id: color_external_normal
+    title: 默认状态颜色
+    description: 链接平时的颜色
+    type: variable-color
+    default: "#B1BFF7"
+  - 
+    id: sep_external_title
+    title: ⬇️ 鼠标悬停状态
+    type: heading
+    level: 4
+  - 
+    id: color_external_hover
+    title: 悬停高亮颜色
+    description: 鼠标放上去变什么色
+    type: variable-color
+    default: "#C5B7FB"
+  - 
+    id: title_dead
+    title: 🚫 其他设置
+    type: heading
+    level: 1
+  - 
+    id: color_link_dead
+    title: 未解析链接颜色 (死链)
+    type: variable-color
+    default: "#BF616A"
+  - 
+    id: toggle_hide_icons
+    title: 编辑行时隐藏图标
+    description: "开启后，光标所在行的图标会自动隐藏。"
+    type: class-toggle
+    default: true
+*/
+
+/* ==========================================================
+   Obsidian 链接样式 V14
+   ========================================================= */
+
+body {
+    /* --- 1. 变量定义 --- */
+    --color_internal_normal: #B1BFF7;
+    --color_internal_hover: #C5B7FB;
+    --color_external_normal: #B1BFF7;
+    --color_external_hover: #C5B7FB;
+    --color_link_dead: #BF616A;
+    /* --- 2. 映射系统变量 --- */
+    --link-color: var(--color_internal_normal);
+    --link-color-hover: var(--color_internal_hover);
+    --link-external-color: var(--color_external_normal);
+    --link-external-color-hover: var(--color_external_hover);
+    --link-unresolved-color: var(--color_link_dead);
+    --link-unresolved-opacity: 1;
+}
+
+/* ==========================================================
+   1. 外部链接 (External)
+   ========================================================= */
+
+/* 文本 & 下划线 */
+.markdown-source-view .cm-link:not(.cm-formatting),
+.markdown-source-view .cm-url,
+.markdown-preview-view .external-link {
+    color: var(--color_external_normal) !important;
+    text-decoration: underline !important;
+}
+
+    /* 悬停 */
+    .markdown-source-view .cm-link:not(.cm-formatting):hover,
+    .markdown-source-view .cm-url:hover,
+    .markdown-preview-view .external-link:hover {
+        color: var(--color_external_hover) !important;
+    }
+
+    /* 图标 🔗 */
+    .markdown-source-view .cm-link:not(.cm-formatting):not(.cm-url)::before,
+    .markdown-preview-view .external-link::before {
+        content: "🔗";
+        margin-right: 4px;
+        display: inline-block;
+        text-decoration: none;
+        color: transparent !important;
+        text-shadow: 0 0 0 var(--color_external_normal) !important;
+    }
+
+    /* 图标悬停 */
+    .markdown-source-view .cm-link:not(.cm-formatting):not(.cm-url):hover::before,
+    .markdown-preview-view .external-link:hover::before {
+        text-shadow: 0 0 0 var(--color_external_hover) !important;
+    }
+
+
+/* ==========================================================
+   2. 内部链接 (Internal)
+   ========================================================= */
+
+/* 文本 & 无下划线 */
+.markdown-source-view .cm-hmd-internal-link,
+.markdown-preview-view .internal-link {
+    color: var(--color_internal_normal) !important;
+    text-decoration: none !important;
+}
+
+    /* 悬停 */
+    .markdown-source-view .cm-hmd-internal-link:hover,
+    .markdown-preview-view .internal-link:hover {
+        color: var(--color_internal_hover) !important;
+    }
+
+    /* 图标 📃 */
+    .markdown-source-view .cm-hmd-internal-link:not(.cm-formatting):not(.is-unresolved)::before,
+    .markdown-preview-view .internal-link:not(.is-unresolved)::before {
+        content: "📃";
+        margin-right: 4px;
+        display: inline-block;
+        color: transparent !important;
+        text-shadow: 0 0 0 var(--color_internal_normal) !important;
+    }
+
+    /* 图标悬停 */
+    .markdown-source-view .cm-hmd-internal-link:not(.cm-formatting):not(.is-unresolved):hover::before,
+    .markdown-preview-view .internal-link:hover::before {
+        text-shadow: 0 0 0 var(--color_internal_hover) !important;
+    }
+
+
+    /* ==========================================================
+   3. 未解析链接 (Dead Links)
+   ========================================================= */
+
+    .markdown-source-view .cm-hmd-internal-link.is-unresolved,
+    .markdown-preview-view .internal-link.is-unresolved {
+        color: var(--color_link_dead) !important;
+        opacity: 1 !important;
+    }
+
+        .markdown-source-view .cm-hmd-internal-link.is-unresolved::before,
+        .markdown-preview-view .internal-link.is-unresolved::before {
+            display: none !important;
+        }
+
+
+/* ==========================================================
+   4. 智能隐藏行为
+   ========================================================= */
+
+body.toggle_hide_icons .cm-line.cm-active .cm-link::before,
+body.toggle_hide_icons .cm-line.cm-active .cm-hmd-internal-link::before {
+    display: none !important;
+}

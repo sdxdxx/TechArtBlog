@@ -1,0 +1,25 @@
+/* 强制为表格显示网格线（阅读视图 + Live Preview） */
+:root {
+  --table-border-color: var(--background-modifier-border, var(--color-base-40));
+  --table-border-width: 1px;
+}
+
+/* 阅读视图 */
+.markdown-rendered table { border-collapse: collapse; }
+.markdown-rendered th,
+.markdown-rendered td {
+  border: var(--table-border-width) solid var(--table-border-color) !important;
+}
+
+/* Live Preview（编辑视图，尽量兼容不同版本的 CM6 标记） */
+.markdown-source-view.mod-cm6 .cm-content .table-wrapper th,
+.markdown-source-view.mod-cm6 .cm-content .table-wrapper td,
+.markdown-source-view.mod-cm6 .cm-table-widget th,
+.markdown-source-view.mod-cm6 .cm-table-widget td,
+.markdown-source-view.mod-cm6 .table-editor th,
+.markdown-source-view.mod-cm6 .table-editor td {
+  border: var(--table-border-width) solid var(--table-border-color) !important;
+}
+
+/* 如果主题把行间距/背景盖住了边框，可以加上这行提高对比度 */
+// .markdown-rendered table tr { background-clip: padding-box; }

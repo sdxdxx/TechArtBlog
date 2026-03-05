@@ -1,0 +1,10 @@
+{
+  "id": "image-alias-manager",
+  "name": "Image Alias Manager",
+  "version": "1.10.0",
+  "minAppVersion": "1.5.0",
+  "description": "Safely modify image embeds off-screen. Supports hierarchical heading aliases, clear-all, and selection-only add/clear.",
+  "author": "DXX",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}

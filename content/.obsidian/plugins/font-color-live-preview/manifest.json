@@ -1,0 +1,10 @@
+{
+  "id": "font-color-live-preview",
+  "name": "Font Color Live Preview",
+  "version": "1.0.0",
+  "minAppVersion": "1.4.0",
+  "description": "Hide <font color> tags and render the colored text directly in Live Preview.",
+  "author": "Xiaoxiao & ChatGPT",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}

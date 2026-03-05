@@ -1,0 +1,107 @@
+/* === 完整版：图片全局居中（Composer 友好），不影响代码 === */
+/* 目标：
+   1) 阅读/预览/Live Preview 中的图片都居中
+   2) 不把代码块或行内代码也居中
+   3) 兼容 Composer 主题对 .image-embed 的收缩布局
+*/
+
+/* 0) 取消过激的容器整体居中（避免把文本/代码也居中） */
+.markdown-source-view.mod-cm6 .cm-embed-block {
+    text-align: initial !important;
+}
+
+/* 1) 居中“图片容器”本身（Composer 常让容器收缩到内容）
+   用 display: table + margin:auto 达成“收缩宽度 + 居中” */
+.markdown-reading-view .image-embed,
+.markdown-preview-view .image-embed {
+    display: table !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+.markdown-source-view.mod-cm6 .cm-content :is(.internal-embed.image-embed, .image-embed) {
+    display: table !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+    /* 2) 保险：图片自身也保持块级 + auto 外边距（不波及文字） */
+    .markdown-reading-view .image-embed img,
+    .markdown-preview-view .image-embed img,
+    .markdown-source-view.mod-cm6 .cm-content :is(.internal-embed.image-embed, .image-embed) img {
+        display: block !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+/* 3) 阅读/预览：整行仅有“外链图片”时也居中 */
+.markdown-reading-view :is(p, li, blockquote) > img:only-child:not(.emoji),
+.markdown-preview-view :is(p, li, blockquote) > img:only-child:not(.emoji) {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* 4) Live Preview：整行仅有“外链图片”时，用 :has 精准置中这一行 */
+.markdown-source-view.mod-cm6 .cm-line:has(> img:only-child:not(.emoji)) {
+    text-align: center !important;
+}
+
+.markdown-source-view.mod-cm6 .cm-line > img:only-child:not(.emoji) {
+    display: inline-block !important; /* 保持固有宽度，配合上行的行内居中 */
+}
+
+/* 5) 表格内的图片也居中 */
+.markdown-reading-view table img,
+.markdown-preview-view table img,
+.markdown-source-view.mod-cm6 table img {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* 6) 可选：图片标题（caption）居中（不影响代码） */
+.image-embed .image-caption {
+    text-align: center !important;
+}
+
+/* 7) 保护：表情/小图标保持行内，不参与居中规则 */
+img.emoji {
+    display: inline !important;
+    margin: 0 !important;
+}
+
+/* 8) 保险：清理可能来自主题/内联样式的 float 干扰 */
+.image-embed[style*="float"],
+.markdown-reading-view img[style*="float"],
+.markdown-preview-view img[style*="float"],
+.markdown-source-view.mod-cm6 img[style*="float"] {
+    float: none !important;
+}
+
+/* 9) 代码始终左对齐（阅读 + 预览） */
+.markdown-reading-view pre,
+.markdown-preview-view pre,
+.markdown-reading-view code,
+.markdown-preview-view code {
+    text-align: left !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* 10) 代码始终左对齐（Live Preview：块/行内） */
+.markdown-source-view.mod-cm6 .cm-inline-code,
+.markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock,
+.markdown-source-view.mod-cm6 .HyperMD-codeblock.cm-line {
+    text-align: left !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* 11) 列表/引用/Callout 中的代码也保持左对齐 */
+.markdown-reading-view :is(blockquote, li) pre,
+.markdown-preview-view :is(blockquote, li) pre,
+.callout pre,
+.callout code {
+    text-align: left !important;
+}

@@ -1,0 +1,149 @@
+{
+  "enableIcons": true,
+  "enableFolderIcons": false,
+  "enableFileIcons": true,
+  "iconGap": 0,
+  "iconVerticalOffset": 0,
+  "folderIcons": [
+    {
+      "path": "0_收集箱",
+      "emoji": "🗑️"
+    },
+    {
+      "path": "1_项目",
+      "emoji": "📁"
+    },
+    {
+      "path": "2_领域",
+      "emoji": "🧭"
+    },
+    {
+      "path": "3_资源",
+      "emoji": "📚"
+    },
+    {
+      "path": "4_归档",
+      "emoji": "📦"
+    },
+    {
+      "path": "FIEA",
+      "emoji": "🚀"
+    }
+  ],
+  "fileTypeIcons": [
+    {
+      "name": "文本文件",
+      "extensions": [
+        ".txt",
+        ".ini"
+      ],
+      "emoji": "📄"
+    },
+    {
+      "name": "Markdown",
+      "extensions": [
+        ".md"
+      ],
+      "emoji": "📝"
+    },
+    {
+      "name": "图片",
+      "extensions": [
+        ".png",
+        ".jpg",
+        ".jpeg",
+        ".gif",
+        ".webp"
+      ],
+      "emoji": "🖼️"
+    },
+    {
+      "name": "PDF",
+      "extensions": [
+        ".pdf"
+      ],
+      "emoji": "📋"
+    },
+    {
+      "name": "Word",
+      "extensions": [
+        ".docx",
+        ".doc"
+      ],
+      "emoji": "📑"
+    },
+    {
+      "name": "Excel",
+      "extensions": [
+        ".xlsx",
+        ".xls",
+        ".csv"
+      ],
+      "emoji": "📈"
+    },
+    {
+      "name": "PPT",
+      "extensions": [
+        ".ppt",
+        ".pptx"
+      ],
+      "emoji": "📊"
+    },
+    {
+      "name": "视频",
+      "extensions": [
+        ".mp4",
+        ".mov",
+        ".avi",
+        ".mkv"
+      ],
+      "emoji": "🎥"
+    },
+    {
+      "name": "音频",
+      "extensions": [
+        ".mp3",
+        ".wav",
+        ".flac"
+      ],
+      "emoji": "🎵"
+    },
+    {
+      "name": "压缩包",
+      "extensions": [
+        ".zip",
+        ".rar",
+        ".7z"
+      ],
+      "emoji": "🗜️"
+    },
+    {
+      "name": "代码",
+      "extensions": [
+        ".js",
+        ".css",
+        ".html",
+        ".py",
+        ".java",
+        ".c",
+        ".cpp",
+        ".json"
+      ],
+      "emoji": "💻"
+    },
+    {
+      "name": "Canvas",
+      "extensions": [
+        ".canvas"
+      ],
+      "emoji": "🎨"
+    },
+    {
+      "name": "Excalidraw",
+      "extensions": [
+        ".excalidraw.md"
+      ],
+      "emoji": "🧩"
+    }
+  ]
+}

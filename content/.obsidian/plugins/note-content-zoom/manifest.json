@@ -1,0 +1,9 @@
+{
+  "id": "note-content-zoom",
+  "name": "Note Content Zoom (Ctrl+Wheel)",
+  "version": "1.5.0",
+  "minAppVersion": "1.5.0",
+  "description": "Zoom only note content (text + images) with Ctrl/Cmd + mouse wheel, without scaling the whole UI.",
+  "author": "DXX",
+  "isDesktopOnly": true
+}

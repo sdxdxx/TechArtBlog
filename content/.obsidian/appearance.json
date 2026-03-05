@@ -1,0 +1,23 @@
+{
+  "accentColor": "",
+  "baseFontSize": 20,
+  "theme": "obsidian",
+  "enabledCssSnippets": [
+    "link-style",
+    "rainbow-headings",
+    "TableStyles",
+    "rounded-images",
+    "auto-attribute-hide",
+    "center-image",
+    "editor-full",
+    "emphasis-colors",
+    "real-link-style",
+    "One Dark Pro",
+    "One Dark Plus",
+    "math-block-white",
+    "rainbow-folders",
+    "table-borders"
+  ],
+  "cssTheme": "Composer",
+  "showRibbon": true
+}

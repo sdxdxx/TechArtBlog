@@ -1,0 +1,158 @@
+/* @settings
+name: 🖍️ Emphasis Colors
+id: emphasis-colors-v2-fixed
+settings:
+  - 
+    id: title_colors
+    title: 🎨 颜色配置
+    type: heading
+    level: 1
+  - 
+    id: title_italic
+    title: 1. 斜体设置 (Italic)
+    type: heading
+    level: 4
+  - 
+    id: em-italic-color
+    title: 斜体颜色
+    description: "推荐：介于亮绿(#2EE6A6)与低饱和绿(#6AA287)之间"
+    type: variable-color
+    default: '#4CC496'
+  - 
+    id: title_bold
+    title: 2. 粗体设置 (Bold)
+    type: heading
+    level: 4
+  - 
+    id: em-bold-color
+    title: 粗体颜色
+    description: "推荐：介于亮红(#FF3B3B)与低饱和红(#C25C5C)之间"
+    type: variable-color
+    default: '#E04C4C'
+  - 
+    id: title_bold_italic
+    title: 3. 粗斜体设置 (Bold-Italic)
+    type: heading
+    level: 4
+  - 
+    id: em-bold-italic-color
+    title: 粗斜体颜色
+    description: "推荐：介于亮蓝(#2F80FF)与低饱和蓝(#5C76A4)之间"
+    type: variable-color
+    default: '#467BD2'
+  - 
+    id: title_underline
+    title: 4. 下划线设置 (Underline)
+    type: heading
+    level: 4
+  - 
+    id: em-underline-color
+    title: 下划线颜色
+    description: "推荐：介于亮黄(#FFD60A)与低饱和黄(#C2A652)之间"
+    type: variable-color
+    default: '#E0BE2E'
+  - 
+    id: title_behavior
+    title: 🛠️ 行为设置
+    type: heading
+    level: 1
+  - 
+    id: em-underline-override
+    title: 下划线颜色覆盖文字
+    type: class-toggle
+    default: true
+    description: "开启后，带下划线的文本将直接显示为下划线颜色（忽略粗体/斜体原色）。"
+  - 
+    id: em-keep-link-color
+    title: 保持链接原色
+    type: class-toggle
+    default: true
+    description: "开启后，强调文本内的链接(Link)将保持主题默认颜色，不被强制染色。"
+*/
+
+/* ==========================================================
+   强调色样式 V2 (Style Settings 修复版)
+   ========================================================= */
+
+/* ------- 变量默认值 ------- */
+:root {
+    --em-italic-color: #4CC496;
+    --em-bold-color: #E04C4C;
+    --em-bold-italic-color: #467BD2;
+    --em-underline-color: #E0BE2E;
+}
+
+/* ========== 1. 阅读/预览模式 (Reading View) ========== */
+
+/* 斜体 */
+.markdown-preview-view em,
+.markdown-preview-view i {
+    color: var(--em-italic-color);
+}
+
+/* 加粗 */
+.markdown-preview-view strong,
+.markdown-preview-view b {
+    color: var(--em-bold-color);
+}
+
+    /* 粗斜体 (嵌套组合) */
+    .markdown-preview-view strong em,
+    .markdown-preview-view strong i,
+    .markdown-preview-view em strong,
+    .markdown-preview-view i b {
+        color: var(--em-bold-italic-color);
+    }
+
+/* 下划线: 线条颜色 */
+.markdown-preview-view u,
+.markdown-preview-view ins {
+    text-decoration-color: var(--em-underline-color);
+}
+
+/* 下划线: 覆盖文字颜色 (当开关开启时) */
+body.em-underline-override .markdown-preview-view u,
+body.em-underline-override .markdown-preview-view ins,
+body.em-underline-override .markdown-preview-view u em,
+body.em-underline-override .markdown-preview-view u strong {
+    color: var(--em-underline-color);
+}
+
+
+/* ========== 2. 编辑模式 (Live Preview) ========== */
+
+/* 斜体 */
+.markdown-source-view.mod-cm6 .cm-em {
+    color: var(--em-italic-color);
+}
+
+/* 加粗 */
+.markdown-source-view.mod-cm6 .cm-strong {
+    color: var(--em-bold-color);
+}
+
+    /* 粗斜体 */
+    .markdown-source-view.mod-cm6 .cm-strong.cm-em {
+        color: var(--em-bold-italic-color);
+    }
+
+/* 下划线 (Live Preview 中 u/ins 是真实标签) */
+.markdown-source-view.mod-cm6 u,
+.markdown-source-view.mod-cm6 ins {
+    text-decoration-color: var(--em-underline-color);
+}
+
+/* 下划线覆盖行为 */
+body.em-underline-override .markdown-source-view.mod-cm6 u,
+body.em-underline-override .markdown-source-view.mod-cm6 ins,
+body.em-underline-override .markdown-source-view.mod-cm6 u * {
+    color: var(--em-underline-color);
+}
+
+
+/* ========== 3. 链接颜色保护 (Keep Link Color) ========== */
+
+/* 逻辑：如果 a 标签在 em/strong/u 内部，强制恢复为系统链接色 */
+body.em-keep-link-color :is(.markdown-preview-view, .markdown-source-view.mod-cm6) :is(em, strong, u, ins) a {
+    color: var(--link-color, var(--link-external-color, inherit)) !important;
+}

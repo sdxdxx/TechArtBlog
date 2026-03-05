@@ -1,0 +1,59 @@
+/* ===== 彩虹标题配色（按你提供的 RGB）===== */
+:root {
+    --rainbow-h1: rgb(171, 180, 207);
+    --rainbow-h2: rgb(235, 203, 139);
+    --rainbow-h3: rgb(163, 190, 140);
+    --rainbow-h4: rgb(180, 142, 173);
+    --rainbow-h5: rgb(143, 188, 187);
+    --rainbow-h6: rgb(129, 161, 193);
+}
+
+/* ================== 阅读模式：只改文字颜色 ================== */
+.markdown-preview-view h1 {
+    color: var(--rainbow-h1);
+}
+
+.markdown-preview-view h2 {
+    color: var(--rainbow-h2);
+}
+
+.markdown-preview-view h3 {
+    color: var(--rainbow-h3);
+}
+
+.markdown-preview-view h4 {
+    color: var(--rainbow-h4);
+}
+
+.markdown-preview-view h5 {
+    color: var(--rainbow-h5);
+}
+
+.markdown-preview-view h6 {
+    color: var(--rainbow-h6);
+}
+
+/* ================== 编辑模式（Live Preview）：只改文字颜色 ================== */
+.cm-s-obsidian span.cm-header-1 {
+    color: var(--rainbow-h1);
+}
+
+.cm-s-obsidian span.cm-header-2 {
+    color: var(--rainbow-h2);
+}
+
+.cm-s-obsidian span.cm-header-3 {
+    color: var(--rainbow-h3);
+}
+
+.cm-s-obsidian span.cm-header-4 {
+    color: var(--rainbow-h4);
+}
+
+.cm-s-obsidian span.cm-header-5 {
+    color: var(--rainbow-h5);
+}
+
+.cm-s-obsidian span.cm-header-6 {
+    color: var(--rainbow-h6);
+}

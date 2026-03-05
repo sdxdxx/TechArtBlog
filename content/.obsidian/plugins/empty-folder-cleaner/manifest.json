@@ -1,0 +1,10 @@
+{
+  "id": "empty-folder-cleaner",
+  "name": "Empty Folder Cleaner",
+  "version": "1.0.0",
+  "minAppVersion": "0.9.0",
+  "description": "Scan and delete empty folders under a chosen base folder (default: Assets). Includes preview & exclude rules.",
+  "author": "DXX",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}
