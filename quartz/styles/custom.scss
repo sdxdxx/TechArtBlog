@@ -3,6 +3,18 @@
 // put your custom CSS here!
 
 /* ==========================================
+   配合 YAML 暗号隐藏首页自带标题
+   ========================================== */
+.homepage .article-title, 
+.homepage .content-meta {
+  display: none !important;
+}
+
+/* 隐藏首页的底部分页导航 */
+hr + .page-footer {
+  margin-top: 4rem;
+}
+/* ==========================================
    左上角 Logo 与副标题优化 (Branding)
    ========================================== */
 .page-title {
@@ -10,7 +22,7 @@
   font-weight: 900 !important; /* 字体加粗 */
   letter-spacing: 1px;         /* 稍微增加字间距 */
   line-height: 1.1;
-  margin-bottom: 1.5rem;       /* 名字和搜索区保持适中呼吸感 */
+  margin-bottom: 2rem;         /* 和下方的目录拉开呼吸感 */
 }
 
 /* 用伪元素自动在名字下方生成职位头衔 */
@@ -21,200 +33,50 @@
   font-weight: 500;            /* 字体变细 */
   color: var(--gray);          /* 使用主题自带的高级灰 */
   letter-spacing: 0.5px;
-  margin-top: 0.2rem;          /* 头衔紧贴名字，增强一体感 */
+  margin-top: 0.3rem;          /* 和名字拉开一点点距离 */
 }
 
 
 /* ==========================================
-   桌面端布局与首页画廊优化 (>= 1200px)
+   ArtStation 风格画廊网格 (Homepage Gallery)
    ========================================== */
-@media screen and (min-width: 1200px) {
-  /* 突破宽度限制：桌面端扩展页面最大宽度 */
-  .page {
-    max-width: 1600px !important;
-  }
-
-  /* 重写底层网格：增大左侧栏可用宽度，避免品牌名换行 */
-  .page > #quartz-body {
-    grid-template-columns: 340px minmax(0, 1fr) !important;
-    grid-template-rows: auto auto auto auto !important;
-    grid-template-areas:
-      "grid-sidebar-left grid-header"
-      "grid-sidebar-left grid-center"
-      "grid-sidebar-left grid-sidebar-right"
-      "grid-sidebar-left grid-footer" !important;
-  }
-
-  /* 内容区彻底撑满可用空间 */
-  .page > #quartz-body .center,
-  .page > #quartz-body .center > article {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-width: 0 !important;
-  }
-
-  /* 左侧侧栏统一左缩进，并固定内容左对齐 */
-  .page > #quartz-body .sidebar.left {
-    padding-left: 2rem !important;
-    padding-right: 1.25rem !important;
-    align-items: flex-start !important;
-  }
-
-  /* 名字、搜索和目录在垂直方向统一左边缘 */
-  .page > #quartz-body .sidebar.left .page-title,
-  .page > #quartz-body .sidebar.left .search,
-  .page > #quartz-body .sidebar.left .explorer {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    text-align: left !important;
-    width: 100% !important;
-    max-width: none !important;
-  }
-
-  /* 品牌名单行显示，避免被压成两行 */
-  .page > #quartz-body .sidebar.left .page-title a {
-    display: inline-block !important;
-    white-space: nowrap !important;
-  }
-
-  /* 搜索与目录拉开距离，避免视觉挤压 */
-  .page > #quartz-body .sidebar.left .search,
-  .page > #quartz-body .sidebar.left > .flex-component {
-    margin-bottom: 1.2rem !important;
-  }
-
-  /* 搜索行布局：搜索框吃满剩余空间，功能按钮贴右对齐 */
-  .page > #quartz-body .sidebar.left > .flex-component {
-    width: 100% !important;
-    display: flex !important;
-    align-items: center !important;
-    gap: 0.65rem !important;
-  }
-
-  .page > #quartz-body .sidebar.left > .flex-component .search {
-    flex: 1 1 auto !important;
-    min-width: 0 !important;
-    margin-bottom: 0 !important;
-  }
-
-  /* 搜索栏横向铺满，弱化“窄条”观感 */
-  .page > #quartz-body .sidebar.left .search {
-    max-width: none !important;
-  }
-
-  .page > #quartz-body .sidebar.left .search > .search-button {
-    width: 100% !important;
-    height: 2.25rem !important;
-    border-radius: 10px !important;
-    border: 1px solid var(--lightgray) !important;
-    background-color: var(--light) !important;
-  }
-
-  /* Explorer 头部和内容都占满宽度，消除右侧空白感 */
-  .page > #quartz-body .sidebar.left .explorer {
-    width: 100% !important;
-  }
-
-  .page > #quartz-body .sidebar.left .explorer button.desktop-explorer {
-    width: 100% !important;
-    justify-content: space-between !important;
-  }
-
-  .page > #quartz-body .sidebar.left .explorer-content {
-    width: 100% !important;
-    box-sizing: border-box !important;
-    margin-top: 0.5rem !important;
-    padding: 0 !important;
-    border: none !important;
-    border-radius: 0 !important;
-    background: transparent !important;
-    max-height: none !important;
-    overflow-x: hidden !important;
-    overflow-y: auto !important;
-    scrollbar-width: none !important; /* Firefox */
-    -ms-overflow-style: none !important; /* IE/Edge Legacy */
-  }
-
-  .page > #quartz-body .sidebar.left .explorer-content::-webkit-scrollbar {
-    width: 0 !important;
-    height: 0 !important;
-    display: none !important;
-  }
-
-  .page > #quartz-body .sidebar.left .explorer-content > .explorer-ul {
-    scrollbar-width: none !important; /* Firefox */
-    -ms-overflow-style: none !important; /* IE/Edge Legacy */
-  }
-
-  .page > #quartz-body .sidebar.left .explorer-content > .explorer-ul::-webkit-scrollbar {
-    width: 0 !important;
-    height: 0 !important;
-    display: none !important;
-  }
-
-  /* Explorer 字体与行高优化，更接近专业文档导航 */
-  .page > #quartz-body .sidebar.left .explorer,
-  .page > #quartz-body .sidebar.left .explorer a,
-  .page > #quartz-body .sidebar.left .explorer span,
-  .page > #quartz-body .sidebar.left .explorer button h2 {
-    font-size: 0.95rem !important;
-    line-height: 1.6 !important;
-  }
-
-  /* 避免右侧 sticky 容器的透明区域拦截 footer 链接点击 */
-  .page > #quartz-body .sidebar.right {
-    pointer-events: none !important;
-  }
-
-  /* 仅右侧侧栏内的真实内容允许交互 */
-  .page > #quartz-body .sidebar.right > * {
-    pointer-events: auto !important;
-  }
-
-  /* 首页视觉净化：隐藏标题与元信息 */
-  .homepage .article-title,
-  .homepage .content-meta {
-    display: none !important;
-  }
-
-  /* 隐藏首页底部分页导航（hr + .page-footer） */
-  .homepage hr:has(+ .page-footer),
-  .homepage hr + .page-footer {
-    display: none !important;
-  }
-
-  /* 画廊网格优化：宽屏响应式布局 */
-  .gallery-grid {
-    display: grid !important;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
-    gap: 24px !important;
-    margin-top: 2rem !important;
-    margin-bottom: 3rem !important;
-  }
-
-  /* 卡片容器样式 */
-  .gallery-grid a {
-    display: block !important;
-    overflow: hidden !important;
-    border-radius: 8px !important; /* 圆角，如果你喜欢硬朗的直角可以改成 0 */
-    background-color: #1e1e1e !important; /* 占位背景色 */
-    text-decoration: none !important; /* 去掉默认的超链接下划线 */
-    transition: transform 0.25s ease, box-shadow 0.25s ease !important;
-    will-change: transform, box-shadow !important;
-  }
-
-  /* 封面图片样式 */
-  .gallery-grid img {
-    width: 100% !important;
-    aspect-ratio: 1 / 1 !important; /* 强制锁定 1:1 的正方形比例 */
-    object-fit: cover !important; /* 保证图片填满且不变形 */
-    display: block !important;
-    margin: 0 !important;
-  }
-
-  /* 鼠标悬浮时的动态交互效果 (Hover Effect) */
-  .gallery-grid a:hover {
-    transform: translateY(-5px) !important; /* 微微上浮 */
-    box-shadow: 0 18px 32px rgba(0, 0, 0, 0.45) !important; /* 深邃阴影 */
-  }
+.gallery-grid {
+  display: grid;
+  /* 自动响应式排版，卡片最小宽度 280px */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
 }
+
+/* 卡片容器样式 */
+.gallery-grid a {
+  display: block;
+  overflow: hidden;
+  border-radius: 8px; /* 圆角，如果你喜欢硬朗的直角可以改成 0 */
+  background-color: #1e1e1e; /* 占位背景色 */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  text-decoration: none; /* 去掉默认的超链接下划线 */
+}
+
+/* 封面图片样式 */
+.gallery-grid img {
+  width: 100%;
+  /* height: 250px; */
+  aspect-ratio: 1 / 1; /* 新增：强制锁定 16:9 的宽屏比例 */
+  object-fit: cover; /* 保证图片填满且不变形 */
+  display: block;
+  margin: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* 鼠标悬浮时的动态交互效果 (Hover Effect) */
+.gallery-grid a:hover {
+  transform: translateY(-5px); /* 微微上浮 */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* 增加阴影 */
+}
+
+.gallery-grid a:hover img {
+  opacity: 0.85; /* 图片变暗一点点，突出交互感 */
+}
+
