@@ -1,3 +1,4 @@
+import { execSync } from "node:child_process"
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
 
@@ -6,6 +7,58 @@ import * as Plugin from "./quartz/plugins"
  *
  * See https://quartz.jzhao.xyz/configuration for more information.
  */
+const isLocalPreview = process.argv.includes("--serve")
+
+function getCliArgValue(flagName: string): string | null {
+  const directPrefix = `${flagName}=`
+  for (let i = 0; i < process.argv.length; i++) {
+    const arg = process.argv[i]
+    if (arg === flagName) {
+      const next = process.argv[i + 1]
+      if (next && !next.startsWith("-")) return next
+      return null
+    }
+    if (arg.startsWith(directPrefix)) {
+      const value = arg.slice(directPrefix.length)
+      return value.length > 0 ? value : null
+    }
+  }
+  return null
+}
+
+function inferGitHubPagesBaseUrl(): string | null {
+  // GitHub Actions: GITHUB_REPOSITORY="owner/repo"
+  const githubRepository = process.env.GITHUB_REPOSITORY?.trim()
+  if (githubRepository && githubRepository.includes("/")) {
+    const [owner, repo] = githubRepository.split("/", 2)
+    if (owner && repo) {
+      return `${owner}.github.io/${repo}`
+    }
+  }
+
+  // Local machine: infer from git remote origin
+  try {
+    const remoteUrl = execSync("git remote get-url origin", { encoding: "utf8" }).trim()
+    const match = remoteUrl.match(/github\.com[:/]([^/]+)\/([^/.]+)(?:\.git)?$/i)
+    if (match) {
+      const [, owner, repo] = match
+      return `${owner}.github.io/${repo}`
+    }
+  } catch {
+    // Ignore and fall back below.
+  }
+
+  return null
+}
+
+// Prefer env override so domain/repo renames do not require code edits.
+// In local preview (--serve), always use root path to avoid subpath 404.
+const cliBaseDir = getCliArgValue("--baseDir")?.replace(/^\/+|\/+$/g, "") ?? ""
+const localBaseUrl = cliBaseDir.length > 0 ? `localhost/${cliBaseDir}` : "localhost"
+const inferredProdBaseUrl = inferGitHubPagesBaseUrl()
+const resolvedBaseUrl =
+  process.env.QUARTZ_BASE_URL?.trim() ??
+  (isLocalPreview ? localBaseUrl : inferredProdBaseUrl ?? "localhost")
 const config: QuartzConfig = {
   configuration: {
     pageTitle: "Xiaoxiao Deng",
@@ -16,7 +69,7 @@ const config: QuartzConfig = {
       provider: "plausible",
     },
     locale: "en-US",
-    baseUrl: "quartz.jzhao.xyz",
+    baseUrl: resolvedBaseUrl,
     ignorePatterns: ["private", "templates", ".obsidian", "Assets_Plugin"],
     defaultDateType: "modified",
     theme: {
