@@ -4,19 +4,19 @@
   "theme": "obsidian",
   "enabledCssSnippets": [
     "link-style",
-    "rainbow-headings",
-    "TableStyles",
-    "rounded-images",
-    "auto-attribute-hide",
-    "center-image",
-    "editor-full",
-    "real-link-style",
     "One Dark Pro",
+    "editor-full",
+    "center-image",
+    "auto-attribute-hide",
+    "emphasis-colors",
+    "math-block-white",
     "One Dark Plus",
     "rainbow-folders",
+    "rainbow-headings",
+    "real-link-style",
+    "rounded-images",
     "table-borders",
-    "math-block-white",
-    "emphasis-colors"
+    "TableStyles"
   ],
   "cssTheme": "Composer",
   "showRibbon": true

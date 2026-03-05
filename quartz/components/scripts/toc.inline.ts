@@ -24,13 +24,28 @@ function toggleToc(this: HTMLElement) {
   content.classList.toggle("collapsed")
 }
 
+function handleTocHeaderClick(this: HTMLElement, e: Event) {
+  const target = e.target as HTMLElement | null
+  if (!target) return
+
+  // Keep original collapse animation: only fold icon click toggles TOC.
+  if (target.closest(".fold")) {
+    toggleToc.call(this)
+    return
+  }
+
+  // Clicking title text (or any non-fold area) scrolls to page top.
+  e.preventDefault()
+  window.scrollTo({ top: 0, behavior: "smooth" })
+}
+
 function setupToc() {
   for (const toc of document.getElementsByClassName("toc")) {
     const button = toc.querySelector(".toc-header")
     const content = toc.querySelector(".toc-content")
-    if (!button || !content) return
-    button.addEventListener("click", toggleToc)
-    window.addCleanup(() => button.removeEventListener("click", toggleToc))
+    if (!button || !content) continue
+    button.addEventListener("click", handleTocHeaderClick)
+    window.addCleanup(() => button.removeEventListener("click", handleTocHeaderClick))
   }
 }
 

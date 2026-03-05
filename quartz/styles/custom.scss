@@ -74,10 +74,43 @@ body[data-slug="Home"] .center > hr + .page-footer {
   --rainbow-h5: rgb(143, 188, 187);
   --rainbow-h6: rgb(129, 161, 193);
 
+  /* 标题字号（H1-H6）：对齐你 Obsidian 的配置 */
+  --heading-h1-size: 1.69em;
+  --heading-h2-size: 1.51em;
+  --heading-h3-size: 1.35em;
+  --heading-h4-size: 1.21em;
+  --heading-h5-size: 1.1em;
+  --heading-h6-size: 1em;
+
   --em-italic-color: #4cc496;
   --em-bold-color: #e04c4c;
   --em-bold-italic-color: #467bd2;
   --em-underline-color: #e0be2e;
+}
+
+/* 标题字号：仅作用于正文和弹窗预览，不影响页面主标题 */
+:is(.center article, .popover .popover-inner) h1 {
+  font-size: var(--heading-h1-size) !important;
+}
+
+:is(.center article, .popover .popover-inner) h2 {
+  font-size: var(--heading-h2-size) !important;
+}
+
+:is(.center article, .popover .popover-inner) h3 {
+  font-size: var(--heading-h3-size) !important;
+}
+
+:is(.center article, .popover .popover-inner) h4 {
+  font-size: var(--heading-h4-size) !important;
+}
+
+:is(.center article, .popover .popover-inner) h5 {
+  font-size: var(--heading-h5-size) !important;
+}
+
+:is(.center article, .popover .popover-inner) h6 {
+  font-size: var(--heading-h6-size) !important;
 }
 
 /* 彩虹标题：仅正文和弹窗预览内生效，避免影响侧栏/导航 */
@@ -246,7 +279,7 @@ body[data-slug="Home"] .center > hr + .page-footer {
 }
 
 /* ==========================================
-   桌面端布局微调：左栏左移 + 正文拓宽
+   桌面端布局微调：左栏 + 正文 + 右侧 TOC 常驻
    ========================================== */
 @media screen and (min-width: 1200px) {
   /* 提升整体可用宽度，给正文更多空间 */
@@ -254,15 +287,14 @@ body[data-slug="Home"] .center > hr + .page-footer {
     max-width: 1700px !important;
   }
 
-  /* 改成两列布局：左栏 + 主内容，释放正文宽度 */
+  /* 三列布局：左栏常驻 + 正文 + 右侧 TOC 常驻 */
   .page > #quartz-body {
-    grid-template-columns: 300px minmax(0, 1fr) !important;
-    grid-template-rows: auto auto auto auto !important;
+    grid-template-columns: 300px minmax(0, 1fr) 280px !important;
+    grid-template-rows: auto auto auto !important;
     grid-template-areas:
-      "grid-sidebar-left grid-header"
-      "grid-sidebar-left grid-center"
-      "grid-sidebar-left grid-sidebar-right"
-      "grid-sidebar-left grid-footer" !important;
+      "grid-sidebar-left grid-header grid-sidebar-right"
+      "grid-sidebar-left grid-center grid-sidebar-right"
+      "grid-sidebar-left grid-footer grid-sidebar-right" !important;
   }
 
   /* 让左侧栏整体更靠左 */
@@ -277,6 +309,30 @@ body[data-slug="Home"] .center > hr + .page-footer {
     width: 100% !important;
     max-width: 100% !important;
     min-width: 0 !important;
+  }
+
+  /* 右侧 TOC 在桌面端常驻显示，便于快速跳转 */
+  .page > #quartz-body .sidebar.right {
+    padding-left: 1rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  .page > #quartz-body .sidebar.right .toc {
+    display: flex !important;
+  }
+
+  /* 主页例外：不显示右侧 TOC，内容区占满右侧空间 */
+  body[data-slug="Home"] .page > #quartz-body {
+    grid-template-columns: 300px minmax(0, 1fr) !important;
+    grid-template-rows: auto auto auto !important;
+    grid-template-areas:
+      "grid-sidebar-left grid-header"
+      "grid-sidebar-left grid-center"
+      "grid-sidebar-left grid-footer" !important;
+  }
+
+  body[data-slug="Home"] .page > #quartz-body .sidebar.right {
+    display: none !important;
   }
 }
 

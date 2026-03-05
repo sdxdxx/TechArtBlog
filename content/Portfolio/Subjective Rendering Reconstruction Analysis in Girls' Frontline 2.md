@@ -250,7 +250,7 @@ Result:
 
 ![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305045219-1.gif|800]]
 
-### Eye Rendering
+### Eye
 
 ![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 05-00-05 2026-03-05.png|Model Eye|800]]
 
