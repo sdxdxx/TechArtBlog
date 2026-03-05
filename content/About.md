@@ -12,8 +12,8 @@ cssclasses:
     <div class="as-role">Technical Artist / Stylized Rendering / Shading / Tools</div>
     <p class="as-blurb">I build real-time rendering features and artist-friendly tools, with a focus on stylized PBR + NPR pipelines (UE5 / Unity URP), performance, and production usability.</p>
     <div class="as-cta">
-      <a class="as-btn" href="../Home">View Portfolio</a>
-      <a class="as-btn as-btn--ghost" href="./assets/Xiaoxiao_Deng_Resume.pdf" target="_blank" rel="noopener noreferrer">Resume (PDF)</a>
+      <a class="as-btn" href="./Home">Portfolio</a>
+      <a class="as-btn as-btn--ghost" href="./Resume">Resume</a>
     </div>
   </div>
 </section>

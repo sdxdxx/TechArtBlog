@@ -68,7 +68,7 @@ cssclasses:
 1. [Subjective Rendering Reconstruction Analysis in Girls' Frontline 2](Portfolio/Subjective Rendering Reconstruction Analysis in Girls' Frontline 2)
 2. [PBR + NPR Rendering Research](Portfolio/PBR + NPR Rendering Research)
 3. [Stylized Shading Model](Portfolio/Stylized Shading Model)
-4. [3D Pixelization Rendering Pipeline](Portfolio/3D Pixelization Rendering Pipeline)
+4. [3D Pixelization Rendering Pipeline](Portfolio/3D Pixelization)
 5. [Comfy Houdini (WIP)](Portfolio/Comfy Houdini)
 
 ## Education
