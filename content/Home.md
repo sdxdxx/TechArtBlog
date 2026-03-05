@@ -17,6 +17,6 @@ Welcome to my website. I am a Technical Artist specializing in rendering and sha
 
 ---
 
-- [[About|About Me]]
-- [[Resume|My Resume]]
-- [[Contact|Contact Me]]
+- [[About]]
+- [[Resume]]
+- [[Contact]]

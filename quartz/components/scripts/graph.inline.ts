@@ -52,6 +52,12 @@ type NodeRenderData = GraphicsInfo & {
   label: Text
 }
 
+// Hide root entry notes by default so Home/Index stay out of graph view.
+const hiddenGraphSlugNames = new Set(["home", "index"])
+function isHiddenGraphSlug(slug: SimpleSlug): boolean {
+  return hiddenGraphSlugNames.has(slug.toLowerCase())
+}
+
 const localStorageKey = "graph-visited"
 function getVisited(): Set<SimpleSlug> {
   return new Set(JSON.parse(localStorage.getItem(localStorageKey) ?? "[]"))
@@ -89,12 +95,13 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     enableRadial,
   } = JSON.parse(graph.dataset["cfg"]!) as D3Config
 
-  const data: Map<SimpleSlug, ContentDetails> = new Map(
-    Object.entries<ContentDetails>(await fetchData).map(([k, v]) => [
-      simplifySlug(k as FullSlug),
-      v,
-    ]),
-  )
+  const data: Map<SimpleSlug, ContentDetails> = new Map()
+  for (const [k, v] of Object.entries<ContentDetails>(await fetchData)) {
+    const simplified = simplifySlug(k as FullSlug)
+    const isHomeFile = v.filePath.replace(/\\/g, "/").endsWith("/Home.md") || v.filePath === "Home.md"
+    if (isHiddenGraphSlug(simplified) || isHomeFile) continue
+    data.set(simplified, v)
+  }
   const links: SimpleLinkData[] = []
   const tags: SimpleSlug[] = []
   const validLinks = new Set(data.keys())
@@ -132,6 +139,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
         depth--
         wl.push("__SENTINEL")
       } else {
+        if (isHiddenGraphSlug(cur)) continue
         neighbourhood.add(cur)
         const outgoing = links.filter((l) => l.source === cur)
         const incoming = links.filter((l) => l.target === cur)
