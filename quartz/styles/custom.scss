@@ -1,0 +1,82 @@
+@use "./base.scss";
+
+// put your custom CSS here!
+
+/* ==========================================
+   配合 YAML 暗号隐藏首页自带标题
+   ========================================== */
+.homepage .article-title, 
+.homepage .content-meta {
+  display: none !important;
+}
+
+/* 隐藏首页的底部分页导航 */
+hr + .page-footer {
+  margin-top: 4rem;
+}
+/* ==========================================
+   左上角 Logo 与副标题优化 (Branding)
+   ========================================== */
+.page-title {
+  font-size: 2rem !important; /* 把名字放大，像个真正的 Logo */
+  font-weight: 900 !important; /* 字体加粗 */
+  letter-spacing: 1px;         /* 稍微增加字间距 */
+  line-height: 1.1;
+  margin-bottom: 2rem;         /* 和下方的目录拉开呼吸感 */
+}
+
+/* 用伪元素自动在名字下方生成职位头衔 */
+.page-title a::after {
+  content: "Technical Artist"; /* 你的专属职位 */
+  display: block;              /* 强制换行到名字正下方 */
+  font-size: 1rem;             /* 字号改小 */
+  font-weight: 500;            /* 字体变细 */
+  color: var(--gray);          /* 使用主题自带的高级灰 */
+  letter-spacing: 0.5px;
+  margin-top: 0.3rem;          /* 和名字拉开一点点距离 */
+}
+
+
+/* ==========================================
+   ArtStation 风格画廊网格 (Homepage Gallery)
+   ========================================== */
+.gallery-grid {
+  display: grid;
+  /* 自动响应式排版，卡片最小宽度 280px */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  margin-top: 2rem;
+  margin-bottom: 3rem;
+}
+
+/* 卡片容器样式 */
+.gallery-grid a {
+  display: block;
+  overflow: hidden;
+  border-radius: 8px; /* 圆角，如果你喜欢硬朗的直角可以改成 0 */
+  background-color: #1e1e1e; /* 占位背景色 */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  text-decoration: none; /* 去掉默认的超链接下划线 */
+}
+
+/* 封面图片样式 */
+.gallery-grid img {
+  width: 100%;
+  /* height: 250px; */
+  aspect-ratio: 1 / 1; /* 新增：强制锁定 16:9 的宽屏比例 */
+  object-fit: cover; /* 保证图片填满且不变形 */
+  display: block;
+  margin: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* 鼠标悬浮时的动态交互效果 (Hover Effect) */
+.gallery-grid a:hover {
+  transform: translateY(-5px); /* 微微上浮 */
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3); /* 增加阴影 */
+}
+
+.gallery-grid a:hover img {
+  opacity: 0.85; /* 图片变暗一点点，突出交互感 */
+}
+

@@ -1,0 +1,1442 @@
+{
+  "components": [
+    {
+      "id": "e10e61d1-e9ba-4b5d-a73b-98af31e1715e",
+      "type": "multi",
+      "titleAlign": "center",
+      "tabTitle": "",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T01:52:07.685Z",
+      "updateAt": "2025-11-19T22:20:44.276Z",
+      "components": [
+        {
+          "componentId": "96f8f3ab-d8f4-44b7-8c2e-10c7a55a5fac",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 0,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 0,
+              "y": 0,
+              "w": 12,
+              "h": 9
+            }
+          }
+        },
+        {
+          "componentId": "0bf6d0a2-c36a-43ae-a0b6-492ac4fd9e9a",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 52,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 6,
+              "y": 9,
+              "w": 3,
+              "h": 4
+            }
+          }
+        },
+        {
+          "componentId": "8d26047d-d28a-4a9e-b7b5-ff6a5b5c680c",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 56,
+              "w": 4,
+              "h": 5
+            },
+            "laptop": {
+              "x": 0,
+              "y": 9,
+              "w": 3,
+              "h": 4
+            }
+          }
+        },
+        {
+          "componentId": "74782cbf-4c9d-45f1-ab04-ae16fd1acc6c",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 28,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 3,
+              "y": 9,
+              "w": 3,
+              "h": 4
+            }
+          }
+        },
+        {
+          "componentId": "4a5b1c97-85df-4ede-9531-7a0a1598d3cb",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 61,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 0,
+              "y": 13,
+              "w": 4,
+              "h": 3
+            }
+          }
+        },
+        {
+          "componentId": "1d315fc8-7c11-4be4-ab3c-57db20a46ca0",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 16,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 0,
+              "y": 16,
+              "w": 2,
+              "h": 2
+            }
+          }
+        },
+        {
+          "componentId": "c538174b-9e51-4771-8d48-c1bc01a7c4af",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 20,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 2,
+              "y": 16,
+              "w": 2,
+              "h": 2
+            }
+          }
+        },
+        {
+          "componentId": "22e44be4-a914-4297-9c36-e5cc93d63dec",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 36,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 0,
+              "y": 18,
+              "w": 2,
+              "h": 2
+            }
+          }
+        },
+        {
+          "componentId": "ef4e82b4-a430-42b8-8104-e829f1c63277",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 24,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 2,
+              "y": 18,
+              "w": 2,
+              "h": 2
+            }
+          }
+        },
+        {
+          "componentId": "8e341780-8021-4676-9e8c-28c2f5f71b18",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 40,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 0,
+              "y": 20,
+              "w": 2,
+              "h": 2
+            }
+          }
+        },
+        {
+          "componentId": "926ec9ba-004c-4492-a4eb-ee8a447ccc27",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 32,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 2,
+              "y": 20,
+              "w": 2,
+              "h": 2
+            }
+          }
+        },
+        {
+          "componentId": "6e3ae3c3-7c1f-4f34-9c6d-77b801e16a91",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 80,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 4,
+              "y": 13,
+              "w": 4,
+              "h": 3
+            }
+          }
+        },
+        {
+          "componentId": "b0cc9443-5d54-41df-8a1a-e3ce38c92359",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 44,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 4,
+              "y": 16,
+              "w": 4,
+              "h": 9
+            }
+          }
+        },
+        {
+          "componentId": "a61fa337-33d0-410a-ba13-29c8608c699f",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 69,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 8,
+              "y": 13,
+              "w": 4,
+              "h": 3
+            }
+          }
+        },
+        {
+          "componentId": "780fe99d-d884-44d6-be63-8ecb1739414e",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 8,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 8,
+              "y": 16,
+              "w": 4,
+              "h": 9
+            }
+          }
+        },
+        {
+          "componentId": "ac92e6a6-b3de-40aa-91bc-c5ccce5d1255",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 65,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 0,
+              "y": 25,
+              "w": 6,
+              "h": 3
+            }
+          }
+        },
+        {
+          "componentId": "8555f765-920a-4a6c-b0f8-edd4eb4f02f2",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 12,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 0,
+              "y": 28,
+              "w": 6,
+              "h": 11
+            }
+          }
+        },
+        {
+          "componentId": "f73e78c5-52f9-48b5-9e80-dab6a1c0c502",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 73,
+              "w": 4,
+              "h": 7
+            },
+            "laptop": {
+              "x": 6,
+              "y": 25,
+              "w": 6,
+              "h": 3
+            }
+          }
+        },
+        {
+          "componentId": "554ff68f-6b28-4a65-9c03-28aabc00f031",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 48,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 6,
+              "y": 28,
+              "w": 6,
+              "h": 11
+            }
+          }
+        },
+        {
+          "componentId": "80e52603-5912-4a7a-bd93-3c3d0a73278f",
+          "layout": {
+            "mobile": {
+              "x": 0,
+              "y": 4,
+              "w": 4,
+              "h": 4
+            },
+            "laptop": {
+              "x": 9,
+              "y": 9,
+              "w": 3,
+              "h": 4
+            }
+          }
+        }
+      ],
+      "layoutType": "grid",
+      "locked": true,
+      "layoutOptions": {}
+    },
+    {
+      "id": "96f8f3ab-d8f4-44b7-8c2e-10c7a55a5fac",
+      "type": "time",
+      "titleAlign": "center",
+      "tabTitle": "时间",
+      "maxWidthRatio": -1,
+      "showBorder": false,
+      "showShadow": false,
+      "createAt": "2025-08-26T01:57:05.626Z",
+      "updateAt": "2025-11-03T06:01:57.937Z",
+      "showLunar": false,
+      "hideDateInfo": false,
+      "hideSeconds": false,
+      "hideProgress": false,
+      "backgroundImage": {
+        "url": "Assets_Plugin/Components/Resources/TimeBackground.jpg",
+        "blurDegree": 0
+      },
+      "darkFontColor": "#246c83"
+    },
+    {
+      "id": "0bf6d0a2-c36a-43ae-a0b6-492ac4fd9e9a",
+      "type": "count",
+      "titleAlign": "center",
+      "tabTitle": "✅待办OB任务",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:04:30.918Z",
+      "updateAt": "2025-11-03T06:01:57.938Z",
+      "countValueAlign": "center",
+      "contentPrefix": "",
+      "contentSuffix": "",
+      "countType": "number",
+      "precision": 0,
+      "query": {
+        "valueType": "task",
+        "value": 100,
+        "filter": {
+          "id": "1d870951-4f5d-4fad-a524-e05bcb41ee7f",
+          "type": "group",
+          "operator": "and",
+          "conditions": [
+            {
+              "id": "834a5f12-b794-409f-a909-ad778fb802ea",
+              "type": "filter",
+              "operator": "not_equals",
+              "property": "${file.parent}",
+              "value": "Assets/TickTickSync/Library",
+              "conditions": []
+            }
+          ]
+        },
+        "sort": {
+          "orders": []
+        },
+        "aggregationType": "uncompletedTasks"
+      },
+      "totalQuery": {
+        "valueType": "constant",
+        "value": 100,
+        "filter": {
+          "id": "140a19cb-b5e6-4efc-9b51-a8c152aee3d8",
+          "type": "group",
+          "operator": "and",
+          "conditions": []
+        },
+        "sort": {
+          "orders": []
+        }
+      },
+      "title": "✅待办OB任务"
+    },
+    {
+      "id": "8d26047d-d28a-4a9e-b7b5-ff6a5b5c680c",
+      "type": "count",
+      "titleAlign": "center",
+      "tabTitle": "✉️收集箱",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:14:33.423Z",
+      "updateAt": "2025-11-03T06:01:57.938Z",
+      "countValueAlign": "center",
+      "contentPrefix": "",
+      "contentSuffix": "",
+      "countType": "number",
+      "precision": 0,
+      "query": {
+        "valueType": "totalRecords",
+        "value": 100,
+        "filter": {
+          "id": "1d870951-4f5d-4fad-a524-e05bcb41ee7f",
+          "type": "group",
+          "operator": "and",
+          "conditions": [
+            {
+              "id": "a2f1773b-0523-4aac-9516-eab8c27da37d",
+              "type": "filter",
+              "operator": "contains",
+              "property": "${file.tags}",
+              "value": "#inbox",
+              "conditions": []
+            },
+            {
+              "id": "53741c58-1d93-49bf-9a1e-69e16f2e517d",
+              "type": "filter",
+              "operator": "not_equals",
+              "property": "${file.parent}",
+              "value": "Assets_Plugin/Template",
+              "conditions": []
+            }
+          ]
+        },
+        "sort": {
+          "orders": []
+        }
+      },
+      "totalQuery": {
+        "valueType": "constant",
+        "value": 100,
+        "filter": {
+          "id": "140a19cb-b5e6-4efc-9b51-a8c152aee3d8",
+          "type": "group",
+          "operator": "and",
+          "conditions": []
+        },
+        "sort": {
+          "orders": []
+        }
+      },
+      "title": "✉️收集箱"
+    },
+    {
+      "id": "4a5b1c97-85df-4ede-9531-7a0a1598d3cb",
+      "type": "card",
+      "titleAlign": "center",
+      "tabTitle": "功能栏",
+      "maxWidthRatio": -1,
+      "showBorder": false,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:21:44.138Z",
+      "updateAt": "2025-11-03T06:01:57.938Z",
+      "title": "功能栏",
+      "description": "",
+      "coverFit": "cover",
+      "coverPosition": "left",
+      "clickAction": {
+        "type": "CallCommand",
+        "id": "f2d979a2-7e72-4dc1-8204-495d9f46cf26",
+        "options": {}
+      },
+      "icon": "AlignStartVertical",
+      "darkBackgroundColor": "#1f292e",
+      "backgroundColor": "#769aac"
+    },
+    {
+      "id": "1d315fc8-7c11-4be4-ab3c-57db20a46ca0",
+      "type": "card",
+      "titleAlign": "center",
+      "tabTitle": "新建草稿",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:49:29.941Z",
+      "updateAt": "2025-11-03T06:01:57.938Z",
+      "title": "新建草稿",
+      "description": "",
+      "coverFit": "cover",
+      "coverPosition": "left",
+      "clickAction": {
+        "type": "CreateFile",
+        "id": "4bd6a7c3-3dc8-42a3-9135-9fb83083273f",
+        "options": {
+          "templateFilePath": "Assets_Plugin/Template/Inbox Template.md",
+          "fileName": "{{date: YYYYMMDDHHmmss}}",
+          "targetFolder": "DailyNotes/Note Box",
+          "openPageIn": "tab"
+        }
+      },
+      "icon": "Feather"
+    },
+    {
+      "id": "74782cbf-4c9d-45f1-ab04-ae16fd1acc6c",
+      "type": "count",
+      "titleAlign": "center",
+      "tabTitle": "🔥 项目",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:51:22.246Z",
+      "updateAt": "2025-11-03T06:01:57.938Z",
+      "countValueAlign": "center",
+      "contentPrefix": "",
+      "contentSuffix": "",
+      "countType": "number",
+      "precision": 0,
+      "query": {
+        "valueType": "totalRecords",
+        "value": 100,
+        "filter": {
+          "id": "1d870951-4f5d-4fad-a524-e05bcb41ee7f",
+          "type": "group",
+          "operator": "and",
+          "conditions": [
+            {
+              "id": "8515bde3-5842-4ccc-9cd5-009de4c527aa",
+              "type": "filter",
+              "operator": "contains",
+              "property": "tags",
+              "value": "project",
+              "conditions": []
+            }
+          ]
+        },
+        "sort": {
+          "orders": [
+            {
+              "id": "ba97a5b3-07e1-4486-b951-ec07285c4ac6",
+              "property": "${file.basename}",
+              "direction": "asc",
+              "disabled": false
+            }
+          ]
+        }
+      },
+      "totalQuery": {
+        "valueType": "constant",
+        "value": 100,
+        "filter": {
+          "id": "140a19cb-b5e6-4efc-9b51-a8c152aee3d8",
+          "type": "group",
+          "operator": "and",
+          "conditions": []
+        },
+        "sort": {
+          "orders": []
+        }
+      },
+      "title": "🔥 项目"
+    },
+    {
+      "id": "ef4e82b4-a430-42b8-8104-e829f1c63277",
+      "type": "card",
+      "titleAlign": "center",
+      "tabTitle": "明暗切换",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:54:21.058Z",
+      "updateAt": "2025-11-03T06:01:57.938Z",
+      "title": "明暗切换",
+      "description": "",
+      "coverFit": "cover",
+      "coverPosition": "left",
+      "clickAction": {
+        "type": "RunScript",
+        "id": "e6c6a437-c0fa-4102-bcff-61ea4f513edf",
+        "options": {
+          "expression": "switchLightDark()"
+        }
+      },
+      "icon": "Lightbulb"
+    },
+    {
+      "id": "b0cc9443-5d54-41df-8a1a-e3ce38c92359",
+      "type": "markdown",
+      "titleAlign": "center",
+      "tabTitle": "导航栏MD",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:56:14.862Z",
+      "updateAt": "2025-11-03T06:01:57.939Z",
+      "maxHeight": 300,
+      "contentAlign": "left",
+      "markdownsSource": "file",
+      "markdownValue": "Assets_Plugin/Components/View/Area导航.md"
+    },
+    {
+      "id": "6e3ae3c3-7c1f-4f34-9c6d-77b801e16a91",
+      "type": "card",
+      "titleAlign": "center",
+      "tabTitle": "导航栏",
+      "maxWidthRatio": -1,
+      "showBorder": false,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:21:44.138Z",
+      "updateAt": "2025-11-03T06:01:57.939Z",
+      "title": "导航栏",
+      "description": "",
+      "coverFit": "cover",
+      "coverPosition": "left",
+      "clickAction": {
+        "type": "CallCommand",
+        "id": "f2d979a2-7e72-4dc1-8204-495d9f46cf26",
+        "options": {}
+      },
+      "icon": "MapPin",
+      "darkBackgroundColor": "#1f292e",
+      "backgroundColor": "#769aac"
+    },
+    {
+      "id": "a61fa337-33d0-410a-ba13-29c8608c699f",
+      "type": "card",
+      "titleAlign": "center",
+      "tabTitle": "提醒",
+      "maxWidthRatio": -1,
+      "showBorder": false,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:21:44.138Z",
+      "updateAt": "2025-11-03T06:01:57.939Z",
+      "title": "提醒",
+      "description": "",
+      "coverFit": "cover",
+      "coverPosition": "left",
+      "clickAction": {
+        "type": "CallCommand",
+        "id": "f2d979a2-7e72-4dc1-8204-495d9f46cf26",
+        "options": {}
+      },
+      "icon": "AlarmClock",
+      "darkBackgroundColor": "#1f292e",
+      "backgroundColor": "#769aac"
+    },
+    {
+      "id": "52d2d7f8-28a6-4238-bcbc-3c4cdae98595",
+      "type": "countdown",
+      "titleAlign": "center",
+      "tabTitle": "",
+      "maxWidthRatio": -1,
+      "showBorder": false,
+      "showShadow": false,
+      "createAt": "2025-08-26T05:03:11.639Z",
+      "updateAt": "2025-08-26T05:03:11.639Z",
+      "repeatType": "weekly",
+      "pictureFit": "cover",
+      "picturePosition": "left",
+      "showEndDateTime": true,
+      "endDayOfWeek": 6,
+      "endHour": 0,
+      "endMinute": 0,
+      "endSecond": 0,
+      "title": "🚀 距离周末",
+      "timeTextPattern": "dHm"
+    },
+    {
+      "id": "8555f765-920a-4a6c-b0f8-edd4eb4f02f2",
+      "type": "multi",
+      "titleAlign": "center",
+      "tabTitle": "处理事项组合",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T05:13:17.538Z",
+      "updateAt": "2025-11-03T06:01:57.939Z",
+      "components": [
+        {
+          "componentId": "db5b8e23-1a2f-49ef-ba6e-2d19bd243cc1"
+        },
+        {
+          "componentId": "5310bc71-b1f1-46ee-b51a-b5f79fdffdeb"
+        },
+        {
+          "componentId": "6d1284d1-e7af-439d-8391-5a8057dd74f9"
+        },
+        {
+          "componentId": "03deca73-04a7-4c63-92ef-173188ea3681"
+        }
+      ],
+      "layoutType": "tab",
+      "locked": false,
+      "layoutOptions": {}
+    },
+    {
+      "id": "03deca73-04a7-4c63-92ef-173188ea3681",
+      "type": "dynamicDataView",
+      "titleAlign": "center",
+      "tabTitle": "日历",
+      "maxWidthRatio": -1,
+      "showBorder": false,
+      "showShadow": false,
+      "createAt": "2025-08-26T05:13:34.859Z",
+      "updateAt": "2025-08-26T05:13:34.859Z",
+      "viewType": "calendar",
+      "newPageNameFormat": "{{date:YYYYMMDDHHmmss}} ",
+      "properties": [
+        {
+          "id": "__componentsTitleProperty_0x7c00",
+          "name": "文件名",
+          "type": "text",
+          "isShow": true,
+          "wrap": false,
+          "options": {}
+        }
+      ],
+      "templates": [],
+      "groups": [],
+      "colorfulGroups": false,
+      "viewOptions": {
+        "openPageIn": "tab",
+        "openPageAfterCreate": true,
+        "items": [],
+        "pinFiltersToMenuBar": false,
+        "showGrid": false,
+        "heightType": "auto",
+        "heightValue": 600,
+        "calendarViewType": "month"
+      },
+      "groupStates": {
+        "sort": "nameAsc",
+        "statics": [],
+        "orders": [],
+        "hiddens": [],
+        "collapseds": []
+      }
+    },
+    {
+      "id": "db5b8e23-1a2f-49ef-ba6e-2d19bd243cc1",
+      "type": "dynamicDataView",
+      "titleAlign": "center",
+      "tabTitle": "收集箱",
+      "maxWidthRatio": -1,
+      "showBorder": false,
+      "showShadow": false,
+      "createAt": "2025-08-26T05:14:34.587Z",
+      "updateAt": "2025-11-03T06:01:34.932Z",
+      "viewType": "table",
+      "newPageNameFormat": "{{date:YYYYMMDDHHmmss}} ",
+      "properties": [
+        {
+          "id": "__componentsTitleProperty_0x7c00",
+          "name": "文件名",
+          "type": "text",
+          "isShow": true,
+          "wrap": false,
+          "options": {
+            "width": "325"
+          }
+        },
+        {
+          "id": "3a36b07c-b9bc-4e3a-b356-1afac492c621",
+          "name": "area",
+          "type": "text",
+          "isShow": false,
+          "wrap": false,
+          "options": {}
+        },
+        {
+          "id": "896d6d90-0115-4d80-8669-933426ac0b4c",
+          "name": "tags",
+          "type": "multiSelect",
+          "isShow": false,
+          "wrap": false,
+          "options": {}
+        },
+        {
+          "id": "e4106f37-fee4-41b7-9574-d766a6114cc2",
+          "name": "createTime",
+          "type": "date",
+          "isShow": true,
+          "wrap": false,
+          "options": {}
+        }
+      ],
+      "templates": [],
+      "groups": [],
+      "colorfulGroups": false,
+      "viewOptions": {
+        "openPageIn": "tab",
+        "openPageAfterCreate": true,
+        "items": [],
+        "pinFiltersToMenuBar": false,
+        "showGrid": true,
+        "heightType": "auto",
+        "heightValue": 600
+      },
+      "groupStates": {
+        "sort": "nameAsc",
+        "statics": [],
+        "orders": [],
+        "hiddens": [],
+        "collapseds": []
+      },
+      "filter": {
+        "id": "afa8d7fc-4ce0-4453-bb09-4bfebbca43ab",
+        "type": "group",
+        "operator": "and",
+        "conditions": [
+          {
+            "id": "1a74a998-c9f9-4be6-97ac-71a4ca7c49b7",
+            "type": "filter",
+            "operator": "equals",
+            "property": "${file.parent}",
+            "value": "DailyNotes/Note Box",
+            "conditions": []
+          }
+        ]
+      },
+      "sort": {
+        "orders": [
+          {
+            "id": "e7f1e1e5-a6de-4f08-bd93-2edd11a4a552",
+            "property": "${file.mtime}",
+            "direction": "asc",
+            "disabled": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "ac92e6a6-b3de-40aa-91bc-c5ccce5d1255",
+      "type": "card",
+      "titleAlign": "center",
+      "tabTitle": "处理事项",
+      "maxWidthRatio": -1,
+      "showBorder": false,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:21:44.138Z",
+      "updateAt": "2025-11-03T06:01:57.939Z",
+      "title": "处理事项",
+      "description": "",
+      "coverFit": "cover",
+      "coverPosition": "left",
+      "clickAction": {
+        "type": "CallCommand",
+        "id": "f2d979a2-7e72-4dc1-8204-495d9f46cf26",
+        "options": {}
+      },
+      "icon": "Mail",
+      "darkBackgroundColor": "#1f292e",
+      "backgroundColor": "#769aac"
+    },
+    {
+      "id": "f73e78c5-52f9-48b5-9e80-dab6a1c0c502",
+      "type": "card",
+      "titleAlign": "center",
+      "tabTitle": "最近修改文件",
+      "maxWidthRatio": -1,
+      "showBorder": false,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:21:44.138Z",
+      "updateAt": "2025-11-03T06:01:57.939Z",
+      "title": "最近修改文件",
+      "description": "",
+      "coverFit": "cover",
+      "coverPosition": "left",
+      "clickAction": {
+        "type": "CallCommand",
+        "id": "f2d979a2-7e72-4dc1-8204-495d9f46cf26",
+        "options": {}
+      },
+      "icon": "AlignLeft",
+      "darkBackgroundColor": "#1f292e",
+      "backgroundColor": "#769aac"
+    },
+    {
+      "id": "d5c60f01-5ae5-42ad-ba78-cc0b7ba8799d",
+      "type": "dynamicDataView",
+      "titleAlign": "center",
+      "tabTitle": "所有主要文件",
+      "maxWidthRatio": -1,
+      "showBorder": false,
+      "showShadow": false,
+      "createAt": "2025-08-26T05:24:55.190Z",
+      "updateAt": "2025-08-26T05:24:55.190Z",
+      "viewType": "list",
+      "newPageNameFormat": "{{date:YYYYMMDDHHmmss}} ",
+      "properties": [
+        {
+          "id": "__componentsTitleProperty_0x7c00",
+          "name": "文件名",
+          "type": "text",
+          "isShow": true,
+          "wrap": false,
+          "options": {}
+        }
+      ],
+      "templates": [],
+      "groups": [],
+      "colorfulGroups": false,
+      "viewOptions": {
+        "openPageIn": "tab",
+        "openPageAfterCreate": true,
+        "items": [],
+        "pinFiltersToMenuBar": false,
+        "showGrid": false,
+        "heightType": "auto",
+        "heightValue": 600
+      },
+      "groupStates": {
+        "sort": "nameAsc",
+        "statics": [],
+        "orders": [],
+        "hiddens": [],
+        "collapseds": []
+      },
+      "loadLimitPerPage": 10,
+      "filter": {
+        "id": "cf385e4e-9d49-4a0a-ada0-916149ea6293",
+        "type": "group",
+        "operator": "and",
+        "conditions": [
+          {
+            "id": "3007da8f-e6c2-49ea-b15e-900d6214c6eb",
+            "type": "group",
+            "operator": "or",
+            "conditions": [
+              {
+                "id": "d2d21980-3d3b-4e15-bcd8-d8f14497fa97",
+                "type": "filter",
+                "operator": "equals",
+                "property": "${file.extension}",
+                "value": "md",
+                "conditions": []
+              },
+              {
+                "id": "b3861295-0261-4e85-8e3f-76cd1f0c5077",
+                "type": "filter",
+                "operator": "equals",
+                "property": "${file.extension}",
+                "value": "pdf",
+                "conditions": []
+              },
+              {
+                "id": "2aaf9c7a-89a2-4d04-99cd-88d8cc7f746b",
+                "type": "filter",
+                "operator": "equals",
+                "property": "${file.extension}",
+                "value": "components",
+                "conditions": []
+              },
+              {
+                "id": "f434cc8c-66db-43a6-938a-bce981090f8b",
+                "type": "filter",
+                "operator": "equals",
+                "property": "${file.extension}",
+                "value": "docx",
+                "conditions": []
+              }
+            ]
+          }
+        ]
+      },
+      "sort": {
+        "orders": [
+          {
+            "id": "5680ff6c-6202-43d1-b654-ca850de57143",
+            "property": "${file.mtime}",
+            "direction": "desc",
+            "disabled": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "926ec9ba-004c-4492-a4eb-ee8a447ccc27",
+      "type": "card",
+      "titleAlign": "center",
+      "tabTitle": "重启OB",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:54:21.058Z",
+      "updateAt": "2025-11-03T06:01:57.939Z",
+      "title": "重启OB",
+      "description": "",
+      "coverFit": "cover",
+      "coverPosition": "left",
+      "clickAction": {
+        "type": "CallCommand",
+        "id": "e6c6a437-c0fa-4102-bcff-61ea4f513edf",
+        "options": {
+          "expression": "switchLightDark()",
+          "commandId": "app:reload",
+          "commandName": "重新加载 Obsidian（不保存当前编辑内容）"
+        }
+      },
+      "icon": "RefreshCcw"
+    },
+    {
+      "id": "22e44be4-a914-4297-9c36-e5cc93d63dec",
+      "type": "card",
+      "titleAlign": "center",
+      "tabTitle": "远程同步",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:54:21.058Z",
+      "updateAt": "2025-11-03T06:01:57.938Z",
+      "title": "远程同步",
+      "description": "",
+      "coverFit": "cover",
+      "coverPosition": "left",
+      "clickAction": {
+        "type": "CallCommand",
+        "id": "e6c6a437-c0fa-4102-bcff-61ea4f513edf",
+        "options": {
+          "expression": "switchLightDark()",
+          "commandId": "remotely-save:start-sync",
+          "commandName": "Remotely Save: 开始同步（start sync）"
+        }
+      },
+      "icon": "CloudDownload"
+    },
+    {
+      "id": "c538174b-9e51-4771-8d48-c1bc01a7c4af",
+      "type": "card",
+      "titleAlign": "center",
+      "tabTitle": "新建笔记",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:49:29.941Z",
+      "updateAt": "2025-11-03T06:01:57.938Z",
+      "title": "新建笔记",
+      "description": "",
+      "coverFit": "cover",
+      "coverPosition": "left",
+      "clickAction": {
+        "type": "CreateFile",
+        "id": "4bd6a7c3-3dc8-42a3-9135-9fb83083273f",
+        "options": {
+          "templateFilePath": "Assets_Plugin/Template/Standard Note Template.md",
+          "fileName": "新建笔记",
+          "targetFolder": "/",
+          "openPageIn": "tab"
+        }
+      },
+      "icon": "NotebookPen"
+    },
+    {
+      "id": "58ca236c-a06a-4fc7-87bb-5faf2ca0333d",
+      "type": "dynamicDataView",
+      "titleAlign": "center",
+      "tabTitle": "OB笔记",
+      "maxWidthRatio": -1,
+      "showBorder": false,
+      "showShadow": false,
+      "createAt": "2025-08-26T05:36:52.872Z",
+      "updateAt": "2025-11-03T06:04:42.157Z",
+      "viewType": "table",
+      "newPageNameFormat": "{{date:YYYYMMDDHHmmss}} ",
+      "properties": [
+        {
+          "id": "__componentsTitleProperty_0x7c00",
+          "name": "文件名",
+          "type": "text",
+          "isShow": true,
+          "wrap": false,
+          "options": {
+            "width": "200"
+          }
+        },
+        {
+          "id": "7fb0848e-d4ae-4b2f-b917-1b48333f3883",
+          "name": "tags",
+          "type": "multiSelect",
+          "isShow": true,
+          "wrap": false,
+          "options": {
+            "width": "99"
+          }
+        },
+        {
+          "id": "a87e2b2b-bc57-4348-8c08-52157bf183d6",
+          "name": "area",
+          "type": "text",
+          "isShow": false,
+          "wrap": false,
+          "options": {}
+        },
+        {
+          "id": "875f6555-22f5-4428-8752-8d3a274153d3",
+          "name": "createTime",
+          "type": "date",
+          "isShow": true,
+          "wrap": false,
+          "options": {
+            "width": "181"
+          }
+        }
+      ],
+      "templates": [],
+      "groups": [],
+      "colorfulGroups": false,
+      "viewOptions": {
+        "openPageIn": "tab",
+        "openPageAfterCreate": true,
+        "items": [],
+        "pinFiltersToMenuBar": false,
+        "showGrid": true,
+        "heightType": "auto",
+        "heightValue": 1200
+      },
+      "groupStates": {
+        "sort": "nameAsc",
+        "statics": [],
+        "orders": [],
+        "hiddens": [],
+        "collapseds": []
+      },
+      "filter": {
+        "id": "1ea860a7-6dba-4018-a98e-bac69fb16eda",
+        "type": "group",
+        "operator": "and",
+        "conditions": [
+          {
+            "id": "3c1c45ba-8061-4c23-ba8a-d26a67db782a",
+            "type": "filter",
+            "operator": "not_equals",
+            "property": "${file.parent}",
+            "value": "Assets/Other/Template",
+            "conditions": []
+          },
+          {
+            "id": "cfebc8ce-798e-496b-bf75-98ba7e9a4a12",
+            "type": "filter",
+            "operator": "equals",
+            "property": "${file.extension}",
+            "value": "md",
+            "conditions": []
+          },
+          {
+            "id": "3ff140f1-de80-45a0-afad-46ab8653143e",
+            "type": "filter",
+            "operator": "not_equals",
+            "property": "${file.parent}",
+            "value": "Assets/Other/TemplatesCode",
+            "conditions": []
+          },
+          {
+            "id": "8117be86-0d6d-437f-8167-87d95c90a822",
+            "type": "filter",
+            "operator": "not_equals",
+            "property": "${file.parent}",
+            "value": "Assets/Other/Template",
+            "conditions": []
+          },
+          {
+            "id": "04efb66c-7805-434a-a92d-ceee4293bb36",
+            "type": "filter",
+            "operator": "not_equals",
+            "property": "${file.parent}",
+            "value": "Assets/Components/View",
+            "conditions": []
+          }
+        ]
+      },
+      "loadLimitPerPage": 50,
+      "sort": {
+        "orders": [
+          {
+            "id": "a9da3263-1bc5-4cec-80c7-8fad3a608a26",
+            "property": "${file.mtime}",
+            "direction": "desc",
+            "disabled": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "8e341780-8021-4676-9e8c-28c2f5f71b18",
+      "type": "card",
+      "titleAlign": "center",
+      "tabTitle": "清理垃圾",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T04:54:21.058Z",
+      "updateAt": "2025-11-03T06:01:57.938Z",
+      "title": "清理垃圾",
+      "description": "",
+      "coverFit": "cover",
+      "coverPosition": "left",
+      "clickAction": {
+        "type": "CallCommand",
+        "id": "e6c6a437-c0fa-4102-bcff-61ea4f513edf",
+        "options": {
+          "expression": "switchLightDark()",
+          "commandId": "janitor:scan-files",
+          "commandName": "Janitor: Scan Files"
+        }
+      },
+      "icon": "Trash2"
+    },
+    {
+      "id": "554ff68f-6b28-4a65-9c03-28aabc00f031",
+      "type": "multi",
+      "titleAlign": "center",
+      "tabTitle": "最近修改组合",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T06:06:39.207Z",
+      "updateAt": "2025-11-03T06:01:57.939Z",
+      "components": [
+        {
+          "componentId": "58ca236c-a06a-4fc7-87bb-5faf2ca0333d"
+        },
+        {
+          "componentId": "67971cbd-7bb1-4710-995f-f1f8391eddff"
+        },
+        {
+          "componentId": "d5c60f01-5ae5-42ad-ba78-cc0b7ba8799d"
+        }
+      ],
+      "layoutType": "tab",
+      "locked": false,
+      "layoutOptions": {}
+    },
+    {
+      "id": "67971cbd-7bb1-4710-995f-f1f8391eddff",
+      "type": "dynamicDataView",
+      "titleAlign": "center",
+      "tabTitle": "备忘录",
+      "maxWidthRatio": -1,
+      "showBorder": false,
+      "showShadow": false,
+      "createAt": "2025-08-26T06:18:46.021Z",
+      "updateAt": "2025-08-26T06:18:46.021Z",
+      "viewType": "table",
+      "newPageNameFormat": "{{date:YYYYMMDDHHmmss}} ",
+      "properties": [
+        {
+          "id": "__componentsTitleProperty_0x7c00",
+          "name": "文件名",
+          "type": "text",
+          "isShow": true,
+          "wrap": false,
+          "options": {}
+        }
+      ],
+      "templates": [],
+      "groups": [],
+      "colorfulGroups": false,
+      "viewOptions": {
+        "openPageIn": "tab",
+        "openPageAfterCreate": true,
+        "items": [],
+        "pinFiltersToMenuBar": false,
+        "showGrid": false,
+        "heightType": "auto",
+        "heightValue": 600
+      },
+      "groupStates": {
+        "sort": "nameAsc",
+        "statics": [],
+        "orders": [],
+        "hiddens": [],
+        "collapseds": []
+      },
+      "sort": {
+        "orders": [
+          {
+            "id": "45391726-6e4f-43b3-91f2-406e051fe2a3",
+            "property": "${file.mtime}",
+            "direction": "desc",
+            "disabled": false
+          }
+        ]
+      },
+      "filter": {
+        "id": "cf385e4e-9d49-4a0a-ada0-916149ea6293",
+        "type": "group",
+        "operator": "and",
+        "conditions": [
+          {
+            "id": "52714d6c-38e0-47cb-99b4-046cd0b933a0",
+            "type": "filter",
+            "operator": "equals",
+            "property": "${file.parent}",
+            "value": "备忘录",
+            "conditions": []
+          }
+        ]
+      }
+    },
+    {
+      "id": "780fe99d-d884-44d6-be63-8ecb1739414e",
+      "type": "multi",
+      "titleAlign": "center",
+      "tabTitle": "提醒事项组合",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-26T06:23:48.887Z",
+      "updateAt": "2025-11-03T06:01:57.939Z",
+      "components": [
+        {
+          "componentId": "52d2d7f8-28a6-4238-bcbc-3c4cdae98595"
+        }
+      ],
+      "layoutType": "tab",
+      "locked": false,
+      "layoutOptions": {}
+    },
+    {
+      "id": "5310bc71-b1f1-46ee-b51a-b5f79fdffdeb",
+      "type": "markdown",
+      "titleAlign": "center",
+      "tabTitle": "OB任务",
+      "maxWidthRatio": -1,
+      "showBorder": false,
+      "showShadow": false,
+      "createAt": "2025-08-26T15:31:16.707Z",
+      "updateAt": "2025-08-26T15:31:16.707Z",
+      "maxHeight": 300,
+      "contentAlign": "left",
+      "markdownsSource": "file",
+      "markdownValue": "Assets_Plugin/Components/View/Tasks.md"
+    },
+    {
+      "id": "80e52603-5912-4a7a-bd93-3c3d0a73278f",
+      "type": "count",
+      "titleAlign": "center",
+      "tabTitle": "☑待办Ticktick任务",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-27T04:04:19.620Z",
+      "updateAt": "2025-11-03T06:01:57.939Z",
+      "countValueAlign": "center",
+      "contentPrefix": "",
+      "contentSuffix": "",
+      "countType": "number",
+      "precision": 0,
+      "query": {
+        "valueType": "task",
+        "value": 100,
+        "filter": {
+          "id": "3598c986-155a-43cf-9740-2b3e27b225f9",
+          "type": "group",
+          "operator": "and",
+          "conditions": [
+            {
+              "id": "72483f5d-b1b5-4058-bf50-84b0f448ab92",
+              "type": "filter",
+              "operator": "equals",
+              "property": "${file.parent}",
+              "value": "Assets_Plugin/TickTickSync/Library",
+              "conditions": []
+            }
+          ]
+        },
+        "sort": {
+          "orders": []
+        },
+        "aggregationType": "uncompletedTasks"
+      },
+      "totalQuery": {
+        "valueType": "constant",
+        "value": 100,
+        "filter": {
+          "id": "7e02b081-4bec-492a-b2a1-a7f6624b5b71",
+          "type": "group",
+          "operator": "and",
+          "conditions": []
+        },
+        "sort": {
+          "orders": []
+        }
+      },
+      "title": "☑待办Ticktick任务"
+    },
+    {
+      "id": "6d1284d1-e7af-439d-8391-5a8057dd74f9",
+      "type": "markdown",
+      "titleAlign": "center",
+      "tabTitle": "FIEA任务",
+      "maxWidthRatio": -1,
+      "showBorder": true,
+      "showShadow": false,
+      "createAt": "2025-08-27T04:16:42.793Z",
+      "updateAt": "2025-08-27T04:16:42.793Z",
+      "maxHeight": 300,
+      "contentAlign": "left",
+      "markdownsSource": "file",
+      "markdownValue": "Assets_Plugin/TickTickSync/Library/🚀FIEA Homework.md"
+    }
+  ],
+  "rootComponentId": "e10e61d1-e9ba-4b5d-a73b-98af31e1715e",
+  "version": 3
+}
