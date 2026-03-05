@@ -29,7 +29,7 @@ interface BreadcrumbOptions {
 }
 
 const defaultOptions: BreadcrumbOptions = {
-  spacerSymbol: "❯",
+  spacerSymbol: "/",
   rootName: "Home",
   resolveFrontmatterTitle: true,
   showCurrentPage: true,
@@ -75,6 +75,12 @@ export default ((opts?: Partial<BreadcrumbOptions>) => {
 
     if (!options.showCurrentPage) {
       crumbs.pop()
+    }
+
+    // If there is no crumb left (for example homepage with showCurrentPage=false),
+    // skip rendering the breadcrumb container entirely.
+    if (crumbs.length === 0) {
+      return null
     }
 
     return (

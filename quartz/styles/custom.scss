@@ -3,11 +3,8 @@
 // put your custom CSS here!
 
 /* ==========================================
-   首页视觉净化：隐藏 index 标题与元信息
-   说明：cssclasses: [homepage] 作用在 article 上，
-        page-header 不在其子树中，因此用 slug 精确匹配首页
+   首页视觉净化：保留 index 标题，仅隐藏元信息
    ========================================== */
-body[data-slug="index"] .center > .page-header .article-title,
 body[data-slug="index"] .center > .page-header .content-meta {
   display: none !important;
 }
