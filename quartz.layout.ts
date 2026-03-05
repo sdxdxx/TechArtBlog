@@ -8,6 +8,13 @@ const explorerOptions = {
     node.slugSegment !== "tags" && node.slug.toLowerCase() !== "home",
 }
 
+const graphHiddenPageSlugs = new Set(["about", "contact", "resume"])
+function shouldShowGraphOnPage(slug: unknown): boolean {
+  const rawSlug = typeof slug === "string" ? slug : ""
+  const pageSlug = rawSlug.split("/").filter(Boolean).at(-1)?.toLowerCase() ?? ""
+  return !graphHiddenPageSlugs.has(pageSlug)
+}
+
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
@@ -45,7 +52,10 @@ export const defaultContentPageLayout: PageLayout = {
     Component.Explorer(explorerOptions),
   ],
   right: [
-    Component.DesktopOnly(Component.Graph()),
+    Component.ConditionalRender({
+      component: Component.DesktopOnly(Component.Graph()),
+      condition: (props) => shouldShowGraphOnPage(props.fileData.slug),
+    }),
     Component.DesktopOnly(Component.TableOfContents()),
     //Component.Backlinks(),
   ],

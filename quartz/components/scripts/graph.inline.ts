@@ -54,8 +54,8 @@ type NodeRenderData = GraphicsInfo & {
   previewLabelText: string
 }
 
-// Hide root entry notes by default so Home/Index stay out of graph view.
-const hiddenGraphSlugNames = new Set(["home", "index"])
+// Hide utility pages and root entry notes from graph view.
+const hiddenGraphSlugNames = new Set(["home", "index", "about", "contact", "resume"])
 function isHiddenGraphSlug(slug: SimpleSlug): boolean {
   return hiddenGraphSlugNames.has(slug.toLowerCase())
 }
