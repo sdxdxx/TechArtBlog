@@ -64,9 +64,10 @@ export default ((opts?: Partial<BreadcrumbOptions>) => {
         crumb.displayName = options.rootName
       }
 
-      // For last node (current page), set empty path
+      // For last node (current page), set empty path.
+      // Special case: homepage should keep a valid link target for "Home".
       if (idx === pathNodes.length - 1) {
-        crumb.path = ""
+        crumb.path = pathNodes.length === 1 ? "." : ""
       }
 
       return crumb

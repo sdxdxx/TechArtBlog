@@ -1,4 +1,4 @@
-import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
+﻿import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { version } from "../../package.json"
 
 const socialLinks: Record<string, string> = {

@@ -1,3 +1,4 @@
+
 <style>
   /* 隐藏首页自带的 index 标题和日期 */
   .article-title { display: none !important; }
@@ -13,17 +14,6 @@
 [![作品二展示](Assets_UI/Cover2.png)](Portfolio/作品2的文件名)
 
 [![作品三展示](Assets_UI/Cover3.png)](Portfolio/作品3的文件名)
-
-[![作品三展示](Assets_UI/Cover3.png)](Portfolio/作品3的文件名)
-
-[![作品三展示](Assets_UI/Cover3.png)](Portfolio/作品3的文件名)
-
-[![作品三展示](Assets_UI/Cover3.png)](Portfolio/作品3的文件名)
-
-[![作品三展示](Assets_UI/Cover3.png)](Portfolio/作品3的文件名)
-
-[![作品三展示](Assets_UI/Cover3.png)](Portfolio/作品3的文件名)
-
 </div>
 
 ---
