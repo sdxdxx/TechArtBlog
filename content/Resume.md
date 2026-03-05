@@ -21,7 +21,7 @@ cssclasses:
     <div><strong>Email:</strong> <a href="mailto:dengxiaoxiao24@outlook.com">dengxiaoxiao24@outlook.com</a></div>
     <div><strong>ArtStation:</strong> <a href="https://sdxdxx007.artstation.com/" target="_blank" rel="noopener noreferrer">sdxdxx007.artstation.com</a></div>
     <div><strong>YouTube:</strong> <a href="https://www.youtube.com/@SDXDXX" target="_blank" rel="noopener noreferrer">@SDXDXX</a></div>
-    <div><strong>Demo Reel (v1.0):</strong> <a href="https://www.youtube.com/watch?v=qecdMs6DTGE&t=73s" target="_blank" rel="noopener noreferrer">youtube.com/watch?v=qecdMs6DTGE&t=73s</a></div>
+    <div><strong>Demo Reel (v1.0):</strong> <a href="https://www.youtube.com/watch?v=qecdMs6DTGE&t=73s" target="_blank" rel="noopener noreferrer">Tech Art Showreel V1.0</a></div>
   </div>
 </section>
 
