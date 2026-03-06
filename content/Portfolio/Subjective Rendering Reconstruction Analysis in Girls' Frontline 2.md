@@ -1,12 +1,12 @@
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062206.png|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191908.png|800]]
 
 ## Demo
-![[Cheeta.mp4|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191908.mp4|800]]
 
 ## Preface
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062206-1.png|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191908-1.png|800]]
 
 This is a **subjective reverse‑engineering / reconstruction** article, for learning and discussion purposes only.  
 
@@ -19,17 +19,17 @@ Render pipeline: **URP**
 
 ## In‑game Screenshot References
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062206-2.png|GFL2 screenshot reference|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191908-2.png|GFL2 screenshot reference|800]]
 
 ## Clothing & Body Skin Rendering (Base)
 
 In terms of textures, clothing and (body) skin use the same texture set—the only difference is the **Ramp Texture**. Below I use clothing as the example.
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062206-3.png|Normal / RMO / Diffuse|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191908-3.png|Normal / RMO / Diffuse|800]]
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062206-4.png|Ramp Texture (Cloth)|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909.png|Ramp Texture (Cloth)|800]]
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062206-5.png|Ramp Texture (Skin)|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-1.png|Ramp Texture (Skin)|800]]
 
 The first three images are a standard PBR workflow:
 
@@ -55,15 +55,15 @@ $$
 L_o(\omega_o) = \int_{\Omega} \left( \frac{c_{diff}}{\pi} + \frac{DFG}{4 \cos\theta_i \cos\theta_o} \right) L_i(\omega_i) \cos\theta_i d\omega_i
 $$
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062206-6.png|Ramp BRDF|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-2.png|Ramp BRDF|800]]
 
 I also added a **Matcap** term for metal and cloth and injected it into the **IBL specular / environment rim** contribution. This not only enriches the perceived environment lighting when no light probes are available, but also helps the character feel a bit more “alive.”
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305045218-6.png|Metal Matcap | 500]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-3.png|Metal Matcap | 500]]
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305045218-7.png|Satin Matcap|500]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-4.png|Satin Matcap|500]]
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305045218-8.png|Matcap Env Rim|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-5.png|Matcap Env Rim|800]]
 
 Note: the SSS look is clearly baked into the Ramp Texture, so clothing and skin can be rendered together.
 
@@ -72,7 +72,7 @@ Note: the SSS look is clearly baked into the Ramp Texture, so clothing and skin 
 Stockings are mostly rendered the same way as clothing—the main difference is in the specular calculation.  
 Like hair, due to their physical structure, stockings produce **anisotropic highlights**. In the reference, you can clearly see a stretched / streaky highlight. So here I do not use standard isotropic GGX; instead I use **anisotropic GGX**.
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305045218-9.png|Stocking Reference]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-6.png|Stocking Reference]]
 
 ``` hlsl
 // ---- GetAnisoAxes(roughness, anisotropy, ax, ay) ----  
@@ -140,17 +140,17 @@ half3 specRamp = SAMPLE_TEXTURE2D(_RampTex, sampler_RampTex, float2(NoL, 0.4)).r
 float3 specColor = SpecularResult * lightCol * specRamp * PI;
 ```
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062206-7.png|Stockings Anisotropic Specular|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-7.png|Stockings Anisotropic Specular|800]]
 
 Stockings also typically have a bit of “see‑through skin” feel. In GFL2, this appears to be baked directly into the Diffuse texture.
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062206-8.png|Stockings|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-8.png|Stockings|800]]
 
 ## Hair Rendering
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207.png|Specular Mask / Albedo|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-9.png|Specular Mask / Albedo|800]]
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-1.png|Ramp Texture (Hair) |800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-10.png|Ramp Texture (Hair) |800]]
 
 Hair uses three textures:
 
@@ -160,15 +160,15 @@ Hair uses three textures:
 
 The Specular Mask is mainly for the hair anisotropic highlight that forms an “angel ring.”
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-2.png|Hair Ref|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-11.png|Hair Ref|800]]
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-3.png|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-12.png|800]]
 
 Hair uses UV0 to sample Diffuse, and UV1 to sample Specular.
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-4.png|Hair UV0|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-13.png|Hair UV0|800]]
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-5.png|Hair UV1|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-14.png|Hair UV1|800]]
 
 Flattening/straightening hair in UV1 makes it easy to slide the texture. We compute an offset based on the camera’s vertical viewing angle, then vertically scroll the highlight Mask on the flattened UV. Because the UV is laid out along the hair flow, the texture scroll looks like the highlight moving up/down along the strands, which better mimics real hair specular behavior.
 
@@ -191,14 +191,14 @@ $$
 
 Result:
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207.gif|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909.gif|800]]
 
 ## Face Rendering
 
 ### Face
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-6.png|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-15.png|800]]
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-7.png|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-16.png|800]]
 
 The face mainly uses the following textures:
 
@@ -214,11 +214,11 @@ The most important one is the SDF map.
 
 Why use a face SDF map? In Japanese anime, facial lighting/shadows are often simplified, and physically correct lighting tends not to fit.
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-8.png|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-17.png|800]]
 
 What matters most is how the RGB channels in the SDF map are used.
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-9.png|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-18.png|800]]
 
 This SDF texture is essentially a **shadow/specular spread threshold map**. It abandons the engine’s default real‑time facial normal lighting and instead decides the shadow shape by reading texture values. When the light rotates, the shader compares the light direction with the grayscale values, producing a very clean, sharp, and fully art‑directable shadow edge.
 
@@ -246,11 +246,11 @@ half3 shadowRamp = SAMPLE_TEXTURE2D(_RampTex,sampler_RampTex,float2(faceSDF*nDot
 
 Result:
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-1.gif|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-1.gif|800]]
 
 ### Eye
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-10.png|Model Eye|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-19.png|Model Eye|800]]
 
 After separating the eye rendering in Maya, the eye is mainly composed of these five layers:
 
@@ -262,7 +262,7 @@ After separating the eye rendering in Maya, the eye is mainly composed of these 
 
 There are three main textures:
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-11.png|Eye Textures|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-20.png|Eye Textures|800]]
 
 - Texture 1: contains eye highlight and eye shadow information
 - Texture 2: eyeball
@@ -293,7 +293,7 @@ $$
 
 Result:
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-12.png|Final Eye|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-21.png|Final Eye|800]]
 
 ### Fringe Shadow (Bangs Shadow)
 
@@ -301,9 +301,9 @@ In Japanese anime illustrations and animation, fringe/bangs shadows are crucial.
 
 Following the ShadowMap idea, I render a dedicated **fringe depth map**, then apply a view‑dependent **screen‑space offset** when sampling. I compare it against the face depth with a depth test, producing a (pseudo) fringe shadow.
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-13.png|Fringe Shadow Reference|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-22.png|Fringe Shadow Reference|800]]
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-14.png|Hair Depth Only Pass|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-23.png|Hair Depth Only Pass|800]]
 
 ``` hlsl
 // Screen position (NDC)
@@ -321,37 +321,37 @@ float hairDepth = SAMPLE_TEXTURE2D(_HairShadowDepth, sampler_PointClamp, targetH
 float hairShadowRange = step(hairDepth, i.pos.z);
 ```
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062207-15.png|Fringe Shadow On/Off Comparison|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-24.png|Fringe Shadow On/Off Comparison|800]]
 
 ## Outline
 
 I use a BackFace outline method. The idea is simple; the difficulty is solving outline breaks.  
 Two passes are rendered: the front‑face pass renders only front faces (normal shading), and the back‑face pass renders only back faces and extrudes vertices along normals, outputting only the outline color.
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062208.png|Default Normal VS Smoothed Normal|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-25.png|Default Normal VS Smoothed Normal|800]]
 
 The key is that normals must be **smoothed**; otherwise you get broken outlines.  
 But we don’t want “smoothed normals” to ruin lighting (e.g., the cube on the right changes its shading after smoothing).
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062208-1.png|Default Normal VS Smoothed Normal (Outline)|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191909-26.png|Default Normal VS Smoothed Normal (Outline)|800]]
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062208-2.png|Vertex Color Normal|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191910.png|Vertex Color Normal|800]]
 
 So I wrote a small Houdini tool that converts the smoothed normals into tangent space (like a normal map) and stores them in UV2 and UV3.  
 (I did not store them in vertex color because vertex color precision is not sufficient.)
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062208-3.png|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191910-1.png|800]]
 
 I also computed (plus hand‑painted) a simple outline‑width weight based on curvature and thickness (black = 0, no modification; red = reduced). This mainly removes tiny details to prevent the result from becoming noisy, and also makes hair outlines look better (some gradient and seam‑artifact cleanup).  
 I stored this outline width weight in the **A channel** of vertex color.
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062208-4.png|Outline|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191910-2.png|Outline|800]]
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062208-5.png|Outline|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191910-3.png|Outline|800]]
 
 ## Per Object Shadow
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062208-6.png|PerObject Shadow|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191910-4.png|PerObject Shadow|800]]
 
 **Per Object Shadow** is a “character‑dedicated shadow” feature I built in Unity to obtain higher‑quality character shadows. The scene still uses Unity’s built‑in cascaded shadows, but for key characters I allocate an extra, higher‑resolution and more stable local shadow map dedicated to the character. This improves shadow edge clarity, detail reliability, and close‑up quality—without pushing the entire scene’s shadow cost to the maximum.
 
@@ -359,6 +359,6 @@ The principle is the same as ShadowMap, but scoped to the target mesh’s boundi
 
 Because this is toon rendering, I personally don’t want the PCSS soft‑transition look, so I use **pre‑integrated Poisson disk + PCF filtering**.
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062208.mp4|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191910.mp4|800]]
 
-![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062208-7.png|Final|800]]
+![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191910-5.png|Final|800]]
