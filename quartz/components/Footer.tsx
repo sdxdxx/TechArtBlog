@@ -4,7 +4,7 @@ import { version } from "../../package.json"
 const socialLinks: Record<string, string> = {
   ArtStation: "https://sdxdxx007.artstation.com/",
   YouTube: "https://www.youtube.com/@SDXDXX",
-  Zhihu: "https://www.zhihu.com/people/sha-dong-xi-da-xing-xing",
+  Zhihu: "https://www.zhihu.com/people/sha-dong-xi-da-xing-xing/posts",
   Bilibili: "https://space.bilibili.com/58940311",
 }
 
