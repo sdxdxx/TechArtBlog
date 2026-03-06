@@ -1,6 +1,9 @@
 
 ![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062206.png|800]]
 
+## Demo
+![[Cheeta.mp4|800]]
+
 ## Preface
 
 ![[Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305062206-1.png|800]]

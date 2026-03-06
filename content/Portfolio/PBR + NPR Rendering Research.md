@@ -1,5 +1,8 @@
 ![[PBR + NPR Rendering Research 20260305062837.png|800]]
 
+## Demo
+![[American Stylized Rendering.mp4|800]]
+
 ## Preface
 
 The model comes from Substance Painter’s beginner tutorial **Spiderbot**, and all textures were painted by me.

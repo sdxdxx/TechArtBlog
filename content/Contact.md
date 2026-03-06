@@ -14,7 +14,7 @@ cssclasses:
 <section class="as-contactGrid">
   <a class="as-contactCard" href="mailto:dengxiaoxiao24@outlook.com">
     <span class="as-contactLabel">Email</span>
-    <span class="as-contactValue">1981623651@qq.com</span>
+    <span class="as-contactValue">dengxiaoxiao24@outlook.com</span>
   </a>
   <a class="as-contactCard" href="https://sdxdxx007.artstation.com/" target="_blank" rel="noopener noreferrer">
     <span class="as-contactLabel">ArtStation</span>
