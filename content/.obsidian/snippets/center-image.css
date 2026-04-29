@@ -105,3 +105,118 @@ img.emoji {
 .callout code {
     text-align: left !important;
 }
+
+/* 12) Video center: Obsidian embeds (e.g. ![[demo.mp4]]) */
+.markdown-reading-view :is(.video-embed, .internal-embed, .media-embed):has(> video),
+.markdown-preview-view :is(.video-embed, .internal-embed, .media-embed):has(> video),
+.markdown-source-view.mod-cm6 .cm-content :is(.video-embed, .internal-embed, .media-embed):has(> video) {
+    display: table !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* 13) Video center: plain <video> blocks */
+.markdown-reading-view :is(p, li, blockquote, div) > video:only-child,
+.markdown-preview-view :is(p, li, blockquote, div) > video:only-child,
+.markdown-source-view.mod-cm6 .cm-content :is(p, li, blockquote, div) > video:only-child {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 100%;
+}
+
+/* 14) Iframe center: YouTube/Bilibili and other frame videos */
+.markdown-reading-view :is(.internal-embed, .media-embed):has(> iframe),
+.markdown-preview-view :is(.internal-embed, .media-embed):has(> iframe),
+.markdown-source-view.mod-cm6 .cm-content :is(.internal-embed, .media-embed):has(> iframe),
+.markdown-reading-view :is(p, li, blockquote, div) > iframe:only-child,
+.markdown-preview-view :is(p, li, blockquote, div) > iframe:only-child,
+.markdown-source-view.mod-cm6 .cm-content :is(p, li, blockquote, div) > iframe:only-child {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 100%;
+}
+
+/* 15) Iframe center fallback: external embeds in Live Preview/Reading */
+.markdown-reading-view :is(.external-embed, .media-embed, .internal-embed, .video-embed):has(iframe),
+.markdown-preview-view :is(.external-embed, .media-embed, .internal-embed, .video-embed):has(iframe),
+.markdown-source-view.mod-cm6 :is(.cm-embed-block, .external-embed, .media-embed, .internal-embed, .video-embed):has(iframe) {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    float: none !important;
+}
+
+.markdown-reading-view :is(.external-embed, .media-embed, .internal-embed, .video-embed) iframe,
+.markdown-preview-view :is(.external-embed, .media-embed, .internal-embed, .video-embed) iframe,
+.markdown-source-view.mod-cm6 :is(.cm-embed-block, .external-embed, .media-embed, .internal-embed, .video-embed) iframe {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 100%;
+    float: none !important;
+}
+
+/* 16) Universal frame fallback: class-agnostic wrappers for iframe/webview */
+.markdown-reading-view :is(p, div, figure, li, blockquote, .external-embed, .media-embed, .internal-embed, .video-embed):has(iframe),
+.markdown-preview-view :is(p, div, figure, li, blockquote, .external-embed, .media-embed, .internal-embed, .video-embed):has(iframe),
+.markdown-source-view.mod-cm6 :is(.cm-line, .cm-embed-block, .cm-preview-code-block, .cm-html-embed, .external-embed, .media-embed, .internal-embed, .video-embed):has(iframe),
+.markdown-reading-view :is(p, div, figure, li, blockquote, .external-embed, .media-embed, .internal-embed, .video-embed):has(webview),
+.markdown-preview-view :is(p, div, figure, li, blockquote, .external-embed, .media-embed, .internal-embed, .video-embed):has(webview),
+.markdown-source-view.mod-cm6 :is(.cm-line, .cm-embed-block, .cm-preview-code-block, .cm-html-embed, .external-embed, .media-embed, .internal-embed, .video-embed):has(webview) {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    float: none !important;
+}
+
+.markdown-reading-view :is(iframe, webview),
+.markdown-preview-view :is(iframe, webview),
+.markdown-source-view.mod-cm6 :is(iframe, webview) {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 100%;
+    float: none !important;
+}
+
+/* 17) External embed explicit targets (YouTube/Twitter via ![](...)) */
+.markdown-reading-view :is(iframe.external-embed, img.external-embed, .external-embed),
+.markdown-preview-view :is(iframe.external-embed, img.external-embed, .external-embed),
+.markdown-source-view.mod-cm6 :is(iframe.external-embed, img.external-embed, .external-embed) {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 100% !important;
+    float: none !important;
+}
+
+/* 18) Live Preview wrappers used for external embed widgets */
+.markdown-source-view.mod-cm6 :is(.cm-embed-block, .cm-preview-code-block, .cm-html-embed):has(.external-embed),
+.markdown-source-view.mod-cm6 :is(.cm-embed-block, .cm-preview-code-block, .cm-html-embed):has(iframe.external-embed),
+.markdown-source-view.mod-cm6 :is(.cm-embed-block, .cm-preview-code-block, .cm-html-embed):has(img.external-embed),
+.markdown-source-view.mod-cm6 :is(.cm-embed-block, .cm-preview-code-block, .cm-html-embed):has(a:only-child > img:only-child) {
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* 19) Link-card fallback: if preview is rendered as anchor+thumbnail image */
+.markdown-reading-view :is(p, div, li, blockquote) > a:only-child:has(> img:only-child),
+.markdown-preview-view :is(p, div, li, blockquote) > a:only-child:has(> img:only-child),
+.markdown-source-view.mod-cm6 :is(.cm-line, .cm-embed-block, .cm-preview-code-block, .cm-html-embed) a:only-child:has(> img:only-child) {
+    display: table !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    float: none !important;
+}
+
+.markdown-reading-view :is(p, div, li, blockquote) > a:only-child:has(> img:only-child) > img:only-child,
+.markdown-preview-view :is(p, div, li, blockquote) > a:only-child:has(> img:only-child) > img:only-child,
+.markdown-source-view.mod-cm6 :is(.cm-line, .cm-embed-block, .cm-preview-code-block, .cm-html-embed) a:only-child:has(> img:only-child) > img:only-child {
+    display: block !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 100% !important;
+}

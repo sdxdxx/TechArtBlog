@@ -9,7 +9,7 @@ Render pipeline: **Deffered**
 ## Demo
 ![[Stylized Shading Model 20260429125801.png|800]]
 
-![[Stylized Shading Model 20260429125904.mp4]]
+![[Stylized Shading Model 20260429125904.mp4|800]]
 
 ## Custom Ramp Shading Models
 

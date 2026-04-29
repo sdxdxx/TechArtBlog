@@ -1,0 +1,57 @@
+:root {
+  --attachment-alias-caption-size: var(--font-smaller);
+  --attachment-alias-caption-color: var(--text-muted);
+  --attachment-alias-caption-opacity: 1;
+  --attachment-alias-caption-gap: 4px;
+  --attachment-alias-caption-weight: normal;
+  --attachment-alias-caption-style: italic;
+  --attachment-alias-caption-padding: 2px 4px;
+  --attachment-alias-caption-radius: 0;
+  --attachment-alias-caption-align: center;
+}
+
+.attachment-alias-caption-host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: var(--attachment-alias-caption-align);
+  box-sizing: border-box;
+}
+
+span.attachment-alias-caption-host {
+  display: inline-flex;
+  vertical-align: top;
+}
+
+.attachment-alias-caption-host > :first-child {
+  max-width: 100%;
+}
+
+.attachment-alias-caption-host > :first-child:is(img, video, iframe, embed, object, webview) {
+  display: block;
+}
+
+.attachment-alias-caption-text {
+  display: block;
+  margin-top: var(--attachment-alias-caption-gap);
+  color: var(--attachment-alias-caption-color);
+  opacity: var(--attachment-alias-caption-opacity);
+  font-size: var(--attachment-alias-caption-size);
+  font-weight: var(--attachment-alias-caption-weight);
+  font-style: var(--attachment-alias-caption-style);
+  padding: var(--attachment-alias-caption-padding);
+  border-radius: var(--attachment-alias-caption-radius);
+  line-height: 1.35;
+  text-align: var(--attachment-alias-caption-align);
+  word-break: break-word;
+  box-sizing: border-box;
+}
+
+p.attachment-alias-caption-paragraph {
+  text-align: center;
+}
