@@ -13,6 +13,92 @@
   }
 })
 
+let activeTopScroll = 0
+const topScrollCancelKeys = new Set([
+  "ArrowDown",
+  "ArrowUp",
+  "End",
+  "Enter",
+  "Home",
+  "PageDown",
+  "PageUp",
+  " ",
+])
+
+function instantScrollTo(top: number) {
+  const html = document.documentElement
+  const previousScrollBehavior = html.style.scrollBehavior
+  html.style.scrollBehavior = "auto"
+  window.scrollTo({ top, behavior: "auto" })
+  html.style.scrollBehavior = previousScrollBehavior
+}
+
+function cancelTopScroll() {
+  activeTopScroll++
+}
+
+window.addEventListener("wheel", cancelTopScroll, { passive: true })
+window.addEventListener("pointerdown", cancelTopScroll, { passive: true })
+window.addEventListener("touchstart", cancelTopScroll, { passive: true })
+window.addEventListener("keydown", (event) => {
+  if (topScrollCancelKeys.has(event.key)) {
+    cancelTopScroll()
+  }
+})
+
+function clearHash() {
+  if (!window.location.hash) return
+
+  const url = new URL(window.location.href)
+  url.hash = ""
+  window.history.replaceState({}, "", url)
+}
+
+function scrollToPageTop() {
+  const token = ++activeTopScroll
+  const start = window.scrollY
+  const shouldReduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  const duration = shouldReduceMotion ? 0 : Math.min(800, Math.max(220, start / 4))
+
+  const settle = (attempt = 0) => {
+    if (token !== activeTopScroll) return
+
+    if (window.scrollY > 2) {
+      instantScrollTo(0)
+    }
+
+    if (attempt < 4) {
+      window.setTimeout(() => settle(attempt + 1), 100 * Math.pow(2, attempt))
+    }
+  }
+
+  if (duration === 0) {
+    instantScrollTo(0)
+    settle()
+    return
+  }
+
+  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
+  let startedAt: number | undefined
+
+  const step = (timestamp: number) => {
+    if (token !== activeTopScroll) return
+    startedAt ??= timestamp
+
+    const progress = Math.min(1, (timestamp - startedAt) / duration)
+    const next = start * (1 - easeOutCubic(progress))
+    instantScrollTo(next)
+
+    if (progress < 1) {
+      window.requestAnimationFrame(step)
+    } else {
+      settle()
+    }
+  }
+
+  window.requestAnimationFrame(step)
+}
+
 function toggleToc(this: HTMLElement) {
   this.classList.toggle("collapsed")
   this.setAttribute(
@@ -36,7 +122,9 @@ function handleTocHeaderClick(this: HTMLElement, e: Event) {
 
   // 点击标题文本（或按钮内其他区域）时回到页面顶部。
   e.preventDefault()
-  window.scrollTo({ top: 0, behavior: "smooth" })
+  window.dispatchEvent(new Event("quartz:cancel-anchor-scroll"))
+  clearHash()
+  scrollToPageTop()
 }
 
 function setupToc() {

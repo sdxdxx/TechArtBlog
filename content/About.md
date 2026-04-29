@@ -24,8 +24,8 @@ cssclasses:
     <span class="as-factVal">Orlando, FL, United States</span>
   </div>
   <div class="as-factRow">
-    <span class="as-factKey">Availability</span>
-    <span class="as-factVal">Open to Summer Internship / Technical Art roles</span>
+    <span class="as-factKey">Status</span>
+    <span class="as-factVal">Technical Artist Intern @ByteDance</span>
   </div>
   <div class="as-factRow">
     <span class="as-factKey">Focus</span>

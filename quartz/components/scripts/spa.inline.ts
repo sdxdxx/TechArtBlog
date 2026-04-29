@@ -41,7 +41,16 @@ function notifyNav(url: FullSlug) {
 }
 
 let activeAnchorScroll = 0
-const scrollCancelKeys = new Set(["ArrowDown", "ArrowUp", "End", "Home", "PageDown", "PageUp", " "])
+const scrollCancelKeys = new Set([
+  "ArrowDown",
+  "ArrowUp",
+  "End",
+  "Enter",
+  "Home",
+  "PageDown",
+  "PageUp",
+  " ",
+])
 
 function getScrollPaddingTop(): number {
   const scrollPaddingTop = window.getComputedStyle(document.documentElement).scrollPaddingTop
@@ -66,7 +75,9 @@ function cancelAnchorScroll() {
 }
 
 window.addEventListener("wheel", cancelAnchorScroll, { passive: true })
+window.addEventListener("pointerdown", cancelAnchorScroll, { passive: true })
 window.addEventListener("touchstart", cancelAnchorScroll, { passive: true })
+window.addEventListener("quartz:cancel-anchor-scroll", cancelAnchorScroll)
 window.addEventListener("keydown", (event) => {
   if (scrollCancelKeys.has(event.key)) {
     cancelAnchorScroll()
