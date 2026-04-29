@@ -170,6 +170,25 @@ function normalizeSpacedMarkdownParenDest(src: string): string {
   })
 }
 
+function mediaSizeStyle(width?: string, height?: string): string {
+  const styles: string[] = []
+
+  if (width && width !== "auto") {
+    styles.push(`width:${width}px`)
+  }
+
+  if (height && height !== "auto") {
+    styles.push(`height:${height}px`)
+  }
+
+  if (styles.length === 0) {
+    return ""
+  }
+
+  styles.push("max-width:100%")
+  return ` style="${styles.join(";")}"`
+}
+
 export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>> = (userOpts) => {
   const opts = { ...defaultOptions, ...userOpts }
 
@@ -271,9 +290,13 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>>
                       },
                     }
                   } else if ([".mp4", ".webm", ".ogv", ".mov", ".mkv"].includes(ext)) {
+                    const match = wikilinkImageEmbedRegex.exec(alias ?? "")
+                    const width = match?.groups?.width ?? "auto"
+                    const height = match?.groups?.height ?? "auto"
+                    const style = mediaSizeStyle(width, height)
                     return {
                       type: "html",
-                      value: `<video src="${url}" controls></video>`,
+                      value: `<video src="${url}" controls${style}></video>`,
                     }
                   } else if (
                     [".mp3", ".webm", ".wav", ".m4a", ".ogg", ".3gp", ".flac"].includes(ext)

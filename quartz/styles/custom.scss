@@ -98,6 +98,30 @@ body[data-slug="Home"] .center > hr + .page-footer {
   stroke: #000 !important;
 }
 
+/* Center media in article bodies */
+.center article :is(img, video, .external-embed.youtube) {
+  display: block;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.center article :is(video, .external-embed.youtube) {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.center article .external-embed.youtube {
+  width: min(100%, 800px);
+  height: auto;
+  aspect-ratio: 16 / 9;
+}
+
+.center article .gallery-grid img {
+  width: 100%;
+  margin: 0;
+}
+
 /* Heading font sizes: article + popover only (exclude sidebars) */
 :is(.center article, .popover .popover-inner) h1 {
   font-size: var(--heading-h1-size) !important;
