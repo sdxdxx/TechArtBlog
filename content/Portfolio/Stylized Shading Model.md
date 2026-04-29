@@ -6,6 +6,11 @@
 Unreal version: **Unreal 5.6.1 Source Code Version** 
 Render pipeline: **Deffered**
 
+## Demo
+![[Stylized Shading Model 20260429125801.png|800]]
+
+![[Stylized Shading Model 20260429125904.mp4]]
+
 ## Custom Ramp Shading Models
 
 ![[Stylized Shading Model 08-22-50 2026-03-05.png|800]]
