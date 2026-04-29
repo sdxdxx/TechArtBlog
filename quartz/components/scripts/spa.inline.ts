@@ -40,6 +40,90 @@ function notifyNav(url: FullSlug) {
   document.dispatchEvent(event)
 }
 
+let activeAnchorScroll = 0
+const scrollCancelKeys = new Set(["ArrowDown", "ArrowUp", "End", "Home", "PageDown", "PageUp", " "])
+
+function getScrollPaddingTop(): number {
+  const scrollPaddingTop = window.getComputedStyle(document.documentElement).scrollPaddingTop
+  const parsed = Number.parseFloat(scrollPaddingTop)
+  return Number.isFinite(parsed) ? parsed : 0
+}
+
+function getAnchorTop(el: HTMLElement): number {
+  return Math.max(0, window.scrollY + el.getBoundingClientRect().top - getScrollPaddingTop())
+}
+
+function instantScrollTo(top: number) {
+  const html = document.documentElement
+  const previousScrollBehavior = html.style.scrollBehavior
+  html.style.scrollBehavior = "auto"
+  window.scrollTo({ top, behavior: "auto" })
+  html.style.scrollBehavior = previousScrollBehavior
+}
+
+function cancelAnchorScroll() {
+  activeAnchorScroll++
+}
+
+window.addEventListener("wheel", cancelAnchorScroll, { passive: true })
+window.addEventListener("touchstart", cancelAnchorScroll, { passive: true })
+window.addEventListener("keydown", (event) => {
+  if (scrollCancelKeys.has(event.key)) {
+    cancelAnchorScroll()
+  }
+})
+
+function scrollToAnchor(hash: string) {
+  const el = document.getElementById(decodeURIComponent(hash.substring(1)))
+  if (!el) return
+
+  const token = ++activeAnchorScroll
+  const start = window.scrollY
+  const distance = Math.abs(getAnchorTop(el) - start)
+  const shouldReduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  const duration = shouldReduceMotion ? 0 : Math.min(900, Math.max(240, distance / 4))
+
+  const settle = (attempt = 0) => {
+    if (token !== activeAnchorScroll) return
+
+    const delta = el.getBoundingClientRect().top - getScrollPaddingTop()
+    if (Math.abs(delta) > 2) {
+      instantScrollTo(getAnchorTop(el))
+    }
+
+    if (attempt < 5) {
+      window.setTimeout(() => settle(attempt + 1), 100 * Math.pow(2, attempt))
+    }
+  }
+
+  if (duration === 0) {
+    instantScrollTo(getAnchorTop(el))
+    settle()
+    return
+  }
+
+  const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3)
+  let startedAt: number | undefined
+
+  const step = (timestamp: number) => {
+    if (token !== activeAnchorScroll) return
+    startedAt ??= timestamp
+
+    const progress = Math.min(1, (timestamp - startedAt) / duration)
+    const target = getAnchorTop(el)
+    const next = start + (target - start) * easeOutCubic(progress)
+    instantScrollTo(next)
+
+    if (progress < 1) {
+      window.requestAnimationFrame(step)
+    } else {
+      settle()
+    }
+  }
+
+  window.requestAnimationFrame(step)
+}
+
 const cleanupFns: Set<(...args: any[]) => void> = new Set()
 window.addCleanup = (fn) => cleanupFns.add(fn)
 
@@ -107,8 +191,7 @@ async function _navigate(url: URL, isBack: boolean = false) {
   // scroll into place and add history
   if (!isBack) {
     if (url.hash) {
-      const el = document.getElementById(decodeURIComponent(url.hash.substring(1)))
-      el?.scrollIntoView()
+      scrollToAnchor(url.hash)
     } else {
       window.scrollTo({ top: 0 })
     }
@@ -154,8 +237,7 @@ function createRouter() {
       event.preventDefault()
 
       if (isSamePage(url) && url.hash) {
-        const el = document.getElementById(decodeURIComponent(url.hash.substring(1)))
-        el?.scrollIntoView()
+        scrollToAnchor(url.hash)
         history.pushState({}, "", url)
         return
       }
