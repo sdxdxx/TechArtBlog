@@ -5,6 +5,13 @@ import { fetchCanonical } from "./util"
 const p = new DOMParser()
 let activeAnchor: HTMLAnchorElement | null = null
 const galleryCoverCache = new Map<string, string | null>()
+const enableHomeGalleryPopovers =
+  (window as Window & { __QUARTZ_ENABLE_HOME_GALLERY_POPOVERS__?: boolean })
+    .__QUARTZ_ENABLE_HOME_GALLERY_POPOVERS__ !== false
+
+function isHomePage() {
+  return document.body.dataset.slug?.toLowerCase() === "home"
+}
 
 async function mouseEnterHandler(
   this: HTMLAnchorElement,
@@ -218,8 +225,12 @@ async function setupGalleryCards() {
   ] as HTMLAnchorElement[]
 
   for (const link of galleryLinks) {
-    // Gallery cards keep Quartz popovers, while also adding ArtStation-like title overlays.
-    link.removeAttribute("data-no-popover")
+    if (isHomePage() && !enableHomeGalleryPopovers) {
+      link.dataset.noPopover = "true"
+    } else {
+      // Gallery cards keep Quartz popovers, while also adding ArtStation-like title overlays.
+      link.removeAttribute("data-no-popover")
+    }
 
     if (!link.dataset.cardTitle) {
       const imageAlt = link.querySelector("img")?.getAttribute("alt")?.trim() ?? ""

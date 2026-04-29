@@ -81,6 +81,11 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
 
   // popovers
   if (cfg.enablePopovers) {
+    componentResources.afterDOMLoaded.push(`
+      window.__QUARTZ_ENABLE_HOME_GALLERY_POPOVERS__ = ${JSON.stringify(
+        cfg.enableHomeGalleryPopovers ?? true,
+      )};
+    `)
     componentResources.afterDOMLoaded.push(popoverScript)
     componentResources.css.push(popoverStyle)
   }

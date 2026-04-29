@@ -58,13 +58,14 @@ const localBaseUrl = cliBaseDir.length > 0 ? `localhost/${cliBaseDir}` : "localh
 const inferredProdBaseUrl = inferGitHubPagesBaseUrl()
 const resolvedBaseUrl =
   process.env.QUARTZ_BASE_URL?.trim() ??
-  (isLocalPreview ? localBaseUrl : inferredProdBaseUrl ?? "localhost")
+  (isLocalPreview ? localBaseUrl : (inferredProdBaseUrl ?? "localhost"))
 const config: QuartzConfig = {
   configuration: {
     pageTitle: "Xiaoxiao Deng",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
+    enableHomeGalleryPopovers: false,
     analytics: {
       provider: "plausible",
     },

@@ -27,6 +27,8 @@
   --heading-h4-size: 1.21em;
   --heading-h5-size: 1.1em;
   --heading-h6-size: 1em;
+  --article-font-size: 1.2rem;
+  --article-line-height: 1.75;
 
   --em-italic-color: #4cc496;
   --em-bold-color: #e04c4c;
@@ -120,6 +122,12 @@ body[data-slug="Home"] .center > hr + .page-footer {
 .center article .gallery-grid img {
   width: 100%;
   margin: 0;
+}
+
+/* Article typography scale */
+.center article {
+  font-size: var(--article-font-size);
+  line-height: var(--article-line-height);
 }
 
 /* Heading font sizes: article + popover only (exclude sidebars) */
