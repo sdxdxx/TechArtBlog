@@ -7,6 +7,10 @@ Welcome to my website. I am a Technical Artist specializing in rendering and sha
 
 <div class="gallery-grid">
 
+[![Per-Object Motion Blur]()](Portfolio/Per-Object Motion Blur.md)
+
+[![Palette Analyzer](Assets_UI/PaletteAnalyzerCover.png)](Tools/Palette Analyzer.md)
+
 [![GLF2 Rendering Reconstruction]()](Portfolio/Subjective Rendering Reconstruction Analysis in Girls' Frontline 2)
 
 [![NPR Rendering Research]()](Portfolio/PBR + NPR Rendering Research.md)
