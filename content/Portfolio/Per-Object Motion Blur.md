@@ -10,7 +10,7 @@ Character comparison with and without Per-Object Motion Blur
 Practical example: using Per-Object Motion Blur on a car to emphasize power and speed
 ![FIEA AMD GameLab 2026](https://youtu.be/E2KztyhhCx4)
 
-### General Implementation Approach
+## General Implementation Approach
 
 ![[Per-Object Motion Blur 20260430010358.png|Single-object mask implementation|800]]
 
