@@ -14,13 +14,13 @@
     {
       "id": "image-alias-manager:alias-images-offscreen-add",
       "icon": "lucide-a-arrow-down",
-      "name": "Image Alias Manager: 按层级路径添加/更新图片别名（整篇，离屏）",
+      "name": "XD Image Alias Manager: 为当前笔记图片添加别名",
       "mode": "any"
     },
     {
       "id": "image-alias-manager:uniform-size-offscreen-whole",
       "icon": "lucide-album",
-      "name": "Image Alias Manager: 统一图片尺寸（整篇，离屏）",
+      "name": "XD Image Alias Manager: 统一当前笔记图片尺寸",
       "mode": "any"
     }
   ],

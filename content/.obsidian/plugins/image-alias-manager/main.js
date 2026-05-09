@@ -4,7 +4,7 @@
  * 2) 清除：一键清除所有别名（wikilink 的别名、Markdown/HTML 的 alt）；支持整篇/选区
  * 3) 尺寸：一键统一宽度（默认 1000），可选“自动高度=按原图等比计算”；支持整篇/选区
  * 4) 标题预处理：① 标题剪裁正则（仅第一次匹配前的内容 + 匹配本身被剪掉）② 标题前缀通用清洗正则（多条、顺序执行）
- * —— 全部“离屏 vault.modify”实现，避免 Live Preview 事务，稳妥不报错。
+ * —— 使用 vault.modify 写入文件，避免 Live Preview 事务冲突。
  */
 const { Plugin, Notice, PluginSettingTab, Setting, MarkdownView, TFile } = require("obsidian");
 
@@ -550,7 +550,7 @@ class ImageAliasManagerSettingTab extends PluginSettingTab {
     constructor(app, plugin) { super(app, plugin); this.plugin = plugin; }
     display() {
         const { containerEl } = this; containerEl.empty();
-        containerEl.createEl("h2", { text: "Image Alias Manager 设置（整合版）" });
+        containerEl.createEl("h2", { text: "XD Image Alias Manager 设置" });
 
         // 基本处理项
         new Setting(containerEl).setName("处理双链语法 ![[...]]")
@@ -619,7 +619,7 @@ class ImageAliasManagerSettingTab extends PluginSettingTab {
         // 操作按钮
         containerEl.createEl("h3", { text: "操作" });
 
-        new Setting(containerEl).setName("添加/更新别名（整篇，离屏）")
+        new Setting(containerEl).setName("为当前笔记图片添加/更新别名")
             .addButton(btn => btn.setButtonText("运行").onClick(async () => {
                 const view = this.app.workspace.getActiveViewOfType(MarkdownView);
                 if (!view) { new Notice("请先打开一个 Markdown 笔记"); return; }
@@ -627,7 +627,7 @@ class ImageAliasManagerSettingTab extends PluginSettingTab {
                 new Notice(changed > 0 ? `已更新 ${changed} 处图片别名` : "未发现需要更新的图片嵌入");
             }));
 
-        new Setting(containerEl).setName("添加/更新别名（选区，离屏）")
+        new Setting(containerEl).setName("为选区图片添加/更新别名")
             .setDesc("仅对选中范围生成/更新别名；支持多选区")
             .addButton(btn => btn.setButtonText("添加/更新选区").onClick(async () => {
                 const view = this.app.workspace.getActiveViewOfType(MarkdownView);
@@ -636,7 +636,7 @@ class ImageAliasManagerSettingTab extends PluginSettingTab {
                 new Notice(changed > 0 ? `已更新选区内 ${changed} 处图片别名` : "选区内未发现需要更新的图片嵌入");
             }));
 
-        new Setting(containerEl).setName("清除所有别名（整篇，离屏）")
+        new Setting(containerEl).setName("清除当前笔记图片别名")
             .addButton(btn => btn.setButtonText("清除整篇").setCta().onClick(async () => {
                 const view = this.app.workspace.getActiveViewOfType(MarkdownView);
                 if (!view) { new Notice("请先打开一个 Markdown 笔记"); return; }
@@ -644,7 +644,7 @@ class ImageAliasManagerSettingTab extends PluginSettingTab {
                 new Notice(changed > 0 ? `已清除 ${changed} 处别名/alt` : "未发现需要清除的别名");
             }));
 
-        new Setting(containerEl).setName("清除选区别名（离屏）")
+        new Setting(containerEl).setName("清除选区图片别名")
             .addButton(btn => btn.setButtonText("清除选区").onClick(async () => {
                 const view = this.app.workspace.getActiveViewOfType(MarkdownView);
                 if (!view) { new Notice("请先打开一个 Markdown 笔记"); return; }
@@ -652,7 +652,7 @@ class ImageAliasManagerSettingTab extends PluginSettingTab {
                 new Notice(changed > 0 ? `已清除选区内 ${changed} 处别名/alt` : "选区内未发现需要清除的别名");
             }));
 
-        new Setting(containerEl).setName("统一图片尺寸（整篇，离屏）")
+        new Setting(containerEl).setName("统一当前笔记图片尺寸")
             .addButton(btn => btn.setButtonText("统一整篇尺寸").setCta().onClick(async () => {
                 const view = this.app.workspace.getActiveViewOfType(MarkdownView);
                 if (!view) { new Notice("请先打开一个 Markdown 笔记"); return; }
@@ -660,7 +660,7 @@ class ImageAliasManagerSettingTab extends PluginSettingTab {
                 new Notice(changed > 0 ? `已统一 ${changed} 处图片尺寸` : "未发现可统一的图片尺寸");
             }));
 
-        new Setting(containerEl).setName("统一图片尺寸（选区，离屏）")
+        new Setting(containerEl).setName("统一选区图片尺寸")
             .setDesc("仅对选区内的图片统一尺寸；支持多选区")
             .addButton(btn => btn.setButtonText("统一选区尺寸").onClick(async () => {
                 const view = this.app.workspace.getActiveViewOfType(MarkdownView);
@@ -679,7 +679,7 @@ class ImageAliasManagerPlugin extends Plugin {
         // 命令：添加/更新别名（整篇/选区）
         this.addCommand({
             id: "alias-images-offscreen-add",
-            name: "按层级路径添加/更新图片别名（整篇，离屏）",
+            name: "XD Image Alias Manager: 为当前笔记图片添加别名",
             editorCallback: async (_editor, view) => {
                 try {
                     if (!view?.file) return;
@@ -690,7 +690,7 @@ class ImageAliasManagerPlugin extends Plugin {
         });
         this.addCommand({
             id: "alias-images-offscreen-add-selection",
-            name: "按层级路径添加/更新图片别名（选区，离屏）",
+            name: "XD Image Alias Manager: 为选区图片添加别名",
             editorCallback: async (editor, view) => {
                 try {
                     if (!view?.file) return;
@@ -703,7 +703,7 @@ class ImageAliasManagerPlugin extends Plugin {
         // 命令：清除别名（整篇/选区）
         this.addCommand({
             id: "alias-images-offscreen-clear",
-            name: "清除所有图片别名/alt（整篇，离屏）",
+            name: "XD Image Alias Manager: 清除当前笔记图片别名",
             editorCallback: async (_editor, view) => {
                 try {
                     if (!view?.file) return;
@@ -714,7 +714,7 @@ class ImageAliasManagerPlugin extends Plugin {
         });
         this.addCommand({
             id: "alias-images-offscreen-clear-selection",
-            name: "清除选区内的图片别名/alt（离屏）",
+            name: "XD Image Alias Manager: 清除选区图片别名",
             editorCallback: async (editor, view) => {
                 try {
                     if (!view?.file) return;
@@ -727,7 +727,7 @@ class ImageAliasManagerPlugin extends Plugin {
         // 命令：统一尺寸（整篇/选区）
         this.addCommand({
             id: "uniform-size-offscreen-whole",
-            name: "统一图片尺寸（整篇，离屏）",
+            name: "XD Image Alias Manager: 统一当前笔记图片尺寸",
             editorCallback: async (_editor, view) => {
                 try {
                     if (!view?.file) return;
@@ -738,7 +738,7 @@ class ImageAliasManagerPlugin extends Plugin {
         });
         this.addCommand({
             id: "uniform-size-offscreen-selection",
-            name: "统一图片尺寸（选区，离屏）",
+            name: "XD Image Alias Manager: 统一选区图片尺寸",
             editorCallback: async (editor, view) => {
                 try {
                     if (!view?.file) return;
@@ -748,7 +748,6 @@ class ImageAliasManagerPlugin extends Plugin {
             }
         });
 
-        this.addRibbonIcon("gear", "Image Alias Manager 设置（整合版）", () => this.openSettings());
         this.addSettingTab(new ImageAliasManagerSettingTab(this.app, this));
     }
 

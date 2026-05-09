@@ -1,0 +1,9 @@
+{
+  "id": "note-refresh-keep-cursor",
+  "name": "XD Note Refresh",
+  "version": "1.0.0",
+  "minAppVersion": "1.6.0",
+  "description": "Refresh the current note render without losing cursor and scroll position.",
+  "author": "sdxdxx007",
+  "isDesktopOnly": false
+}

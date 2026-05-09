@@ -49,17 +49,17 @@ module.exports = class NoteContentZoomPlugin extends Plugin {
         // 命令
         this.addCommand({
             id: 'note-zoom-in',
-            name: '放大笔记内容（内容缩放）',
+            name: 'XD Note Content Zoom: 放大笔记内容',
             callback: () => this.setZoom(clamp(this.zoom + (this.settings.step || DEFAULT_SETTINGS.step), MIN, MAX))
         });
         this.addCommand({
             id: 'note-zoom-out',
-            name: '缩小笔记内容（内容缩放）',
+            name: 'XD Note Content Zoom: 缩小笔记内容',
             callback: () => this.setZoom(clamp(this.zoom - (this.settings.step || DEFAULT_SETTINGS.step), MIN, MAX))
         });
         this.addCommand({
             id: 'note-zoom-reset',
-            name: '重置笔记内容到 100%',
+            name: 'XD Note Content Zoom: 重置缩放为 100%',
             callback: () => this.setZoom(1.0)
         });
 
@@ -170,7 +170,7 @@ module.exports = class NoteContentZoomPlugin extends Plugin {
             if (!this.ribbonEl) {
                 this.ribbonEl = this.addRibbonIcon(
                     'zoom-in',
-                    '一键还原笔记内容到 100%',
+                    'XD Note Content Zoom: 重置缩放为 100%',
                     () => this.setZoom(1.0)
                 );
             }
@@ -184,7 +184,7 @@ module.exports = class NoteContentZoomPlugin extends Plugin {
             if (!this.status) this.status = this.addStatusBarItem();
             this.status.addClass('note-zoom-status');
             this.renderStatus();
-            this.status.setAttr('title', '点击重置到 100%');
+            this.status.setAttr('title', 'XD Note Content Zoom: 重置缩放为 100%');
             this.status.onclick = () => this.setZoom(1.0);
         } else if (this.status) {
             this.status.remove(); this.status = null;
@@ -205,7 +205,7 @@ class NoteZoomSettingTab extends PluginSettingTab {
     display() {
         const { containerEl } = this;
         containerEl.empty();
-        containerEl.createEl('h2', { text: 'Note Content Zoom 设置' });
+        containerEl.createEl('h2', { text: 'XD Note Content Zoom 设置' });
 
         new Setting(containerEl)
             .setName('滚轮步进（每次缩放幅度）')
@@ -232,8 +232,8 @@ class NoteZoomSettingTab extends PluginSettingTab {
             });
 
         new Setting(containerEl)
-            .setName('显示功能区一键还原按钮')
-            .setDesc('在左侧功能区显示一个按钮，单击即可重置为 100%。')
+            .setName('显示功能区重置按钮')
+            .setDesc('在左侧功能区显示 XD Note Content Zoom 的重置缩放按钮。')
             .addToggle(t => {
                 t.setValue(this.plugin.settings.showRibbonReset)
                     .onChange(async (v) => {
@@ -278,10 +278,10 @@ class NoteZoomSettingTab extends PluginSettingTab {
             });
 
         new Setting(containerEl)
-            .setName('一键还原到 100%（现在）')
-            .setDesc('点击立即将笔记内容缩放设为 100%。')
+            .setName('重置缩放为 100%')
+            .setDesc('立即将 XD Note Content Zoom 的缩放比例恢复到默认大小。')
             .addButton(b => {
-                b.setButtonText('还原到 100%')
+                b.setButtonText('重置缩放')
                     .onClick(() => this.plugin.setZoom(1.0));
             });
 

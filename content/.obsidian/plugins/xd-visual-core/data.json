@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "modules": {
+    "mediaCenter": true,
+    "roundedImages": true,
+    "attachmentCaptions": true,
+    "rainbowFolders": true,
+    "indentationGuides": true,
+    "fileIcons": true,
+    "rainbowHeadings": true,
+    "emphasisColors": true,
+    "linkStyles": true,
+    "tableStyles": true,
+    "tableBorders": true,
+    "codeTheme": true,
+    "editorFull": true,
+    "autoAttributeHide": true,
+    "mathBlockWhite": true
+  },
+  "media": {
+    "imageRadius": 8,
+    "captionColor": "",
+    "captionAlpha": 0.8
+  },
+  "fileExplorer": {
+    "folderBgInitial": 0.15,
+    "folderTextInitial": 0.85,
+    "folderDecay": 0.85,
+    "folderMinBg": 0.02,
+    "folderMinText": 0.2,
+    "folderHover": 1.25,
+    "guideWidth": 2,
+    "guideInitial": 0.8,
+    "guideDecay": 0.7,
+    "guideMin": 0.18,
+    "guideHover": 0.85,
+    "icons": {
+      "enableFolderIcons": false,
+      "enableFileIcons": true,
+      "iconGap": 0,
+      "iconVerticalOffset": 0,
+      "folderIcons": [
+        {
+          "path": "0_收集箱",
+          "emoji": "🗑️"
+        },
+        {
+          "path": "1_项目",
+          "emoji": "📁"
+        },
+        {
+          "path": "2_领域",
+          "emoji": "🧭"
+        },
+        {
+          "path": "3_资源",
+          "emoji": "📚"
+        },
+        {
+          "path": "4_归档",
+          "emoji": "📦"
+        },
+        {
+          "path": "FIEA",
+          "emoji": "🚀"
+        }
+      ],
+      "fileTypeIcons": [
+        {
+          "name": "文本文件",
+          "extensions": [
+            ".txt",
+            ".ini"
+          ],
+          "emoji": "📄"
+        },
+        {
+          "name": "Markdown",
+          "extensions": [
+            ".md"
+          ],
+          "emoji": "📝"
+        },
+        {
+          "name": "图片",
+          "extensions": [
+            ".png",
+            ".jpg",
+            ".jpeg",
+            ".gif",
+            ".webp"
+          ],
+          "emoji": "🖼️"
+        },
+        {
+          "name": "PDF",
+          "extensions": [
+            ".pdf"
+          ],
+          "emoji": "📋"
+        },
+        {
+          "name": "Word",
+          "extensions": [
+            ".docx",
+            ".doc"
+          ],
+          "emoji": "📑"
+        },
+        {
+          "name": "Excel",
+          "extensions": [
+            ".xlsx",
+            ".xls",
+            ".csv"
+          ],
+          "emoji": "📈"
+        },
+        {
+          "name": "PPT",
+          "extensions": [
+            ".ppt",
+            ".pptx"
+          ],
+          "emoji": "📊"
+        },
+        {
+          "name": "视频",
+          "extensions": [
+            ".mp4",
+            ".mov",
+            ".avi",
+            ".mkv"
+          ],
+          "emoji": "🎥"
+        },
+        {
+          "name": "音频",
+          "extensions": [
+            ".mp3",
+            ".wav",
+            ".flac"
+          ],
+          "emoji": "🎵"
+        },
+        {
+          "name": "压缩包",
+          "extensions": [
+            ".zip",
+            ".rar",
+            ".7z"
+          ],
+          "emoji": "🗜️"
+        },
+        {
+          "name": "代码",
+          "extensions": [
+            ".js",
+            ".css",
+            ".html",
+            ".py",
+            ".java",
+            ".c",
+            ".cpp",
+            ".json"
+          ],
+          "emoji": "💻"
+        },
+        {
+          "name": "Canvas",
+          "extensions": [
+            ".canvas"
+          ],
+          "emoji": "🎨"
+        },
+        {
+          "name": "Excalidraw",
+          "extensions": [
+            ".excalidraw.md"
+          ],
+          "emoji": "🧩"
+        }
+      ]
+    }
+  },
+  "typography": {
+    "headingColors": {
+      "h1": "rgb(171, 180, 207)",
+      "h2": "rgb(235, 203, 139)",
+      "h3": "rgb(163, 190, 140)",
+      "h4": "rgb(180, 142, 173)",
+      "h5": "rgb(143, 188, 187)",
+      "h6": "rgb(129, 161, 193)"
+    },
+    "emphasis": {
+      "italicColor": "#4CC496",
+      "boldColor": "#E04C4C",
+      "boldItalicColor": "#467BD2",
+      "underlineColor": "#E0BE2E",
+      "underlineOverride": true,
+      "keepLinkColor": true
+    },
+    "links": {
+      "internalColor": "#B1BFF7",
+      "internalHoverColor": "#C5B7FB",
+      "externalColor": "#B1BFF7",
+      "externalHoverColor": "#C5B7FB",
+      "deadColor": "#63151C",
+      "hideIconsOnActiveLine": true
+    }
+  },
+  "tables": {
+    "headerBg": "#2B303B",
+    "headerText": "#FFFFFF",
+    "hoverColor": "#333333",
+    "borderColor": "",
+    "borderWidth": 2
+  },
+  "editor": {
+    "fullWidth": "95vw",
+    "metadataCollapsedHeight": "2.7rem",
+    "metadataCollapsedOpacity": 0.6,
+    "mathBlockBackground": "#ffffff",
+    "mathBlockText": "#000000"
+  }
+}

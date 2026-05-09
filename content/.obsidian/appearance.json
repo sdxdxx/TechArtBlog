@@ -2,22 +2,7 @@
   "accentColor": "",
   "baseFontSize": 20,
   "theme": "obsidian",
-  "enabledCssSnippets": [
-    "link-style",
-    "One Dark Pro",
-    "editor-full",
-    "center-image",
-    "auto-attribute-hide",
-    "emphasis-colors",
-    "math-block-white",
-    "One Dark Plus",
-    "rainbow-folders",
-    "rainbow-headings",
-    "real-link-style",
-    "rounded-images",
-    "table-borders",
-    "TableStyles"
-  ],
+  "enabledCssSnippets": [],
   "cssTheme": "Composer",
   "showRibbon": true
 }

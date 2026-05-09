@@ -1,9 +1,0 @@
-{
-  "id": "attachment-alias-caption",
-  "name": "Attachment Alias Caption",
-  "version": "1.2.7",
-  "minAppVersion": "1.6.0",
-  "description": "Show alias captions and apply width tokens for internal media and external images without changing their source syntax.",
-  "author": "DXX",
-  "isDesktopOnly": false
-}

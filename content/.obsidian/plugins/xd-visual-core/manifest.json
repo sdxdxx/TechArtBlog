@@ -1,0 +1,10 @@
+{
+  "id": "xd-visual-core",
+  "name": "XD Visual Core",
+  "version": "1.0.0",
+  "minAppVersion": "1.5.0",
+  "description": "统一管理 Obsidian 外观、文件树图标、媒体标题和常用视觉样式。",
+  "author": "sdxdxx007",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}

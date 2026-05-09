@@ -1,6 +1,5 @@
 [
   "Translator",
-  "translate",
   "templater-obsidian",
   "obsidian-tasks-plugin",
   "quickadd",
@@ -16,9 +15,6 @@
   "image-alias-manager",
   "font-color-live-preview",
   "obsidian-icon-folder",
-  "simple-file-icons",
-  "shiki-highlighter-Modified",
-  "obsidian-simple-code-block-highlighter",
   "code-styler",
   "obsidian-image-toolkit",
   "obsidian-style-settings",
@@ -27,5 +23,6 @@
   "obsidian-latex-suite",
   "note-content-zoom",
   "shiki-highlighter",
-  "attachment-alias-caption"
+  "xd-visual-core",
+  "note-refresh-keep-cursor"
 ]
