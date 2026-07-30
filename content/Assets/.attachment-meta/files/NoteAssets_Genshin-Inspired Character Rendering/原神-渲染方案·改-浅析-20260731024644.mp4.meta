@@ -2,13 +2,21 @@
   "schemaVersion": 2,
   "id": "asset_f5902b0245ae48038c69791bdbb2baca",
   "path": "Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731024644.mp4",
-  "ownerNoteId": null,
-  "ownerNotePath": null,
+  "ownerNoteId": "note_c9a191c1ac694e3c8614db8e0aa51235",
+  "ownerNotePath": "Portfolio/Genshin-Inspired Character Rendering.md",
   "firstSeenAt": 1785448514003,
   "createdAt": 1785448514003,
-  "updatedAt": 1785448515052,
+  "updatedAt": 1785449121231,
   "mtime": 1785437204976,
   "size": 12064479,
-  "state": "orphan",
-  "references": []
+  "state": "active",
+  "references": [
+    {
+      "noteId": "note_c9a191c1ac694e3c8614db8e0aa51235",
+      "notePath": "Portfolio/Genshin-Inspired Character Rendering.md",
+      "containerRole": "note",
+      "syntax": "wiki",
+      "firstSeenAt": 1785448476926
+    }
+  ]
 }

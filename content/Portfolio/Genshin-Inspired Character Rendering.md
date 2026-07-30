@@ -13,7 +13,7 @@ This pipeline is based on the `Light Map + Shadow Ramp` approach commonly used f
 
 ### 1.1 Mesh and Material Separation
 
-![[Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731034858/原神-渲染方案·改-浅析-20260731034858.excalidraw.md|800]]
+![[Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731034858/原神-渲染方案·改-浅析-20260731034858.excalidraw|800]]
 
 The body, hair, and accessories share the standard character shader, while the face and front hair are handled separately. Standard materials mainly read the Albedo, Normal, Light Map, and Shadow Ramp textures, with MatCaps providing additional metallic and environmental highlights. The face uses a dedicated Face Light Map, while the front hair writes to an additional depth texture used to cast the fringe shadow onto the face.
 
@@ -21,11 +21,11 @@ The base diffuse term is not standard Lambert. I first use Half-Lambert to produ
 
 ### 1.2 Light Map Channels and Material Classification
 
-![[Assets/NoteAssets_Genshin-Inspired Character Rendering/Drawing 2026-07-31 04.00.08/Drawing 2026-07-31 04.00.08.excalidraw.md|Light Map|800]]
+![[Assets/NoteAssets_Genshin-Inspired Character Rendering/Drawing 2026-07-31 04.00.08/Drawing 2026-07-31 04.00.08.excalidraw|Light Map|800]]
 
-![[Assets/NoteAssets_Genshin-Inspired Character Rendering/Drawing 2026-07-31 04.08.32/Drawing 2026-07-31 04.08.32.excalidraw.md|Specular Layer|800]]
+![[Assets/NoteAssets_Genshin-Inspired Character Rendering/Drawing 2026-07-31 04.08.32/Drawing 2026-07-31 04.08.32.excalidraw|Specular Layer|800]]
 
-![[Assets/NoteAssets_Genshin-Inspired Character Rendering/Drawing 2026-07-31 04.15.59/Drawing 2026-07-31 04.15.59.excalidraw.md|Ramp ID|800]]
+![[Assets/NoteAssets_Genshin-Inspired Character Rendering/Drawing 2026-07-31 04.15.59/Drawing 2026-07-31 04.15.59.excalidraw|Ramp ID|800]]
 
 The standard character Light Map stores both lighting parameters and material classification data:
 
@@ -58,7 +58,7 @@ The ramp reorganizes the value and hue relationships between the lit and shadowe
 
 #### 2.2.2 Face: SDF Shadows, Day/Night Direction, and Fringe Projection
 
-![[Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731031733/原神-渲染方案·改-浅析-20260731031733.excalidraw.md|800]]
+![[Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731031733/原神-渲染方案·改-浅析-20260731031733.excalidraw|800]]
 
 ![[Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731024644.mp4|800]]
 
@@ -100,13 +100,13 @@ The face currently keeps only ambient diffuse and does not sample an Ambient Spe
 
 ### 2.6 Skin and Subsurface-Scattering Enhancement
 
-![[Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731010945 2/原神-渲染方案·改-浅析-20260731010945.excalidraw.md|800]]
+![[Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731010945 2/原神-渲染方案·改-浅析-20260731010945.excalidraw|800]]
 
 Adding a subsurface-scattering enhancement gives the skin noticeably more depth and keeps it from looking flat.
 
 #### 2.6.1 Body Skin: Pre-Integrated Skin LUT
 
-![[Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731011503/原神-渲染方案·改-浅析-20260731011503.excalidraw.md|Pre-Integrated Skin LUT|500]]
+![[Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731011503/原神-渲染方案·改-浅析-20260731011503.excalidraw|Pre-Integrated Skin LUT|500]]
 
 The original Ramp Diffuse looked too flat on skin, so I add Pre-Integrated Skin shading in Skin regions. The LUT's horizontal axis comes from $\mathbf{N}\cdot\mathbf{L}$. Its vertical axis uses `fwidth` to estimate curvature dynamically from normal and position variation, eliminating the need for an additional curvature texture.
 
@@ -114,17 +114,17 @@ To approximate the different diffusion distances of different wavelengths, the R
 
 #### 2.6.2 Face Skin: Pre-Integrated Skin and Fresnel-Based Fake SSS
 
-![[Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731015043 2/原神-渲染方案·改-浅析-20260731015043.excalidraw.md|SSS Texture|800]]
+![[Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731015043 2/原神-渲染方案·改-浅析-20260731015043.excalidraw|SSS Texture|800]]
 
 The face uses two layers of skin enhancement. Pre-Integrated Skin calculates $\mathbf{N}\cdot\mathbf{L}$ with the cylindrical normal, estimates curvature with the original geometric normal, and includes the fringe projection in the LUT's horizontal coordinate. The second layer follows an approach inspired by Arknights: Endfield: a Face SSS texture controls view direction, edge range, and intensity, while a Fresnel weight tints the Albedo toward a flesh tone around the side of the face.
 
 The first layer improves scattering around the light-shadow boundary, while the second adds view-dependent contour definition. Together they reduce the skin-tone mismatch between the face and body.
 
-![[Assets/NoteAssets_Genshin-Inspired Character Rendering/Drawing 2026-07-31 04.49.36/Drawing 2026-07-31 04.49.36.excalidraw.md|800]]
+![[Assets/NoteAssets_Genshin-Inspired Character Rendering/Drawing 2026-07-31 04.49.36/Drawing 2026-07-31 04.49.36.excalidraw|800]]
 
 ### 2.7 Depth-Based Rim Lighting
 
-![[Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731022659/原神-渲染方案·改-浅析-20260731022659.excalidraw.md|Depth Rim|800]]
+![[Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731022659/原神-渲染方案·改-浅析-20260731022659.excalidraw|Depth Rim|800]]
 
 The depth-based rim light offsets the screen UV along the normal direction and compares the linear depth at the current and offset positions to locate the character silhouette. I multiply the result by a conventional Fresnel term so the rim transitions naturally from front-facing to grazing angles instead of appearing as a hard, uniform bright edge.
 
