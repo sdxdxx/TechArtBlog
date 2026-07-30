@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "id": "asset_63496b0829fd4cf681d88c680950c9ef",
+  "path": "Assets/NoteAssets_Multi-Pass Fur/Multi-Pass-Fur-20260731053650.mp4",
+  "ownerNoteId": "note_78aa4ad1cafc49cfaed98525446f13d3",
+  "ownerNotePath": "Portfolio/Multi-Pass Fur.md",
+  "firstSeenAt": 1785447410461,
+  "createdAt": 1785447410461,
+  "updatedAt": 1785447412755,
+  "mtime": 1785447410459,
+  "size": 16061179,
+  "state": "active",
+  "references": [
+    {
+      "noteId": "note_78aa4ad1cafc49cfaed98525446f13d3",
+      "notePath": "Portfolio/Multi-Pass Fur.md",
+      "containerRole": "note",
+      "syntax": "wiki",
+      "firstSeenAt": 1785447357371
+    }
+  ]
+}

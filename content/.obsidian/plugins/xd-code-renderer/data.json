@@ -1,0 +1,9 @@
+{
+  "darkTheme": "dark-plus",
+  "lightTheme": "dark-plus",
+  "enableReadingView": true,
+  "enableLivePreview": true,
+  "renderInactiveBlocks": true,
+  "cacheCharacterLimit": 4000000,
+  "overscanLines": 30
+}

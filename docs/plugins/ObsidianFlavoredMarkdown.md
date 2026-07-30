@@ -22,6 +22,7 @@ This plugin accepts the following configuration options:
 - `enableInHtmlEmbed`: If `true`, allows embedding of content directly within HTML. Defaults to `false`.
 - `enableYouTubeEmbed`: If `true` (default), enables the embedding of YouTube videos and playlists using external image Markdown syntax.
 - `enableVideoEmbed`: If `true` (default), enables the embedding of video files.
+- `enableVisualEmbed`: If `true` (default), renders Canvas and Excalidraw embeds through XD Attachment Manager-compatible adjacent PNG previews. Canvas files fall back to a browser renderer when a preview is missing.
 - `enableCheckbox`: If `true`, adds support for interactive checkboxes in content. Defaults to `false`.
 - `disableBrokenWikilinks`: If `true`, replaces links to non-existent notes with a dimmed, disabled link. Defaults to `false`.
 

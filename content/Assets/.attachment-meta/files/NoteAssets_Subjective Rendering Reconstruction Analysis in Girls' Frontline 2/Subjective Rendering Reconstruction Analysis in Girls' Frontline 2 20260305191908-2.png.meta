@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "id": "asset_916af54546d04b6a8e58264563714d49",
+  "path": "Assets/NoteAssets_Subjective Rendering Reconstruction Analysis in Girls' Frontline 2/Subjective Rendering Reconstruction Analysis in Girls' Frontline 2 20260305191908-2.png",
+  "ownerNoteId": "note_635dd82bf08b4f93a3b0a084a4a55e1b",
+  "ownerNotePath": "Portfolio/Subjective Rendering Reconstruction Analysis in Girls' Frontline 2.md",
+  "firstSeenAt": 1772704446093,
+  "createdAt": 1772704402012,
+  "updatedAt": 1785437542229,
+  "mtime": 1772520078748,
+  "size": 6481063,
+  "state": "active",
+  "references": [
+    {
+      "noteId": "note_635dd82bf08b4f93a3b0a084a4a55e1b",
+      "notePath": "Portfolio/Subjective Rendering Reconstruction Analysis in Girls' Frontline 2.md",
+      "containerRole": "note",
+      "syntax": "wiki",
+      "firstSeenAt": 1772704446093
+    }
+  ]
+}

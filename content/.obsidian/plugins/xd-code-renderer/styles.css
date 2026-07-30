@@ -1,0 +1,263 @@
+.xdcr-frame {
+  --xdcr-background: #1e1e1e;
+  --xdcr-foreground: #d4d4d4;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  margin: 0.75em 0;
+  color: var(--xdcr-foreground);
+  background: var(--xdcr-background);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.xd-code-renderer-enabled .xdcr-frame > pre.xdcr-code-block {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-height: 2.8em;
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 0.85em 1em 0.8em !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  color: var(--xdcr-foreground) !important;
+  background: var(--xdcr-background) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  white-space: pre !important;
+  tab-size: 4;
+  line-height: 1.55;
+  scrollbar-color: #454545 #252525;
+  scrollbar-width: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-inline: contain;
+  touch-action: pan-x pan-y;
+}
+
+.xdcr-code-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 40px;
+  padding: 6px 7px 6px 12px;
+  box-sizing: border-box;
+  background: var(--xdcr-background);
+  border-bottom: 1px solid #2d2d2d;
+}
+
+.xdcr-code-metadata {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+  overflow: hidden;
+  color: #c7c7c7;
+  font-family: var(--font-monospace);
+  font-size: var(--code-size);
+  line-height: 1.3;
+  white-space: nowrap;
+}
+
+.xdcr-code-title {
+  min-width: 0;
+  overflow: hidden;
+  color: #e2e2e2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.xdcr-code-metadata-separator,
+.xdcr-language-label {
+  flex: none;
+  color: #8f8f8f;
+}
+
+.xdcr-header-actions {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+}
+
+.xdcr-frame > pre.xdcr-code-block::-webkit-scrollbar {
+  height: 12px;
+}
+
+.xdcr-frame > pre.xdcr-code-block::-webkit-scrollbar-track {
+  background: #252525;
+  border-top: 1px solid #303030;
+}
+
+.xdcr-frame > pre.xdcr-code-block::-webkit-scrollbar-thumb {
+  background: #454545;
+  border: 3px solid #252525;
+  border-radius: 5px;
+}
+
+.xdcr-frame > pre.xdcr-code-block::-webkit-scrollbar-thumb:hover {
+  background: #5a5a5a;
+}
+
+.xdcr-frame > pre.xdcr-code-block > .copy-code-button {
+  display: none !important;
+}
+
+.xd-code-renderer-enabled .xdcr-frame > pre.xdcr-code-block > code.xdcr-code {
+  display: block !important;
+  width: max-content;
+  min-width: 100%;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: inherit !important;
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  outline: 0 !important;
+  font-family: var(--font-monospace);
+  font-size: var(--code-size);
+  white-space: pre !important;
+}
+
+.xd-code-renderer-enabled .xdcr-frame.xdcr-highlighting-pending > pre.xdcr-code-block > code.xdcr-code {
+  visibility: hidden !important;
+}
+
+.xdcr-code-action-button {
+  position: static;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  padding: 5px;
+  color: #9d9d9d;
+  background: #1e1e1ed9;
+  border: 1px solid #3a3a3a;
+  border-radius: 4px;
+  opacity: 0.55;
+  touch-action: manipulation;
+}
+
+.xdcr-jump-to-top-button {
+  position: absolute;
+  right: 7px;
+  bottom: 18px;
+}
+
+.xdcr-scroll-anchor {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+.xdcr-scroll-anchor-top {
+  top: 0;
+}
+
+.xdcr-scroll-anchor-bottom {
+  bottom: 0;
+}
+
+.xdcr-compact-frame > .xdcr-code-header .xdcr-jump-button,
+.xdcr-compact-frame > .xdcr-jump-button {
+  display: none;
+}
+
+.xdcr-frame:hover .xdcr-code-action-button,
+.xdcr-code-action-button:focus-visible {
+  color: #d4d4d4;
+  opacity: 1;
+}
+
+.xdcr-token {
+  color: var(--xdcr-token-color, inherit) !important;
+  background-color: var(--xdcr-token-background, transparent) !important;
+  font-style: var(--xdcr-token-font-style, normal) !important;
+  font-weight: var(--xdcr-token-font-weight, 400) !important;
+  text-decoration: var(--xdcr-token-decoration, none) !important;
+}
+
+.xdcr-live-widget-surface {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.65em 0;
+}
+
+.xdcr-live-widget {
+  margin: 0;
+}
+
+.xd-code-renderer-enabled .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock,
+.xd-code-renderer-enabled .markdown-source-view.mod-cm6 .xdcr-source-code-line {
+  color: var(--xdcr-foreground, #d4d4d4);
+  background: #1e1e1e !important;
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere;
+}
+
+.xd-code-renderer-enabled .markdown-source-view.mod-cm6 .xdcr-source-code-line span:not(.xdcr-token) {
+  color: inherit !important;
+  font-style: inherit !important;
+  font-weight: inherit !important;
+  text-decoration: inherit !important;
+}
+
+.xd-code-renderer-enabled .markdown-source-view.mod-cm6 .xdcr-source-code-line .xdcr-token {
+  color: var(--xdcr-token-color, inherit) !important;
+  background-color: var(--xdcr-token-background, transparent) !important;
+  font-style: var(--xdcr-token-font-style, normal) !important;
+  font-weight: var(--xdcr-token-font-weight, 400) !important;
+  text-decoration: var(--xdcr-token-decoration, none) !important;
+}
+
+.xd-code-renderer-enabled .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock-begin,
+.xd-code-renderer-enabled .markdown-source-view.mod-cm6 .cm-line.HyperMD-codeblock-end {
+  color: #6a6a6a !important;
+}
+
+@media (pointer: coarse), (hover: none) {
+  .xdcr-code-header {
+    min-height: 56px;
+    padding: 6px;
+  }
+
+  .xdcr-code-metadata {
+    gap: 5px;
+  }
+
+  .xdcr-header-actions {
+    gap: 6px;
+  }
+
+  .xd-code-renderer-enabled .xdcr-frame > pre.xdcr-code-block {
+    min-height: 64px;
+    scrollbar-width: thin;
+  }
+
+  .xd-code-renderer-enabled .xdcr-frame:not(.xdcr-compact-frame) > pre.xdcr-code-block {
+    padding-bottom: 58px !important;
+  }
+
+  .xdcr-code-action-button {
+    width: 44px;
+    height: 44px;
+    padding: 10px;
+    opacity: 0.9;
+  }
+
+  .xdcr-jump-to-top-button {
+    right: 6px;
+    bottom: 14px;
+  }
+
+  .xdcr-frame:hover .xdcr-code-action-button {
+    color: #d4d4d4;
+    opacity: 0.9;
+  }
+}

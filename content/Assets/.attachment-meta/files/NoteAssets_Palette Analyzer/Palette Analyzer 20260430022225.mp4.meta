@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "id": "asset_62da7b4c28c840e29d7e3a5e57943d4b",
+  "path": "Assets/NoteAssets_Palette Analyzer/Palette Analyzer 20260430022225.mp4",
+  "ownerNoteId": "note_967dc640dc8b4a3d88b5f4a736bdc394",
+  "ownerNotePath": "Tools/Palette Analyzer.md",
+  "firstSeenAt": 1777526783653,
+  "createdAt": 1777530143467,
+  "updatedAt": 1785437542351,
+  "mtime": 1777530143490,
+  "size": 9412512,
+  "state": "active",
+  "references": [
+    {
+      "noteId": "note_967dc640dc8b4a3d88b5f4a736bdc394",
+      "notePath": "Tools/Palette Analyzer.md",
+      "containerRole": "note",
+      "syntax": "wiki",
+      "firstSeenAt": 1777526783653
+    }
+  ]
+}

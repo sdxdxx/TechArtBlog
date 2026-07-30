@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "id": "asset_c1e55f3aa1fe41578793e83846a50fcf",
+  "path": "Assets/NoteAssets_Stylized Shading Model/Stylized Shading Model 20260305082032.png",
+  "ownerNoteId": "note_ebc5f65f41a04f5daeacc1f7a48501ba",
+  "ownerNotePath": "Portfolio/Stylized Shading Model.md",
+  "firstSeenAt": 1772715717803,
+  "createdAt": 1772716830760,
+  "updatedAt": 1785437542238,
+  "mtime": 1772716830760,
+  "size": 1073235,
+  "state": "active",
+  "references": [
+    {
+      "noteId": "note_ebc5f65f41a04f5daeacc1f7a48501ba",
+      "notePath": "Portfolio/Stylized Shading Model.md",
+      "containerRole": "note",
+      "syntax": "wiki",
+      "firstSeenAt": 1772715717803
+    }
+  ]
+}

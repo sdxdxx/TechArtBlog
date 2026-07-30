@@ -1,6 +1,6 @@
 "use strict";
 
-const { Plugin, MarkdownView, PluginSettingTab, Setting, Modal, Notice } = require("obsidian");
+const { Plugin, MarkdownView, PluginSettingTab, Setting, Modal, Notice, TFile } = require("obsidian");
 
 const PLUGIN_STYLE_ID = "xdvc-managed-styles";
 const ICON_STYLE_ID = "xdvc-file-icon-rules";
@@ -14,13 +14,18 @@ const CAPTION_PARAGRAPH_CLASS = "xdvc-attachment-caption-paragraph";
 const CAPTION_GENERATED_ATTR = "data-xdvc-attachment-caption-generated";
 const CAPTION_WIDTH_ATTR = "data-xdvc-attachment-caption-width";
 const CAPTION_ORIGINAL_STYLE_ATTR_PREFIX = "data-xdvc-attachment-caption-original-style-";
+const CENTERED_MEDIA_CLASS = "xdvc-centered-media";
+const CENTERED_MEDIA_LINE_CLASS = "xdvc-centered-media-line";
+const NATIVE_IMAGE_EDIT_HOST_CLASS = "xdvc-native-image-edit-host";
+const NATIVE_IMAGE_EDIT_HOST_SELECTOR = ".cm-editor > .cm-image-reveal-tooltip";
 const MEDIA_ELEMENT_SELECTOR = "img, video, iframe, embed, object, webview";
 const EMBED_ROOT_SELECTOR = [
   ".internal-embed",
   ".external-embed",
   ".media-embed",
   ".image-embed",
-  ".video-embed"
+  ".video-embed",
+  ".xdvc-managed-visual-host"
 ].join(", ");
 
 const IMAGE_EXTENSIONS = new Set([
@@ -80,6 +85,7 @@ const DEFAULT_SETTINGS = {
     emphasisColors: true,
     linkStyles: true,
     tableStyles: true,
+    tableZebra: false,
     tableBorders: true,
     codeTheme: true,
     editorFull: true,
@@ -156,6 +162,8 @@ const DEFAULT_SETTINGS = {
       externalColor: "#B1BFF7",
       externalHoverColor: "#C5B7FB",
       deadColor: "#63151C",
+      internalIcon: "📃",
+      externalIcon: "🔗",
       hideIconsOnActiveLine: true
     }
   },
@@ -362,7 +370,10 @@ function getFileExtension(target) {
 
 function isSupportedInternalTarget(target) {
   const extension = getFileExtension(target);
-  return IMAGE_EXTENSIONS.has(extension) || VIDEO_EXTENSIONS.has(extension);
+  return IMAGE_EXTENSIONS.has(extension)
+    || VIDEO_EXTENSIONS.has(extension)
+    || extension === "canvas"
+    || /\.excalidraw(?:\.md)?$/i.test(String(target ?? "").split("#")[0].split("?")[0].trim());
 }
 
 function hasSinglePayloadToken(parts, startIndex) {
@@ -494,6 +505,11 @@ function makeKeyCandidates(...values) {
       }
       if (internalKey) {
         keys.add(internalKey);
+        if (internalKey.endsWith(".excalidraw.md")) {
+          keys.add(internalKey.slice(0, -3));
+        } else if (internalKey.endsWith(".excalidraw")) {
+          keys.add(`${internalKey}.md`);
+        }
       }
     }
   }
@@ -637,6 +653,9 @@ function findPreferredMediaRoot(root) {
     if (parent.matches?.(EMBED_ROOT_SELECTOR)) {
       return parent;
     }
+    if (parent.matches?.(".excalidraw-svg")) {
+      return parent;
+    }
     if (parent.matches?.("a[href], [data-href], [data-url]")) {
       return parent;
     }
@@ -646,7 +665,13 @@ function findPreferredMediaRoot(root) {
 }
 
 function getRootType(root) {
-  return root.classList?.contains("internal-embed") ? "internal" : "external";
+  const media = findMediaElement(root);
+  return root.classList?.contains("internal-embed")
+    || root.classList?.contains(MANAGED_VISUAL_HOST_CLASS)
+    || root.hasAttribute?.("filesource")
+    || media?.hasAttribute?.("filesource")
+    ? "internal"
+    : "external";
 }
 
 function sortByDocumentOrder(elements) {
@@ -744,6 +769,8 @@ function rootKeyCandidates(root) {
   addValue(root.getAttribute?.("data-href"));
   addValue(root.getAttribute?.("data-url"));
   addValue(root.getAttribute?.("srcdoc"));
+  addValue(root.getAttribute?.("data-xdvc-visual-source"));
+  addValue(root.getAttribute?.("filesource"));
 
   const media = findMediaElement(root);
   if (media) {
@@ -752,6 +779,8 @@ function rootKeyCandidates(root) {
     addValue(media.getAttribute?.("data-href"));
     addValue(media.getAttribute?.("data-url"));
     addValue(media.getAttribute?.("srcdoc"));
+    addValue(media.getAttribute?.("data-xdvc-visual-source"));
+    addValue(media.getAttribute?.("filesource"));
     addValue(media.currentSrc);
     addValue(media.getAttribute?.("poster"));
   }
@@ -773,13 +802,42 @@ function rootKeyCandidates(root) {
   return candidates;
 }
 
+function rootCaptionCandidates(root, rootKeys) {
+  const candidates = new Set();
+  const identityLabels = new Set();
+  for (const key of rootKeys) {
+    let identity = normalizeInternalKey(key);
+    if (!identity) continue;
+    identityLabels.add(identity);
+    if (identity.endsWith(".md")) {
+      identity = identity.slice(0, -3);
+      identityLabels.add(identity);
+    }
+    const dot = identity.lastIndexOf(".");
+    if (dot > 0) identityLabels.add(identity.slice(0, dot));
+  }
+  const addValue = (value) => {
+    const text = normalizeText(value).toLowerCase();
+    if (text && !identityLabels.has(text)) {
+      candidates.add(text);
+    }
+  };
+
+  addValue(root.getAttribute?.("alt"));
+  const media = findMediaElement(root);
+  if (media && media !== root) {
+    addValue(media.getAttribute?.("alt"));
+  }
+  return candidates;
+}
+
 function collectRenderedMediaRoots(container) {
   const wrappedRoots = Array.from(container.querySelectorAll(EMBED_ROOT_SELECTOR)).filter((root) => containsMedia(root) && isVisible(root));
   const bareRoots = Array.from(container.querySelectorAll(MEDIA_ELEMENT_SELECTOR)).filter((root) => {
     if (!isVisible(root)) {
       return false;
     }
-    if (root.classList.contains("emoji")) {
+    if (root.classList.contains("emoji") || root.classList.contains("cm-widgetBuffer")) {
       return false;
     }
     return !root.closest(EMBED_ROOT_SELECTOR);
@@ -795,11 +853,15 @@ function collectRenderedMediaRoots(container) {
     }
   }
 
-  return sortByDocumentOrder(wrappedRoots.concat(dedupedBareRoots)).map((root) => ({
-    root,
-    type: getRootType(root),
-    keys: rootKeyCandidates(root)
-  }));
+  return sortByDocumentOrder(wrappedRoots.concat(dedupedBareRoots)).map((root) => {
+    const keys = rootKeyCandidates(root);
+    return {
+      root,
+      type: getRootType(root),
+      keys,
+      captions: rootCaptionCandidates(root, keys)
+    };
+  });
 }
 
 function paragraphHasOnlyHost(paragraph, host) {
@@ -952,7 +1014,9 @@ function applyCaption(root, caption) {
 
   const existingCaption = Array.from(host.children).find((child) => child.classList?.contains(CAPTION_TEXT_CLASS)) ?? null;
   if (existingCaption) {
-    existingCaption.textContent = text;
+    if (existingCaption.textContent !== text) {
+      existingCaption.textContent = text;
+    }
     return;
   }
 
@@ -964,6 +1028,7 @@ function applyCaption(root, caption) {
 
 function findMatchingRootIndex(roots, token, startIndex) {
   const tokenKeys = token.keys?.size ? token.keys : makeKeyCandidates(token.key);
+  const tokenCaption = normalizeText(token.caption).toLowerCase();
   if (!tokenKeys.size) {
     return -1;
   }
@@ -975,6 +1040,10 @@ function findMatchingRootIndex(roots, token, startIndex) {
       continue;
     }
 
+    if (tokenCaption && root.captions?.size && !root.captions.has(tokenCaption)) {
+      continue;
+    }
+
     for (const key of tokenKeys) {
       if (root.keys.has(key)) {
         return index;
@@ -983,6 +1052,309 @@ function findMatchingRootIndex(roots, token, startIndex) {
   }
 
   return -1;
+}
+
+function findManagedVisualSourceToken(source, sourceFile, sourceOrdinal) {
+  const sourceKeys = makeKeyCandidates(sourceFile.path, sourceFile.name, sourceFile.basename);
+  const matches = parseSourceTokens(source).filter((token) => {
+    if (token.type !== "internal" && !token.allowInternalRoot) {
+      return false;
+    }
+    return Array.from(token.keys ?? []).some((key) => sourceKeys.has(key));
+  });
+  return matches[sourceOrdinal] ?? null;
+}
+
+const MANAGED_VISUAL_HOST_CLASS = "xdvc-managed-visual-host";
+const MANAGED_VISUAL_ORIGINAL_CLASS = "xdvc-managed-visual-original";
+const MANAGED_VISUAL_PREVIEW_CLASS = "xdvc-managed-visual-preview";
+const MANAGED_VISUAL_MARGIN_LEFT_ATTR = "data-xdvc-managed-visual-original-margin-left";
+const MANAGED_VISUAL_MARGIN_RIGHT_ATTR = "data-xdvc-managed-visual-original-margin-right";
+const MANAGED_VISUAL_CARET_HIDDEN_CLASS = "xdvc-managed-visual-caret-hidden";
+
+function nativeExcalidrawDrawingIsReady(host) {
+  const images = Array.from(host.querySelectorAll?.("img.excalidraw-embedded-img") ?? []);
+  if (images.length) {
+    return images.some((image) => image.complete && image.naturalWidth > 0 && image.naturalHeight > 0);
+  }
+
+  return Array.from(host.querySelectorAll?.("svg.excalidraw-svg, .excalidraw-svg > svg") ?? [])
+    .some((svg) => svg.childElementCount > 0);
+}
+
+function revisionedPreviewSource(source, revision) {
+  const value = String(source ?? "");
+  const version = String(revision ?? "").trim();
+  if (!value || !version || value.startsWith("blob:") || value.startsWith("data:")) {
+    return value;
+  }
+  try {
+    const url = new URL(value);
+    url.searchParams.set("xdvc-revision", version);
+    return url.toString();
+  } catch {
+    const separator = value.includes("?") ? "&" : "?";
+    return `${value}${separator}xdvc-revision=${encodeURIComponent(version)}`;
+  }
+}
+
+function setManagedVisualInlineCentering(host) {
+  for (const [property, attribute] of [
+    ["margin-left", MANAGED_VISUAL_MARGIN_LEFT_ATTR],
+    ["margin-right", MANAGED_VISUAL_MARGIN_RIGHT_ATTR]
+  ]) {
+    if (!host.hasAttribute(attribute)) {
+      host.setAttribute(attribute, JSON.stringify({
+        value: host.style.getPropertyValue(property),
+        priority: host.style.getPropertyPriority(property)
+      }));
+    }
+    host.style.setProperty(property, "auto", "important");
+  }
+}
+
+function restoreManagedVisualInlineCentering(host) {
+  for (const [property, attribute] of [
+    ["margin-left", MANAGED_VISUAL_MARGIN_LEFT_ATTR],
+    ["margin-right", MANAGED_VISUAL_MARGIN_RIGHT_ATTR]
+  ]) {
+    if (!host.hasAttribute(attribute)) continue;
+    try {
+      const original = JSON.parse(host.getAttribute(attribute) ?? "{}");
+      if (original.value) {
+        host.style.setProperty(property, original.value, original.priority ?? "");
+      } else {
+        host.style.removeProperty(property);
+      }
+    } catch {
+      host.style.removeProperty(property);
+    }
+    host.removeAttribute(attribute);
+  }
+}
+
+function restoreManagedVisualHost(host) {
+  const original = Array.from(host.children).find((child) => child.classList?.contains(MANAGED_VISUAL_ORIGINAL_CLASS));
+  const preview = host.querySelector(`:scope > .${MANAGED_VISUAL_PREVIEW_CLASS}`);
+  if (preview?._xdvcSingleClickTimer) {
+    window.clearTimeout(preview._xdvcSingleClickTimer);
+    preview._xdvcSingleClickTimer = null;
+  }
+  preview?.remove();
+  if (original) {
+    original.removeAttribute("aria-hidden");
+    original.removeAttribute("inert");
+    while (original.firstChild) {
+      host.insertBefore(original.firstChild, original);
+    }
+    original.remove();
+  }
+  host.querySelector(`:scope > .${CAPTION_TEXT_CLASS}`)?.remove();
+  for (const property of ["width", "maxWidth", "height"]) {
+    const originalAttr = originalStyleAttrName(property);
+    if (!host.hasAttribute(originalAttr)) continue;
+    host.style[property] = host.getAttribute(originalAttr) ?? "";
+    host.removeAttribute(originalAttr);
+  }
+  host.removeAttribute(CAPTION_WIDTH_ATTR);
+  host.classList.remove(CAPTION_HOST_CLASS);
+  host.parentElement?.classList?.remove(CAPTION_PARAGRAPH_CLASS);
+  restoreManagedVisualInlineCentering(host);
+  host.classList.remove(MANAGED_VISUAL_HOST_CLASS);
+  delete host.dataset.xdvcVisualSource;
+  delete host.dataset.xdvcVisualRevision;
+}
+
+function findEmbedOccurrences(source) {
+  const occurrences = [];
+  let index = 0;
+  while (index < source.length) {
+    if (source.startsWith("![[", index)) {
+      const endIndex = source.indexOf("]]", index + 3);
+      if (endIndex === -1) {
+        index += 3;
+        continue;
+      }
+      const parts = splitUnescapedPipes(source.slice(index + 3, endIndex));
+      const target = normalizeText(parts[0] ?? "").split("#")[0].trim();
+      if (target) occurrences.push({ start: index, end: endIndex + 2, cursor: index + 3, target });
+      index = endIndex + 2;
+      continue;
+    }
+    if (source.startsWith("![", index)) {
+      const altEnd = source.indexOf("](", index + 2);
+      const parsed = readExternalEmbed(source, index);
+      if (!parsed || altEnd === -1) {
+        index += 2;
+        continue;
+      }
+      const target = extractMarkdownUrl(source.slice(altEnd + 2, parsed.endIndex - 1)).split("#")[0].trim();
+      if (target) occurrences.push({ start: index, end: parsed.endIndex, cursor: index + 2, target });
+      index = parsed.endIndex;
+      continue;
+    }
+    index += 1;
+  }
+  return occurrences;
+}
+
+function sourceLineContainsManagedVisual(sourceLine) {
+  return findEmbedOccurrences(sourceLine).some((occurrence) => {
+    const target = decodeUriComponentSafely(occurrence.target).split("?")[0].toLowerCase();
+    return target.endsWith(".canvas") || target.endsWith(".excalidraw") || target.endsWith(".excalidraw.md");
+  });
+}
+
+function markCenteredMediaRoot(root) {
+  root.classList.add(CENTERED_MEDIA_CLASS);
+  const line = root.closest?.(".cm-line");
+  if (!line) {
+    return;
+  }
+  const visibleText = textOutsideManagedVisual(line, root)
+    .replace(/[\u200b\u00a0]/g, "")
+    .trim();
+  if (!visibleText) {
+    line.classList.add(CENTERED_MEDIA_LINE_CLASS);
+  }
+}
+
+function clearCenteredMediaLineClasses(root) {
+  for (const line of Array.from(root.querySelectorAll?.(`.${CENTERED_MEDIA_LINE_CLASS}`) ?? [])) {
+    line.classList.remove(CENTERED_MEDIA_LINE_CLASS);
+  }
+}
+
+function nativeImageEditHostsWithin(root) {
+  const hosts = [];
+  if (root?.nodeType === Node.ELEMENT_NODE && root.matches?.(NATIVE_IMAGE_EDIT_HOST_SELECTOR)) {
+    hosts.push(root);
+  }
+  for (const host of Array.from(root?.querySelectorAll?.(NATIVE_IMAGE_EDIT_HOST_SELECTOR) ?? [])) {
+    hosts.push(host);
+  }
+  return hosts;
+}
+
+function setStyleProperty(element, name, value) {
+  if (element.style.getPropertyValue(name) !== value) {
+    element.style.setProperty(name, value);
+  }
+}
+
+function syncNativeImageEditHost(host) {
+  const editor = host.closest?.(".cm-editor");
+  const content = editor?.querySelector?.(".cm-content");
+  if (!editor || !content) {
+    return null;
+  }
+
+  const editorRect = editor.getBoundingClientRect();
+  const contentRect = content.getBoundingClientRect();
+  if (contentRect.width <= 0) {
+    return null;
+  }
+
+  const contentLeft = Math.round((contentRect.left - editorRect.left) * 1000) / 1000;
+  const contentWidth = Math.round(contentRect.width * 1000) / 1000;
+  const activeLine = editor.querySelector(".cm-line.cm-active");
+  const activeLineRect = activeLine?.getBoundingClientRect();
+  const hostRect = host.getBoundingClientRect();
+  const sourceOverlap = activeLineRect && hostRect.top > editorRect.top - editorRect.height
+    ? Math.max(0, Math.min(activeLineRect.height, activeLineRect.bottom - hostRect.top))
+    : 0;
+  setStyleProperty(host, "--xdvc-native-image-edit-left", `${contentLeft}px`);
+  setStyleProperty(host, "--xdvc-native-image-edit-width", `${contentWidth}px`);
+  setStyleProperty(host, "--xdvc-native-image-edit-source-overlap", `${Math.round(sourceOverlap * 1000) / 1000}px`);
+  host.classList.add(NATIVE_IMAGE_EDIT_HOST_CLASS);
+  return content;
+}
+
+function clearNativeImageEditHosts(root) {
+  for (const host of nativeImageEditHostsWithin(root)) {
+    host.classList.remove(NATIVE_IMAGE_EDIT_HOST_CLASS);
+    host.style.removeProperty("--xdvc-native-image-edit-left");
+    host.style.removeProperty("--xdvc-native-image-edit-width");
+    host.style.removeProperty("--xdvc-native-image-edit-source-overlap");
+  }
+}
+
+const MANAGED_VISUAL_MUTATION_SELECTOR = ".internal-embed, .excalidraw-embedded-img, .excalidraw-svg";
+
+function nodeContainsManagedVisualTarget(node) {
+  if (node?.nodeType !== Node.ELEMENT_NODE) {
+    return false;
+  }
+  return Boolean(
+    node.matches?.(MANAGED_VISUAL_MUTATION_SELECTOR)
+    || node.querySelector?.(MANAGED_VISUAL_MUTATION_SELECTOR)
+  );
+}
+
+function recordsAffectManagedVisuals(records) {
+  return records.some((record) => {
+    if (record.type === "childList") {
+      return [...record.addedNodes, ...record.removedNodes].some(nodeContainsManagedVisualTarget);
+    }
+    if (record.type !== "attributes" || record.target?.nodeType !== Node.ELEMENT_NODE) {
+      return false;
+    }
+    if (record.attributeName === "class") {
+      return record.target.matches?.(".excalidraw-embedded-img, .excalidraw-svg") ?? false;
+    }
+    return record.target.matches?.(MANAGED_VISUAL_MUTATION_SELECTOR) ?? false;
+  });
+}
+
+function isActiveLivePreviewHost(view, host) {
+  if (!host.closest?.(".markdown-source-view.is-live-preview") || !view.editor) {
+    return false;
+  }
+  try {
+    const offset = view.editor.cm?.posAtDOM?.(host);
+    if (!Number.isFinite(offset)) {
+      return false;
+    }
+    return view.editor.offsetToPos(offset).line === view.editor.getCursor().line;
+  } catch {
+    return false;
+  }
+}
+
+function textOutsideManagedVisual(node, host) {
+  if (node === host || host.contains?.(node)) {
+    return "";
+  }
+  if (node.nodeType === 3) {
+    return node.textContent ?? "";
+  }
+  let text = "";
+  for (const child of Array.from(node.childNodes ?? [])) {
+    text += textOutsideManagedVisual(child, host);
+  }
+  return text;
+}
+
+function managedVisualCaretTarget(view, host) {
+  if (host.parentElement?.matches?.(".cm-content")) {
+    return host;
+  }
+  if (!isActiveLivePreviewHost(view, host)) {
+    return null;
+  }
+  const editorView = view.editor?.cm;
+  if (editorView && "hasFocus" in editorView && !editorView.hasFocus) {
+    return null;
+  }
+  const line = host.closest?.(".cm-line");
+  if (line) {
+    const visibleSource = textOutsideManagedVisual(line, host)
+      .replace(/[\u200b\u00a0]/g, "")
+      .trim();
+    return visibleSource ? null : line;
+  }
+
+  return null;
 }
 
 class XDVisualCorePlugin extends Plugin {
@@ -1017,23 +1389,86 @@ class XDVisualCorePlugin extends Plugin {
     });
 
     this.refreshInFlight = false;
+    this.refreshPending = false;
+    this.refreshPendingFollowup = false;
     this.suppressObserver = false;
+    this.managedVisualRefreshFrame = 0;
+    this.managedVisualRefreshTimer = 0;
+    this.managedVisualFollowupTimer = 0;
+    this.managedVisualCaretRefreshFrame = 0;
+    this.managedVisualCursorLineState = new WeakMap();
+    this.captionSourceByView = new WeakMap();
+    this.attachmentManagerApi = null;
+    this.attachmentManagerUnsubscribe = null;
+    this.nativeImageEditObservedContent = new WeakSet();
+    this.nativeImageEditResizeObserver = typeof ResizeObserver === "function"
+      ? new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const editor = entry.target.closest?.(".cm-editor");
+          if (editor) {
+            this.syncNativeImageEditHosts(editor);
+          }
+        }
+      })
+      : null;
 
     this.registerMarkdownPostProcessor(() => this.scheduleCaptionRefresh());
     this.registerEvent(this.app.workspace.on("layout-change", () => {
+      this.syncNativeImageEditHosts();
       this.scheduleCaptionRefresh();
       this.scheduleFileTreeRefresh();
     }));
     this.registerEvent(this.app.workspace.on("active-leaf-change", () => this.scheduleCaptionRefresh()));
     this.registerEvent(this.app.workspace.on("file-open", () => this.scheduleCaptionRefresh()));
+    const handleEditorFocusChange = () => {
+      this.scheduleManagedVisualCaretRefresh();
+      const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+      if (!view?.editor) {
+        return;
+      }
+      const cursorLine = view.editor.getLine(view.editor.getCursor().line) ?? "";
+      const currentLineIsVisual = sourceLineContainsManagedVisual(cursorLine);
+      const previousLineWasVisual = this.managedVisualCursorLineState.get(view) ?? false;
+      this.managedVisualCursorLineState.set(view, currentLineIsVisual);
+      if (currentLineIsVisual || previousLineWasVisual) {
+        this.scheduleManagedVisualRefresh(true);
+      }
+    };
+    this.registerDomEvent(document, "selectionchange", handleEditorFocusChange);
+    this.registerDomEvent(document, "focusin", handleEditorFocusChange);
+    this.registerDomEvent(document, "focusout", handleEditorFocusChange);
+    this.registerDomEvent(this.app.workspace.containerEl, "load", (event) => {
+      const target = event.target;
+      if (target instanceof Element && target.matches(MEDIA_ELEMENT_SELECTOR)) {
+        this.scheduleCaptionRefresh();
+      }
+    }, true);
     for (const eventName of ["create", "delete", "rename"]) {
       this.registerEvent(this.app.vault.on(eventName, () => this.scheduleFileTreeRefresh()));
     }
 
     this.observer = new MutationObserver((records) => {
+      if (this.settings.modules.mediaCenter) {
+        for (const record of records) {
+          if (record.type === "childList") {
+            for (const node of record.addedNodes) {
+              this.syncNativeImageEditHosts(node);
+            }
+          } else if (record.attributeName === "style" && record.target.matches?.(NATIVE_IMAGE_EDIT_HOST_SELECTOR)) {
+            this.syncNativeImageEditHosts(record.target);
+          }
+        }
+      }
+      const contentRecords = records.filter((record) => record.attributeName !== "style");
       if (!this.suppressObserver) {
+        if (!contentRecords.length) {
+          return;
+        }
+        if (recordsAffectManagedVisuals(contentRecords)) {
+          this.scheduleManagedVisualRefresh();
+        }
         this.scheduleCaptionRefresh();
-        if (records.some((record) => record.type === "childList" || record.attributeName === "data-path")) {
+        if (contentRecords.some((record) => record.type === "childList" || record.attributeName === "data-path")) {
           this.scheduleFileTreeRefresh();
         }
       }
@@ -1042,7 +1477,7 @@ class XDVisualCorePlugin extends Plugin {
       childList: true,
       subtree: true,
       attributes: true,
-      attributeFilter: ["src", "alt", "class", "data-path"]
+      attributeFilter: ["src", "alt", "class", "style", "data-path", "data-href", "data-src"]
     });
 
     this.register(() => {
@@ -1052,11 +1487,31 @@ class XDVisualCorePlugin extends Plugin {
       if (this.followupRefreshTimer) {
         window.clearTimeout(this.followupRefreshTimer);
       }
+      if (this.managedVisualRefreshFrame) {
+        window.cancelAnimationFrame(this.managedVisualRefreshFrame);
+      }
+      if (this.managedVisualRefreshTimer) {
+        window.clearTimeout(this.managedVisualRefreshTimer);
+      }
+      if (this.managedVisualFollowupTimer) {
+        window.clearTimeout(this.managedVisualFollowupTimer);
+      }
+      if (this.managedVisualCaretRefreshFrame) {
+        window.cancelAnimationFrame(this.managedVisualCaretRefreshFrame);
+      }
       if (this.fileTreeRefreshTimer) {
         window.clearTimeout(this.fileTreeRefreshTimer);
       }
       this.observer?.disconnect();
+      this.nativeImageEditResizeObserver?.disconnect();
+      this.attachmentManagerUnsubscribe?.();
+      this.attachmentManagerUnsubscribe = null;
+      this.attachmentManagerApi = null;
+      this.clearManagedVisuals();
+      this.clearManagedVisualCaretStates();
       this.clearAllGeneratedCaptions();
+      this.clearCenteredMediaClasses();
+      clearNativeImageEditHosts(this.app.workspace.containerEl);
       this.clearFileTreeRainbowColors();
       this.removeInjectedStyles();
       this.clearBodyClasses();
@@ -1074,6 +1529,11 @@ class XDVisualCorePlugin extends Plugin {
     this.normalizeSettings();
     await this.saveData(this.settings);
     this.applyAll();
+  }
+
+  async resetSettings() {
+    this.settings = clone(DEFAULT_SETTINGS);
+    await this.saveSettings();
   }
 
   normalizeSettings() {
@@ -1106,8 +1566,27 @@ class XDVisualCorePlugin extends Plugin {
     this.updateBodyClasses();
     this.injectManagedCSS();
     this.injectFileIconCSS();
+    this.syncNativeImageEditHosts();
     this.scheduleCaptionRefresh();
     this.scheduleFileTreeRefresh(0);
+  }
+
+  syncNativeImageEditHosts(root = this.app.workspace.containerEl) {
+    if (!root) {
+      return;
+    }
+    if (!this.settings.modules.mediaCenter) {
+      clearNativeImageEditHosts(root);
+      return;
+    }
+
+    for (const host of nativeImageEditHostsWithin(root)) {
+      const content = syncNativeImageEditHost(host);
+      if (content && !this.nativeImageEditObservedContent.has(content)) {
+        this.nativeImageEditObservedContent.add(content);
+        this.nativeImageEditResizeObserver?.observe(content);
+      }
+    }
   }
 
   updateBodyClasses() {
@@ -1285,7 +1764,7 @@ ${selectors} {
   }
 
   buildManagedCSS() {
-    const css = [this.buildVariableCSS()];
+    const css = [this.buildVariableCSS(), MANAGED_VISUAL_CSS];
     const modules = this.settings.modules;
 
     if (modules.mediaCenter) css.push(MEDIA_CENTER_CSS);
@@ -1297,6 +1776,7 @@ ${selectors} {
     if (modules.rainbowHeadings) css.push(RAINBOW_HEADINGS_CSS);
     if (modules.emphasisColors) css.push(EMPHASIS_COLORS_CSS);
     if (modules.linkStyles) css.push(LINK_STYLES_CSS);
+    if (modules.tableZebra) css.push(TABLE_ZEBRA_CSS);
     if (modules.tableStyles) css.push(TABLE_STYLES_CSS);
     if (modules.tableBorders) css.push(TABLE_BORDERS_CSS);
     if (modules.codeTheme) css.push(ONE_DARK_PLUS_CSS);
@@ -1314,6 +1794,8 @@ ${selectors} {
     const heading = typography.headingColors;
     const emphasis = typography.emphasis;
     const links = typography.links;
+    const internalLinkIcon = String(links.internalIcon ?? "📃");
+    const externalLinkIcon = String(links.externalIcon ?? "🔗");
 
     return `
 :root {
@@ -1353,6 +1835,10 @@ ${selectors} {
   --xdvc-link-external-color: ${colorValue(links.externalColor, "#B1BFF7")};
   --xdvc-link-external-hover-color: ${colorValue(links.externalHoverColor, "#C5B7FB")};
   --xdvc-link-dead-color: ${colorValue(links.deadColor, "#63151C")};
+  --xdvc-link-internal-icon: '${escapeCssString(internalLinkIcon)}';
+  --xdvc-link-external-icon: '${escapeCssString(externalLinkIcon)}';
+  --xdvc-link-internal-icon-gap: ${internalLinkIcon ? "4px" : "0px"};
+  --xdvc-link-external-icon-gap: ${externalLinkIcon ? "4px" : "0px"};
   --xdvc-table-header-bg: ${colorValue(tables.headerBg, "#2B303B")};
   --xdvc-table-header-text: ${colorValue(tables.headerText, "#FFFFFF")};
   --xdvc-table-hover-color: ${colorValue(tables.hoverColor, "#333333")};
@@ -1395,6 +1881,55 @@ body.theme-light {
     }, 120);
   }
 
+  scheduleManagedVisualRefresh(scheduleFollowup = false) {
+    if (scheduleFollowup) {
+      if (this.managedVisualFollowupTimer) {
+        window.clearTimeout(this.managedVisualFollowupTimer);
+      }
+      this.managedVisualFollowupTimer = window.setTimeout(() => {
+        this.managedVisualFollowupTimer = 0;
+        this.scheduleManagedVisualRefresh();
+      }, 96);
+    }
+    if (this.managedVisualRefreshFrame) {
+      return;
+    }
+    const flush = () => {
+      if (!this.managedVisualRefreshFrame) {
+        return;
+      }
+      window.cancelAnimationFrame(this.managedVisualRefreshFrame);
+      this.managedVisualRefreshFrame = 0;
+      if (this.managedVisualRefreshTimer) {
+        window.clearTimeout(this.managedVisualRefreshTimer);
+        this.managedVisualRefreshTimer = 0;
+      }
+      for (const leaf of this.app.workspace.getLeavesOfType("markdown")) {
+        const view = leaf.view;
+        if (view instanceof MarkdownView) {
+          this.renderManagedVisuals(view);
+        }
+      }
+    };
+    this.managedVisualRefreshFrame = window.requestAnimationFrame(flush);
+    this.managedVisualRefreshTimer = window.setTimeout(flush, 64);
+  }
+
+  scheduleManagedVisualCaretRefresh() {
+    if (this.managedVisualCaretRefreshFrame) {
+      return;
+    }
+    this.managedVisualCaretRefreshFrame = window.requestAnimationFrame(() => {
+      this.managedVisualCaretRefreshFrame = 0;
+      for (const leaf of this.app.workspace.getLeavesOfType("markdown")) {
+        const view = leaf.view;
+        if (view instanceof MarkdownView) {
+          this.updateManagedVisualCaretState(view);
+        }
+      }
+    });
+  }
+
   scheduleFollowupCaptionRefresh() {
     if (this.followupRefreshTimer) {
       window.clearTimeout(this.followupRefreshTimer);
@@ -1408,28 +1943,37 @@ body.theme-light {
 
   async refreshAllViews(scheduleFollowup = false) {
     if (this.refreshInFlight) {
+      this.refreshPending = true;
+      this.refreshPendingFollowup ||= scheduleFollowup;
       return;
     }
 
-    this.refreshInFlight = true;
-    this.suppressObserver = true;
+    let requestFollowup = scheduleFollowup;
+    do {
+      this.refreshPending = false;
+      requestFollowup ||= this.refreshPendingFollowup;
+      this.refreshPendingFollowup = false;
+      this.refreshInFlight = true;
+      this.suppressObserver = true;
 
-    try {
-      const leaves = this.app.workspace.getLeavesOfType("markdown");
-      for (const leaf of leaves) {
-        const view = leaf.view;
-        if (view instanceof MarkdownView) {
-          await this.refreshView(view);
+      try {
+        const leaves = this.app.workspace.getLeavesOfType("markdown");
+        for (const leaf of leaves) {
+          const view = leaf.view;
+          if (view instanceof MarkdownView) {
+            await this.refreshView(view);
+          }
         }
+      } finally {
+        this.suppressObserver = false;
+        this.refreshInFlight = false;
       }
-    } finally {
-      this.suppressObserver = false;
-      this.refreshInFlight = false;
-    }
 
-    if (scheduleFollowup) {
-      this.scheduleFollowupCaptionRefresh();
-    }
+      if (requestFollowup) {
+        this.scheduleFollowupCaptionRefresh();
+        requestFollowup = false;
+      }
+    } while (this.refreshPending);
   }
 
   async refreshView(view) {
@@ -1438,12 +1982,28 @@ body.theme-light {
       return;
     }
 
-    clearExistingCaptions(container);
+    clearCenteredMediaLineClasses(container);
+    await this.renderManagedVisuals(view);
+    this.syncNativeImageEditHosts(container);
+    const roots = collectRenderedMediaRoots(container);
+    if (this.settings.modules.mediaCenter) {
+      for (const root of roots) {
+        if (root.keys.size) {
+          markCenteredMediaRoot(root.root);
+        }
+      }
+    }
     if (!this.settings.modules.attachmentCaptions) {
+      clearExistingCaptions(container);
+      this.captionSourceByView.delete(view);
       return;
     }
 
     const source = await this.getViewSource(view);
+    if (this.captionSourceByView.get(view) !== source) {
+      clearExistingCaptions(container);
+      this.captionSourceByView.set(view, source);
+    }
     if (!source) {
       return;
     }
@@ -1453,7 +2013,6 @@ body.theme-light {
       return;
     }
 
-    const roots = collectRenderedMediaRoots(container);
     let rootIndex = 0;
     for (const token of tokens) {
       const matchIndex = roots.length ? findMatchingRootIndex(roots, token, rootIndex) : -1;
@@ -1465,9 +2024,13 @@ body.theme-light {
       applyCaption(roots[matchIndex].root, token.caption);
       rootIndex = matchIndex + 1;
     }
+
   }
 
   async getViewSource(view) {
+    if (view.getMode?.() === "source" && typeof view.editor?.getValue === "function") {
+      return view.editor.getValue();
+    }
     if (typeof view.data === "string") {
       return view.data;
     }
@@ -1481,6 +2044,281 @@ body.theme-light {
     return "";
   }
 
+  getAttachmentManagerApi() {
+    const pluginManager = this.app.plugins;
+    const plugin = pluginManager?.getPlugin?.("xd-attachment-manager")
+      ?? pluginManager?.plugins?.["xd-attachment-manager"];
+    if (!plugin || typeof plugin.resolveVisual !== "function" || typeof plugin.onVisualChanged !== "function") {
+      return null;
+    }
+    return plugin;
+  }
+
+  connectAttachmentManager() {
+    const api = this.getAttachmentManagerApi();
+    if (api === this.attachmentManagerApi) {
+      return api;
+    }
+    this.attachmentManagerUnsubscribe?.();
+    this.attachmentManagerUnsubscribe = null;
+    this.attachmentManagerApi = api;
+    if (api) {
+      this.attachmentManagerUnsubscribe = api.onVisualChanged(() => this.scheduleCaptionRefresh());
+    }
+    return api;
+  }
+
+  renderManagedVisuals(view) {
+    const container = view.containerEl;
+    const api = this.connectAttachmentManager();
+    if (!api) {
+      this.clearManagedVisuals(container);
+      this.updateManagedVisualCaretState(view);
+      return;
+    }
+    const sourcePath = view.file?.path ?? "";
+    const candidates = Array.from(container.querySelectorAll(
+      ".internal-embed, .markdown-embed, .cm-embed-block, .internal-embed [data-src], .internal-embed [data-href], .markdown-embed [data-src], .markdown-embed [data-href], .cm-embed-block [data-src], .cm-embed-block [data-href]"
+    ));
+    const activeHosts = new Set();
+    const resolvedHosts = new Set();
+    const sourceOrdinals = new Map();
+    for (const candidate of candidates) {
+      const host = candidate.closest(".internal-embed, .markdown-embed, .cm-embed-block") ?? candidate;
+      if (resolvedHosts.has(host)) {
+        continue;
+      }
+      const carrier = candidate.matches("[data-src], [data-href], [src], [alt]")
+        ? candidate
+        : candidate.querySelector("[data-src], [data-href], [src], [alt]");
+      const rawTarget = carrier?.dataset.src
+        ?? carrier?.dataset.href
+        ?? carrier?.getAttribute("src")
+        ?? carrier?.getAttribute("alt")
+        ?? "";
+      const cleanTarget = rawTarget.split("|")[0].split("#")[0];
+      const sourceFile = this.app.metadataCache.getFirstLinkpathDest(cleanTarget, sourcePath);
+      const descriptor = sourceFile ? api.resolveVisual(sourceFile.path) : null;
+      if (!descriptor || (descriptor.kind !== "canvas" && descriptor.kind !== "excalidraw")) {
+        continue;
+      }
+      const sourceOrdinal = sourceOrdinals.get(sourceFile.path) ?? 0;
+      sourceOrdinals.set(sourceFile.path, sourceOrdinal + 1);
+      if (descriptor.kind === "excalidraw") {
+        const isLivePreview = Boolean(host.closest?.(".markdown-source-view.is-live-preview"));
+        const hasNativeDrawing = nativeExcalidrawDrawingIsReady(host);
+        if (!isLivePreview || hasNativeDrawing || isActiveLivePreviewHost(view, host)) {
+          resolvedHosts.add(host);
+          continue;
+        }
+      }
+      let previewSource = descriptor.previewUrl ?? "";
+      if (!previewSource && descriptor.previewPath) {
+        const previewFile = this.app.vault.getAbstractFileByPath(descriptor.previewPath);
+        if (previewFile instanceof TFile) {
+          previewSource = this.app.vault.getResourcePath(previewFile);
+        }
+      }
+      if (!previewSource) {
+        continue;
+      }
+      resolvedHosts.add(host);
+      activeHosts.add(host);
+      this.renderManagedVisualHost(view, host, sourceFile, previewSource, descriptor, sourceOrdinal);
+    }
+    for (const host of Array.from(container.querySelectorAll(`.${MANAGED_VISUAL_HOST_CLASS}`))) {
+      if (!activeHosts.has(host)) {
+        restoreManagedVisualHost(host);
+      }
+    }
+    this.updateManagedVisualCaretState(view);
+  }
+
+  updateManagedVisualCaretState(view) {
+    const container = view.containerEl;
+    for (const target of Array.from(container?.querySelectorAll?.(`.${MANAGED_VISUAL_CARET_HIDDEN_CLASS}`) ?? [])) {
+      target.classList.remove(MANAGED_VISUAL_CARET_HIDDEN_CLASS);
+    }
+    const sourceView = container?.querySelector?.(".markdown-source-view.mod-cm6.is-live-preview");
+    if (!sourceView) {
+      return;
+    }
+    const hosts = new Set();
+    for (const drawing of Array.from(sourceView.querySelectorAll(".excalidraw-embedded-img, .excalidraw-svg"))) {
+      const host = drawing.closest?.(".internal-embed, .markdown-embed, .cm-embed-block");
+      if (host) hosts.add(host);
+    }
+    for (const host of Array.from(sourceView.querySelectorAll(`.${MANAGED_VISUAL_HOST_CLASS}`))) {
+      hosts.add(host);
+    }
+    for (const host of hosts) {
+      managedVisualCaretTarget(view, host)?.classList.add(MANAGED_VISUAL_CARET_HIDDEN_CLASS);
+    }
+  }
+
+  clearManagedVisualCaretStates(root = this.app.workspace.containerEl) {
+    for (const sourceView of Array.from(root.querySelectorAll(`.${MANAGED_VISUAL_CARET_HIDDEN_CLASS}`))) {
+      sourceView.classList.remove(MANAGED_VISUAL_CARET_HIDDEN_CLASS);
+    }
+  }
+
+  renderManagedVisualHost(view, host, sourceFile, previewSource, descriptor, sourceOrdinal) {
+    let original = Array.from(host.children).find((child) => child.classList?.contains(MANAGED_VISUAL_ORIGINAL_CLASS));
+    if (!original) {
+      original = document.createElement("div");
+      original.className = MANAGED_VISUAL_ORIGINAL_CLASS;
+      original.setAttribute("aria-hidden", "true");
+      original.setAttribute("inert", "");
+      while (host.firstChild) {
+        original.appendChild(host.firstChild);
+      }
+      host.appendChild(original);
+    }
+    let preview = Array.from(host.children).find((child) => child.classList?.contains(MANAGED_VISUAL_PREVIEW_CLASS));
+    if (!preview) {
+      preview = document.createElement("img");
+      preview.className = MANAGED_VISUAL_PREVIEW_CLASS;
+      preview.setAttribute("draggable", "false");
+      host.appendChild(preview);
+    }
+    const stopPrimaryPointer = (event) => {
+      if (event.button !== 0 || event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) return;
+      event.stopPropagation();
+    };
+    preview.onpointerdown = stopPrimaryPointer;
+    preview.onpointerup = stopPrimaryPointer;
+    preview.onmousedown = stopPrimaryPointer;
+    preview.onmouseup = stopPrimaryPointer;
+    preview.onclick = (event) => {
+      if (event.ctrlKey || event.metaKey || event.altKey || event.shiftKey) {
+        this.handoffModifiedImageClick(event, preview);
+        return;
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      if (descriptor.kind === "excalidraw") {
+        void this.app.workspace.getLeaf(false).openFile(sourceFile);
+        return;
+      }
+      if (preview._xdvcSingleClickTimer) window.clearTimeout(preview._xdvcSingleClickTimer);
+      preview._xdvcSingleClickTimer = window.setTimeout(() => {
+        preview._xdvcSingleClickTimer = null;
+        this.revealManagedVisualLink(view, host, sourceFile, sourceOrdinal);
+      }, 240);
+    };
+    preview.ondblclick = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (preview._xdvcSingleClickTimer) {
+        window.clearTimeout(preview._xdvcSingleClickTimer);
+        preview._xdvcSingleClickTimer = null;
+      }
+      void this.app.workspace.getLeaf(false).openFile(sourceFile);
+    };
+    const revision = String(descriptor.revision ?? "");
+    const requestedPreviewSource = revisionedPreviewSource(previewSource, revision);
+    if (preview.getAttribute("src") !== requestedPreviewSource || preview.dataset.xdvcPreviewRevision !== revision) {
+      preview.dataset.xdvcPreviewRevision = revision;
+      preview.src = requestedPreviewSource;
+    }
+    preview.alt = sourceFile.basename;
+    preview.removeAttribute("title");
+    preview.removeAttribute("aria-label");
+    host.classList.add(MANAGED_VISUAL_HOST_CLASS);
+    if (this.settings.modules.mediaCenter) {
+      markCenteredMediaRoot(host);
+    }
+    setManagedVisualInlineCentering(host);
+    host.dataset.xdvcVisualSource = descriptor.sourcePath;
+    host.dataset.xdvcVisualRevision = descriptor.revision;
+    if (this.settings.modules.attachmentCaptions) {
+      const source = typeof view.editor?.getValue === "function" ? view.editor.getValue() : view.data ?? "";
+      const token = findManagedVisualSourceToken(source, sourceFile, sourceOrdinal);
+      if (token) {
+        applyMediaWidth(host, token.width);
+        applyCaption(host, token.caption);
+      }
+    }
+  }
+
+  handoffModifiedImageClick(event, image) {
+    const imageToolkit = this.app.plugins?.plugins?.["obsidian-image-toolkit"];
+    if (typeof imageToolkit?.isClickable !== "function" || typeof imageToolkit?.clickImage !== "function") {
+      return false;
+    }
+    try {
+      if (!imageToolkit.isClickable(image, event)) {
+        return false;
+      }
+      event.preventDefault();
+      event.stopPropagation();
+      imageToolkit.clickImage(event);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  revealManagedVisualLink(view, host, sourceFile, sourceOrdinal) {
+    if (view.getMode?.() !== "source" || !view.editor) return;
+    const source = typeof view.editor.getValue === "function" ? view.editor.getValue() : view.data ?? "";
+    let approximateOffset = null;
+    try {
+      const value = view.editor.cm?.posAtDOM?.(host);
+      if (Number.isFinite(value)) approximateOffset = value;
+    } catch {
+      approximateOffset = null;
+    }
+    const matches = findEmbedOccurrences(source).filter((occurrence) => {
+      const candidates = [occurrence.target, decodeUriComponentSafely(occurrence.target)];
+      return candidates.some((target) =>
+        this.app.metadataCache.getFirstLinkpathDest(target, view.file?.path ?? "")?.path === sourceFile.path
+      );
+    });
+    const occurrence = approximateOffset === null
+      ? matches[sourceOrdinal]
+      : matches.reduce((closest, candidate) => {
+        if (!closest) return candidate;
+        return Math.abs(candidate.start - approximateOffset) < Math.abs(closest.start - approximateOffset)
+          ? candidate
+          : closest;
+      }, null);
+    if (!occurrence) return;
+    const cursorOffset = Math.min(occurrence.cursor, occurrence.end - 1);
+    const cmView = view.editor.cm;
+    const scrollElement = cmView?.scrollDOM instanceof HTMLElement
+      ? cmView.scrollDOM
+      : view.containerEl?.querySelector?.(".cm-scroller");
+    const scrollTop = scrollElement?.scrollTop ?? 0;
+    const scrollLeft = scrollElement?.scrollLeft ?? 0;
+    const restoreScroll = () => {
+      if (!scrollElement) return;
+      scrollElement.scrollTop = scrollTop;
+      scrollElement.scrollLeft = scrollLeft;
+    };
+
+    if (cmView?.dispatch && cmView.state?.doc) {
+      const anchor = Math.min(cursorOffset, cmView.state.doc.length);
+      cmView.dispatch({ selection: { anchor }, userEvent: "select.pointer" });
+      cmView.contentDOM?.focus?.({ preventScroll: true });
+    } else {
+      view.editor.setCursor(view.editor.offsetToPos(cursorOffset));
+      view.containerEl?.querySelector?.(".cm-content")?.focus?.({ preventScroll: true });
+    }
+
+    restoreScroll();
+    window.requestAnimationFrame(() => {
+      restoreScroll();
+      window.requestAnimationFrame(restoreScroll);
+    });
+  }
+
+  clearManagedVisuals(root = this.app.workspace.containerEl) {
+    for (const host of Array.from(root.querySelectorAll(`.${MANAGED_VISUAL_HOST_CLASS}`))) {
+      restoreManagedVisualHost(host);
+    }
+  }
+
   clearAllGeneratedCaptions() {
     for (const leaf of this.app.workspace.getLeavesOfType("markdown")) {
       const view = leaf.view;
@@ -1488,6 +2326,13 @@ body.theme-light {
         clearExistingCaptions(view.containerEl);
       }
     }
+  }
+
+  clearCenteredMediaClasses(root = this.app.workspace.containerEl) {
+    for (const element of Array.from(root.querySelectorAll(`.${CENTERED_MEDIA_CLASS}`))) {
+      element.classList.remove(CENTERED_MEDIA_CLASS);
+    }
+    clearCenteredMediaLineClasses(root);
   }
 }
 
@@ -1509,6 +2354,17 @@ class XDVisualCoreSettingTab extends PluginSettingTab {
       cls: "xdvc-settings-subtitle",
       text: "集中管理 Obsidian 外观模块、文件树图标、媒体标题和常用视觉样式。",
     });
+
+    new Setting(containerEl)
+      .setName("恢复默认设置")
+      .setDesc("将所有模块开关、颜色、数值和图标规则恢复为当前版本的内置默认值。")
+      .addButton((button) => button.setButtonText("恢复默认设置").setWarning().onClick(async () => {
+        button.setDisabled(true);
+        await this.plugin.resetSettings();
+        this.openSections.clear();
+        new Notice("XD Visual Core 已恢复默认设置。");
+        this.display();
+      }));
 
     this.renderMediaSection(containerEl, settings);
     this.renderFileExplorerSection(containerEl, settings);
@@ -1755,16 +2611,21 @@ class XDVisualCoreSettingTab extends PluginSettingTab {
     this.addColorSetting(section, "外部链接颜色", "设置外部链接颜色。", () => links.externalColor, (value) => links.externalColor = value, "#B1BFF7");
     this.addColorSetting(section, "外部链接悬停颜色", "设置鼠标悬停在外部链接上时的颜色。", () => links.externalHoverColor, (value) => links.externalHoverColor = value, "#C5B7FB");
     this.addColorSetting(section, "未创建链接颜色", "设置尚未创建的内部链接颜色。", () => links.deadColor, (value) => links.deadColor = value, "#63151C");
+    this.addTextSetting(section, "内部链接图标", "设置已创建内部链接前的图标，可输入 Emoji 或文字；留空隐藏。", () => links.internalIcon, (value) => links.internalIcon = value, "📃");
+    this.addTextSetting(section, "外部链接图标", "设置外部链接前的图标，可输入 Emoji 或文字；留空隐藏。", () => links.externalIcon, (value) => links.externalIcon = value, "🔗");
     this.addToggleSetting(section, "编辑行隐藏链接图标", "启用后，当前编辑行里的链接图标会隐藏，减少视觉干扰。", () => links.hideIconsOnActiveLine, (value) => links.hideIconsOnActiveLine = value);
   }
 
   renderTableSection(containerEl, settings) {
-    const section = this.renderSection(containerEl, "tables", "表格", "表格配色和网格线显示。");
+    const section = this.renderSection(containerEl, "tables", "表格", "表格配色、斑马纹和网格线显示。");
     this.addSubheading(section, "表格配色");
     this.addModuleToggle(section, "tableStyles", "表格主题样式", "启用表头、悬停行和表格整体配色。");
     this.addColorSetting(section, "表头背景", "设置表格表头背景色。", () => settings.tables.headerBg, (value) => settings.tables.headerBg = value, "#2B303B");
     this.addColorSetting(section, "表头文字", "设置表格表头文字颜色。", () => settings.tables.headerText, (value) => settings.tables.headerText = value, "#FFFFFF");
     this.addColorSetting(section, "悬停行颜色", "设置鼠标悬停时的表格行背景色。", () => settings.tables.hoverColor, (value) => settings.tables.hoverColor = value, "#333333");
+
+    this.addSubheading(section, "表格行");
+    this.addModuleToggle(section, "tableZebra", "表格斑马纹", "启用后，普通 Markdown 表格的相邻数据行会显示轻微的背景色差异。");
 
     this.addSubheading(section, "表格边框");
     this.addSliderSetting(section, "边框粗细", "调整表格边框粗细，单位 px。", () => settings.tables.borderWidth, (value) => settings.tables.borderWidth = value, 0, 5, 0.5);
@@ -2072,16 +2933,84 @@ const MEDIA_CENTER_CSS = `
 .markdown-source-view.mod-cm6 .cm-embed-block {
   text-align: initial !important;
 }
+.markdown-source-view.mod-cm6 .cm-editor > .cm-image-reveal-tooltip.${NATIVE_IMAGE_EDIT_HOST_CLASS} {
+  left: var(--xdvc-native-image-edit-left) !important;
+  width: var(--xdvc-native-image-edit-width) !important;
+  max-width: none !important;
+  padding-top: calc(var(--xdvc-native-image-edit-source-overlap, 0px) + var(--size-4-2)) !important;
+  box-sizing: border-box;
+}
+.markdown-source-view.mod-cm6 .cm-editor > .cm-image-reveal-tooltip.${NATIVE_IMAGE_EDIT_HOST_CLASS} > .image-embed {
+  display: table !important;
+  margin-inline: auto !important;
+}
+.xdvc-managed-visual-host {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  float: none !important;
+}
+.xdvc-managed-visual-host > .xdvc-managed-visual-preview {
+  display: block !important;
+  max-width: 100%;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  float: none !important;
+}
+.markdown-source-view.mod-cm6 .xdvc-managed-visual-host.cm-embed-block {
+  display: flex !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+.markdown-source-view.mod-cm6 .cm-line:has(.xdvc-managed-visual-host) {
+  text-align: center !important;
+}
+.markdown-source-view.mod-cm6 .cm-line .xdvc-managed-visual-host {
+  display: inline-flex !important;
+  vertical-align: top;
+  text-align: initial;
+}
+.markdown-source-view.mod-cm6.is-live-preview .${MANAGED_VISUAL_CARET_HIDDEN_CLASS} {
+  caret-color: transparent !important;
+}
+.markdown-reading-view .${CENTERED_MEDIA_CLASS},
+.markdown-preview-view .${CENTERED_MEDIA_CLASS},
+.markdown-source-view.mod-cm6 .${CENTERED_MEDIA_CLASS} {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  float: none !important;
+}
+.markdown-reading-view :is(img, video, iframe, embed, object, webview).${CENTERED_MEDIA_CLASS},
+.markdown-preview-view :is(img, video, iframe, embed, object, webview).${CENTERED_MEDIA_CLASS},
+.markdown-source-view.mod-cm6 :is(img, video, iframe, embed, object, webview).${CENTERED_MEDIA_CLASS} {
+  display: block !important;
+}
+.markdown-source-view.mod-cm6 .cm-line.${CENTERED_MEDIA_LINE_CLASS} {
+  text-indent: 0 !important;
+  padding-inline-start: 0 !important;
+}
+.markdown-reading-view .excalidraw-embedded-img,
+.markdown-preview-view .excalidraw-embedded-img,
+.markdown-source-view.mod-cm6 .excalidraw-embedded-img {
+  display: block !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  float: none !important;
+}
 .markdown-reading-view .image-embed,
 .markdown-preview-view .image-embed,
-.markdown-source-view.mod-cm6 .cm-content :is(.internal-embed.image-embed, .image-embed) {
+.markdown-source-view.mod-cm6 .cm-content :is(.internal-embed.image-embed, .image-embed):not(.xdvc-managed-visual-host) {
   display: table !important;
   margin-left: auto !important;
   margin-right: auto !important;
 }
 .markdown-reading-view .image-embed img,
 .markdown-preview-view .image-embed img,
-.markdown-source-view.mod-cm6 .cm-content :is(.internal-embed.image-embed, .image-embed) img,
+.markdown-source-view.mod-cm6 .cm-content :is(.internal-embed.image-embed, .image-embed):not(.xdvc-managed-visual-host) img,
 .markdown-reading-view :is(p, li, blockquote) > img:only-child:not(.emoji),
 .markdown-preview-view :is(p, li, blockquote) > img:only-child:not(.emoji),
 .markdown-reading-view table img,
@@ -2149,15 +3078,6 @@ img.emoji {
   max-width: 100% !important;
   float: none !important;
 }
-.markdown-reading-view :is(.external-embed, .media-embed, .internal-embed, .video-embed):has(iframe),
-.markdown-preview-view :is(.external-embed, .media-embed, .internal-embed, .video-embed):has(iframe),
-.markdown-source-view.mod-cm6 :is(.cm-embed-block, .external-embed, .media-embed, .internal-embed, .video-embed):has(iframe),
-.markdown-reading-view :is(p, div, figure, li, blockquote, .external-embed, .media-embed, .internal-embed, .video-embed):has(iframe),
-.markdown-preview-view :is(p, div, figure, li, blockquote, .external-embed, .media-embed, .internal-embed, .video-embed):has(iframe),
-.markdown-source-view.mod-cm6 :is(.cm-line, .cm-embed-block, .cm-preview-code-block, .cm-html-embed, .external-embed, .media-embed, .internal-embed, .video-embed):has(iframe),
-.markdown-reading-view :is(p, div, figure, li, blockquote, .external-embed, .media-embed, .internal-embed, .video-embed):has(webview),
-.markdown-preview-view :is(p, div, figure, li, blockquote, .external-embed, .media-embed, .internal-embed, .video-embed):has(webview),
-.markdown-source-view.mod-cm6 :is(.cm-line, .cm-embed-block, .cm-preview-code-block, .cm-html-embed, .external-embed, .media-embed, .internal-embed, .video-embed):has(webview),
 .markdown-source-view.mod-cm6 :is(.cm-embed-block, .cm-preview-code-block, .cm-html-embed):has(.external-embed),
 .markdown-source-view.mod-cm6 :is(.cm-embed-block, .cm-preview-code-block, .cm-html-embed):has(iframe.external-embed),
 .markdown-source-view.mod-cm6 :is(.cm-embed-block, .cm-preview-code-block, .cm-html-embed):has(img.external-embed),
@@ -2182,6 +3102,43 @@ img.emoji {
   margin-left: auto !important;
   margin-right: auto !important;
   max-width: 100% !important;
+}
+`;
+
+const MANAGED_VISUAL_CSS = `
+.xdvc-managed-visual-host {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  overflow: visible !important;
+  position: relative !important;
+}
+.xdvc-managed-visual-host > .xdvc-managed-visual-original {
+  display: block !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+.xdvc-managed-visual-host > .xdvc-managed-visual-preview {
+  display: block;
+  width: min(100%, 1200px);
+  height: auto !important;
+  min-height: 0;
+  max-height: none !important;
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+@media (pointer: coarse) {
+  .xdvc-managed-visual-host > .xdvc-managed-visual-preview {
+    min-height: 44px;
+  }
 }
 `;
 
@@ -2233,7 +3190,15 @@ span.${CAPTION_HOST_CLASS} {
   box-sizing: border-box;
 }
 p.${CAPTION_PARAGRAPH_CLASS} {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
+}
+p.${CAPTION_PARAGRAPH_CLASS} > .${CAPTION_HOST_CLASS} {
+  align-self: unsafe center;
+  margin-left: 0;
+  margin-right: 0;
 }`;
 
 function rainbowCommonCSS() {
@@ -2503,8 +3468,8 @@ body {
 }
 .markdown-source-view .cm-link:not(.cm-formatting):not(.cm-url)::before,
 .markdown-preview-view .external-link::before {
-  content: "🔗";
-  margin-right: 4px;
+  content: var(--xdvc-link-external-icon);
+  margin-right: var(--xdvc-link-external-icon-gap);
   display: inline-block;
   text-decoration: none;
   color: transparent !important;
@@ -2525,8 +3490,8 @@ body {
 }
 .markdown-source-view .cm-hmd-internal-link:not(.cm-formatting):not(.is-unresolved)::before,
 .markdown-preview-view .internal-link:not(.is-unresolved)::before {
-  content: "📃";
-  margin-right: 4px;
+  content: var(--xdvc-link-internal-icon);
+  margin-right: var(--xdvc-link-internal-icon-gap);
   display: inline-block;
   color: transparent !important;
   text-shadow: 0 0 0 var(--xdvc-link-internal-color) !important;
@@ -2554,10 +3519,13 @@ const TABLE_STYLES_CSS = `
   width: 100% !important;
   max-width: 100% !important;
   display: block !important;
-  margin: 1em 0 !important;
+  box-sizing: border-box;
+  margin: 0 !important;
+  padding: 1em 0 !important;
 }
 .markdown-source-view.mod-cm6 .cm-content .cm-table-widget .table-wrapper {
-  width: 100% !important;
+  width: calc(100% - var(--size-4-4)) !important;
+  max-width: calc(100% - var(--size-4-4)) !important;
   margin: 0 !important;
 }
 :is(.markdown-preview-view, .markdown-rendered, .markdown-source-view.mod-cm6) table {
@@ -2607,6 +3575,14 @@ const TABLE_STYLES_CSS = `
   padding: 2px 6px !important;
   border-radius: 4px;
   font-family: var(--font-monospace);
+}`;
+
+const TABLE_ZEBRA_CSS = `
+:is(.markdown-preview-view, .markdown-rendered, .markdown-source-view.mod-cm6, .cm-html-embed) table:not(.dataview):not(.dataview-table) tbody > tr:nth-child(even) > td {
+  background-color: color-mix(in srgb, var(--text-normal) 3%, var(--background-primary)) !important;
+}
+:is(.markdown-preview-view, .markdown-rendered, .markdown-source-view.mod-cm6, .cm-html-embed) table:not(.dataview):not(.dataview-table) tbody > tr:hover > td {
+  background-color: var(--table-row-background-hover, var(--background-modifier-hover)) !important;
 }`;
 
 const TABLE_BORDERS_CSS = `
@@ -2755,23 +3731,50 @@ const AUTO_ATTRIBUTE_HIDE_CSS = `
 }`;
 
 const MATH_BLOCK_WHITE_CSS = `
-.markdown-preview-view .math-block,
-.markdown-source-view.mod-cm6 .math-block {
+:is(.markdown-preview-view, .markdown-rendered) :is(.math.math-block, .math-block),
+.markdown-source-view.mod-cm6 :is(.math.math-block, .math-block) {
+  display: block !important;
   background: var(--xdvc-math-block-bg) !important;
   color: var(--xdvc-math-block-text) !important;
   padding: 0.6em 0.8em;
   border-radius: 8px;
   margin: 0.8em 0;
+  text-align: center;
+  overflow-x: auto;
 }
-.markdown-preview-view .math-block .katex,
-.markdown-preview-view .math-block .katex *,
-.markdown-source-view.mod-cm6 .math-block .katex,
-.markdown-source-view.mod-cm6 .math-block .katex * {
+:is(.markdown-preview-view, .markdown-rendered) mjx-container[display="true"],
+.markdown-source-view.mod-cm6 mjx-container[display="true"],
+:is(.markdown-preview-view, .markdown-rendered) .katex-display,
+.markdown-source-view.mod-cm6 .katex-display {
+  display: block !important;
+  background: var(--xdvc-math-block-bg) !important;
+  color: var(--xdvc-math-block-text) !important;
+  padding: 0.6em 0.8em;
+  border-radius: 8px;
+  margin: 0.8em 0;
+  text-align: center;
+  overflow-x: auto;
+}
+:is(.markdown-preview-view, .markdown-rendered, .markdown-source-view.mod-cm6) :is(.math.math-block, .math-block, mjx-container[display="true"], .katex-display) {
   color: var(--xdvc-math-block-text) !important;
 }
-.markdown-preview-view .math-block .katex-display,
-.markdown-source-view.mod-cm6 .math-block .katex-display {
+:is(.markdown-preview-view, .markdown-rendered, .markdown-source-view.mod-cm6) :is(.math.math-block, .math-block, mjx-container[display="true"], .katex-display) :is(.katex, .katex *, mjx-container, mjx-container *, .MathJax, .MathJax *) {
+  color: var(--xdvc-math-block-text) !important;
+  fill: currentColor !important;
+}
+:is(.markdown-preview-view, .markdown-rendered, .markdown-source-view.mod-cm6) :is(.math.math-block, .math-block, mjx-container[display="true"], .katex-display) :is(button, .clickable-icon, .edit-block-button),
+:is(.markdown-preview-view, .markdown-rendered, .markdown-source-view.mod-cm6) :is(.math.math-block, .math-block, mjx-container[display="true"], .katex-display) :is(button, .clickable-icon, .edit-block-button) * {
+  color: var(--icon-color, var(--text-muted)) !important;
+  fill: none !important;
+}
+:is(.markdown-preview-view, .markdown-rendered, .markdown-source-view.mod-cm6) :is(.math.math-block, .math-block, mjx-container[display="true"], .katex-display) :is(button, .clickable-icon, .edit-block-button) svg {
+  stroke: currentColor !important;
+}
+:is(.markdown-preview-view, .markdown-rendered) :is(.math.math-block, .math-block) :is(.katex-display, mjx-container[display="true"]),
+.markdown-source-view.mod-cm6 :is(.math.math-block, .math-block) :is(.katex-display, mjx-container[display="true"]) {
   margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
 }`;
 
 module.exports = XDVisualCorePlugin;

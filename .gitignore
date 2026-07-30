@@ -1,8 +1,21 @@
 # ==========================================
-# 1. 屏蔽你提到的插件密钥文件夹 (核心需求)
+# 1. Obsidian 本地账号、API 与运行时状态
 # ==========================================
-content/.obsidian/plugins/translate/
-content/.obsidian/plugins/obsidian-translator/
+# 只忽略会写入凭据的用户数据；插件程序文件仍可同步。
+content/.obsidian/plugins/obsidian-translator/data.json
+content/.obsidian/plugins/quickadd/data.json
+content/.obsidian/plugins/obsidian-excalidraw-plugin/data.json
+content/.obsidian/plugins/editing-toolbar/data.json
+content/.obsidian/plugins/obsidian42-brat/data.json
+content/.obsidian/plugins/opencode-obsidian/data.json
+
+# 迁移/完整性报告和资源包是每台设备的可重建状态。
+content/.obsidian/plugins/xd-attachment-manager/data.json
+content/.obsidian/plugins/xd-code-renderer/packs/installed.json
+content/.obsidian/plugins/xd-code-renderer/packs/installed/
+
+# 登录 Cookie 与会话信息不进入 Git。
+content/.obsidian/zhihu-data.json
 
 # ==========================================
 # 2. 屏蔽 Obsidian 内部缓存与本地设置

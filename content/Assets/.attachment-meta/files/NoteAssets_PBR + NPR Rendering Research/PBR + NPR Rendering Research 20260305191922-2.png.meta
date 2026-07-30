@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "id": "asset_17bebfb88aba4d559a5d2840a985fed0",
+  "path": "Assets/NoteAssets_PBR + NPR Rendering Research/PBR + NPR Rendering Research 20260305191922-2.png",
+  "ownerNoteId": "note_4c2c5cd057914164944b93d1cf4527ac",
+  "ownerNotePath": "Portfolio/PBR + NPR Rendering Research.md",
+  "firstSeenAt": 1772701123635,
+  "createdAt": 1772709396520,
+  "updatedAt": 1785437542345,
+  "mtime": 1772709396520,
+  "size": 850723,
+  "state": "active",
+  "references": [
+    {
+      "noteId": "note_4c2c5cd057914164944b93d1cf4527ac",
+      "notePath": "Portfolio/PBR + NPR Rendering Research.md",
+      "containerRole": "note",
+      "syntax": "wiki",
+      "firstSeenAt": 1772701123635
+    }
+  ]
+}

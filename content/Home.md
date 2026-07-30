@@ -7,6 +7,10 @@ Welcome to my website. I am a Technical Artist specializing in rendering and sha
 
 <div class="gallery-grid">
 
+[![Genshin-Inspired Character Rendering](Assets_UI/GenshinInspiredCharacterRenderingCover.png)](Portfolio/Genshin-Inspired Character Rendering.md)
+
+[![Multi-Pass Fur](Assets_UI/MultiPassFurCover.png)](Portfolio/Multi-Pass Fur.md)
+
 [![Per-Object Motion Blur]()](Portfolio/Per-Object Motion Blur.md)
 
 [![Palette Analyzer](Assets_UI/PaletteAnalyzerCover.png)](Tools/Palette Analyzer.md)

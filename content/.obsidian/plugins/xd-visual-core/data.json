@@ -11,6 +11,7 @@
     "emphasisColors": true,
     "linkStyles": true,
     "tableStyles": true,
+    "tableZebra": true,
     "tableBorders": true,
     "codeTheme": true,
     "editorFull": true,
@@ -206,6 +207,8 @@
       "externalColor": "#B1BFF7",
       "externalHoverColor": "#C5B7FB",
       "deadColor": "#63151C",
+      "internalIcon": "📃",
+      "externalIcon": "🔗",
       "hideIconsOnActiveLine": true
     }
   },

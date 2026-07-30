@@ -2,7 +2,7 @@
   "version": 4,
   "homepages": {
     "Main Homepage": {
-      "value": "Home",
+      "value": "Assets_Plugin/Components/Area/Homepage.components",
       "kind": "File",
       "openOnStartup": false,
       "openMode": "Replace all open notes",

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "id": "asset_0f702c7bf3a3486aa7d10e6d8c125f5f",
+  "path": "Assets/NoteAssets_Per-Object Motion Blur/Per-Object Motion Blur 20260430010354.png",
+  "ownerNoteId": "note_9227343f53324d44864b5828c286e10a",
+  "ownerNotePath": "Portfolio/Per-Object Motion Blur.md",
+  "firstSeenAt": 1777522918871,
+  "createdAt": 1777524710311,
+  "updatedAt": 1785437542331,
+  "mtime": 1777524710311,
+  "size": 1812564,
+  "state": "active",
+  "references": [
+    {
+      "noteId": "note_9227343f53324d44864b5828c286e10a",
+      "notePath": "Portfolio/Per-Object Motion Blur.md",
+      "containerRole": "note",
+      "syntax": "wiki",
+      "firstSeenAt": 1777522918871
+    }
+  ]
+}

@@ -1,0 +1,327 @@
+.nav-folder[data-path="Assets/.attachment-meta"],
+.nav-folder:has(> .nav-folder-title[data-path="Assets/.attachment-meta"]),
+.nav-folder-title[data-path="Assets/.attachment-meta"],
+.nav-file[data-path^="Assets/.attachment-meta/"],
+.nav-file:has(> .nav-file-title[data-path^="Assets/.attachment-meta/"]),
+[data-path^="Assets/.attachment-meta/"] {
+  display: none !important;
+}
+
+.xd-attachment-manager-modal .setting-item-info {
+  min-width: 0;
+}
+
+.xd-attachment-manager-impact-list {
+  max-height: min(52vh, 520px);
+  overflow: auto;
+  border-block: 1px solid var(--background-modifier-border);
+  padding-block: 8px;
+}
+
+.xd-attachment-manager-impact-path {
+  overflow-wrap: anywhere;
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+
+.xd-attachment-manager-button-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.xd-attachment-manager-progress {
+  width: 100%;
+}
+
+.xd-attachment-cleanup-modal {
+  width: min(760px, calc(100vw - 32px));
+}
+
+.xd-attachment-cleanup-scope {
+  display: grid;
+  grid-template-columns: minmax(140px, 180px) minmax(0, 1fr) auto;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.xd-attachment-cleanup-scope .is-hidden {
+  visibility: hidden;
+}
+
+.xd-attachment-cleanup-results {
+  max-height: min(62vh, 660px);
+  overflow: auto;
+  border-block: 1px solid var(--background-modifier-border);
+}
+
+.xd-attachment-cleanup-empty {
+  color: var(--text-muted);
+}
+
+.xd-attachment-cleanup-section + .xd-attachment-cleanup-section {
+  border-top: 1px solid var(--background-modifier-border);
+}
+
+.xd-attachment-cleanup-section-header,
+.xd-attachment-cleanup-row {
+  display: grid;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.xd-attachment-cleanup-section-header {
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  min-height: 42px;
+  padding-inline: 10px;
+  background: var(--background-primary);
+}
+
+.xd-attachment-cleanup-section-title {
+  font-weight: var(--font-semibold);
+}
+
+.xd-attachment-cleanup-section-count {
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+
+.xd-attachment-cleanup-row {
+  grid-template-columns: 20px minmax(0, 1fr) 32px;
+  position: relative;
+  min-height: 58px;
+  padding: 8px 10px;
+  border-top: 1px solid var(--background-modifier-border-hover);
+}
+
+.xd-attachment-cleanup-row:hover {
+  background: var(--background-modifier-hover);
+}
+
+.xd-attachment-cleanup-row-info,
+.xd-attachment-cleanup-path {
+  min-width: 0;
+}
+
+.xd-attachment-cleanup-path {
+  overflow-wrap: anywhere;
+  color: var(--text-normal);
+  font-size: var(--font-ui-small);
+  font-weight: var(--font-medium);
+}
+
+.xd-attachment-cleanup-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px 10px;
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: var(--font-ui-smaller);
+}
+
+.xd-attachment-cleanup-type {
+  color: var(--text-accent);
+  font-weight: var(--font-medium);
+}
+
+.xd-attachment-cleanup-type.is-note {
+  color: var(--text-success);
+}
+
+.xd-attachment-cleanup-type.is-file,
+.xd-attachment-cleanup-type.is-folder {
+  color: var(--text-muted);
+}
+
+.xd-attachment-cleanup-open {
+  width: 32px;
+  height: 32px;
+}
+
+.xd-attachment-cleanup-preview {
+  display: none;
+  position: absolute;
+  z-index: 10;
+  right: 44px;
+  bottom: calc(100% - 4px);
+  width: 220px;
+  max-height: 220px;
+  padding: 5px;
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 6px;
+  background: var(--background-primary);
+  box-shadow: var(--shadow-s);
+}
+
+.xd-attachment-cleanup-preview img {
+  display: block;
+  width: 100%;
+  max-height: 208px;
+  object-fit: contain;
+}
+
+@media (hover: hover) {
+  .xd-attachment-cleanup-row:hover .xd-attachment-cleanup-preview {
+    display: block;
+  }
+}
+
+.xd-attachment-cleanup-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.menu-item.xd-attachment-manager-inline-item {
+  height: auto;
+  min-height: 0;
+  padding: 6px;
+  cursor: default;
+}
+
+.xd-attachment-manager-inline-properties {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 32px;
+  gap: 6px;
+  width: min(336px, calc(100vw - 32px));
+  color: var(--text-normal);
+}
+
+.xd-attachment-manager-inline-fields {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.xd-attachment-manager-inline-row {
+  display: grid;
+  grid-template-columns: 20px 48px minmax(0, 1fr);
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.xd-attachment-manager-inline-row > label {
+  color: var(--text-normal);
+  font-size: var(--font-ui-small);
+  white-space: nowrap;
+}
+
+.xd-attachment-manager-inline-row input {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 30px;
+  padding-inline: 8px;
+  border-radius: 5px;
+  font-size: var(--font-ui-small);
+}
+
+.xd-attachment-manager-inline-icon {
+  display: grid;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  color: var(--text-muted);
+}
+
+.xd-attachment-manager-inline-icon svg,
+.xd-attachment-manager-inline-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.xd-attachment-manager-size-controls {
+  display: grid;
+  grid-template-columns: minmax(48px, 1fr) 12px minmax(48px, 1fr) 28px;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
+.xd-attachment-manager-size-multiply {
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.xd-attachment-manager-inline-button {
+  display: grid;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  min-height: 28px;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 5px;
+  box-shadow: none;
+}
+
+.xd-attachment-manager-inline-button.is-active {
+  color: var(--interactive-accent);
+  background: var(--background-modifier-hover);
+}
+
+.xd-attachment-manager-inline-confirm {
+  align-self: center;
+}
+
+@media (pointer: coarse) {
+  .xd-attachment-manager-modal button,
+  .xd-attachment-manager-modal input,
+  .xd-attachment-manager-modal select {
+    min-height: 44px;
+  }
+
+  .xd-attachment-manager-inline-properties {
+    grid-template-columns: minmax(0, 1fr) 44px;
+  }
+
+  .xd-attachment-manager-inline-row input,
+  .xd-attachment-manager-inline-button {
+    min-height: 44px;
+  }
+
+  .xd-attachment-manager-inline-button {
+    width: 44px;
+    min-width: 44px;
+  }
+
+  .xd-attachment-manager-size-controls {
+    grid-template-columns: minmax(44px, 1fr) 12px minmax(44px, 1fr) 44px;
+  }
+
+  .xd-attachment-cleanup-row,
+  .xd-attachment-cleanup-section-header {
+    grid-template-columns: 44px minmax(0, 1fr) 44px;
+  }
+
+  .xd-attachment-cleanup-row input[type="checkbox"],
+  .xd-attachment-cleanup-section-header input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+  }
+
+  .xd-attachment-cleanup-open {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 520px) {
+  .xd-attachment-cleanup-scope {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .xd-attachment-cleanup-scope input {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}

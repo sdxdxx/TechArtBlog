@@ -1,0 +1,10 @@
+{
+  "id": "xd-attachment-manager",
+  "name": "XD Attachment Manager",
+  "version": "0.2.1",
+  "minAppVersion": "1.8.7",
+  "description": "Fast, cross-platform attachment ownership, cleanup, and visual-source management.",
+  "author": "sdxdxx007",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}

@@ -22,11 +22,15 @@ import checkboxScript from "../../components/scripts/checkbox.inline"
 // @ts-ignore
 import mermaidScript from "../../components/scripts/mermaid.inline"
 import mermaidStyle from "../../components/styles/mermaid.inline.scss"
+// @ts-ignore
+import visualEmbedScript from "../../components/scripts/visualEmbed.inline"
+import visualEmbedStyle from "../../components/styles/visualEmbed.scss"
 import { FilePath, pathToRoot, slugTag, slugifyFilePath } from "../../util/path"
 import { toHast } from "mdast-util-to-hast"
 import { toHtml } from "hast-util-to-html"
 import { capitalize } from "../../util/lang"
 import { PluggableList } from "unified"
+import { visualEmbedKind, visualPreviewPath } from "./visualEmbed"
 
 export interface Options {
   comments: boolean
@@ -40,6 +44,7 @@ export interface Options {
   enableInHtmlEmbed: boolean
   enableYouTubeEmbed: boolean
   enableVideoEmbed: boolean
+  enableVisualEmbed: boolean
   enableCheckbox: boolean
   disableBrokenWikilinks: boolean
 }
@@ -56,6 +61,7 @@ const defaultOptions: Options = {
   enableInHtmlEmbed: false,
   enableYouTubeEmbed: true,
   enableVideoEmbed: true,
+  enableVisualEmbed: true,
   enableCheckbox: false,
   disableBrokenWikilinks: false,
 }
@@ -143,7 +149,9 @@ const tagRegex = new RegExp(
 const blockReferenceRegex = new RegExp(/\^([-_A-Za-z0-9]+)$/g)
 const ytLinkRegex = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/
 const ytPlaylistLinkRegex = /[?&]list=([^#?&]*)/
-const videoExtensionRegex = new RegExp(/\.(mp4|webm|ogg|avi|mov|flv|wmv|mkv|mpg|mpeg|3gp|m4v)$/)
+const videoExtensionRegex = new RegExp(
+  /\.(mp4|webm|ogg|ogv|avi|mov|flv|wmv|mkv|mpg|mpeg|3gp|m4v|m3u8)$/i,
+)
 const wikilinkImageEmbedRegex = new RegExp(
   /^(?<alt>(?!^\d*x?\d*$).*?)?(\|?\s*?(?<width>\d+)(x(?<height>\d+))?)?$/,
 )
@@ -170,23 +178,51 @@ function normalizeSpacedMarkdownParenDest(src: string): string {
   })
 }
 
-function mediaSizeStyle(width?: string, height?: string): string {
+function escapeHtml(value: string): string {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+}
+
+function mediaAlias(alias?: string): { title: string; width?: string; height?: string } {
+  const match = wikilinkImageEmbedRegex.exec(alias ?? "")
+  return {
+    title: match?.groups?.alt?.trim() ?? "",
+    width: match?.groups?.width,
+    height: match?.groups?.height,
+  }
+}
+
+function mediaFigureStyle(width?: string, height?: string): string {
   const styles: string[] = []
+  if (width) styles.push(`width:${width}px`)
+  if (height) styles.push(`--media-embed-height:${height}px`)
+  return styles.length > 0 ? ` style="${styles.join(";")};max-width:100%"` : ""
+}
 
-  if (width && width !== "auto") {
-    styles.push(`width:${width}px`)
-  }
+function mediaCaption(title: string): string {
+  return title ? `<figcaption>${escapeHtml(title)}</figcaption>` : ""
+}
 
-  if (height && height !== "auto") {
-    styles.push(`height:${height}px`)
-  }
+function imageEmbed(url: string, alias?: string): string {
+  const { title, width } = mediaAlias(alias)
+  return `<figure class="media-embed media-embed--image"${mediaFigureStyle(width)}><img src="${escapeHtml(url)}" alt="${escapeHtml(title)}" loading="lazy">${mediaCaption(title)}</figure>`
+}
 
-  if (styles.length === 0) {
-    return ""
-  }
+function videoEmbed(url: string, alias?: string): string {
+  const { title, width, height } = mediaAlias(alias)
+  const safeUrl = escapeHtml(url)
+  return `<figure class="media-embed media-embed--video"${mediaFigureStyle(width, height)}><video src="${safeUrl}" controls preload="metadata"><a href="${safeUrl}">Download video</a></video>${mediaCaption(title)}</figure>`
+}
 
-  styles.push("max-width:100%")
-  return ` style="${styles.join(";")}"`
+function visualEmbed(fp: string, url: string, alias: string | undefined, root: string): string {
+  const kind = visualEmbedKind(fp)!
+  const preview = slugifyFilePath(visualPreviewPath(fp)! as FilePath)
+  const { title, width, height } = mediaAlias(alias)
+  const fallbackTitle = title || (kind === "canvas" ? "Canvas" : "Excalidraw")
+  return `<figure class="media-embed visual-embed visual-embed--${kind}" data-visual-kind="${kind}" data-site-root="${escapeHtml(root)}"${mediaFigureStyle(width, height)}><a class="visual-embed__preview" href="${escapeHtml(preview)}"><img src="${escapeHtml(preview)}" alt="${escapeHtml(fallbackTitle)}" loading="lazy"></a><a class="visual-embed__source" href="${escapeHtml(url)}" aria-hidden="true" tabindex="-1"></a><div class="visual-embed__fallback" role="img" aria-label="${escapeHtml(fallbackTitle)}" hidden></div>${mediaCaption(title)}</figure>`
 }
 
 export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>> = (userOpts) => {
@@ -273,30 +309,31 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>>
                 if (value.startsWith("!")) {
                   const ext: string = path.extname(fp).toLowerCase()
                   const url = slugifyFilePath(fp as FilePath)
-                  if ([".png", ".jpg", ".jpeg", ".gif", ".bmp", ".svg", ".webp"].includes(ext)) {
-                    const match = wikilinkImageEmbedRegex.exec(alias ?? "")
-                    const alt = match?.groups?.alt ?? ""
-                    const width = match?.groups?.width ?? "auto"
-                    const height = match?.groups?.height ?? "auto"
-                    return {
-                      type: "image",
-                      url,
-                      data: {
-                        hProperties: {
-                          width,
-                          height,
-                          alt,
-                        },
-                      },
-                    }
-                  } else if ([".mp4", ".webm", ".ogv", ".mov", ".mkv"].includes(ext)) {
-                    const match = wikilinkImageEmbedRegex.exec(alias ?? "")
-                    const width = match?.groups?.width ?? "auto"
-                    const height = match?.groups?.height ?? "auto"
-                    const style = mediaSizeStyle(width, height)
+                  if (
+                    [
+                      ".png",
+                      ".jpg",
+                      ".jpeg",
+                      ".gif",
+                      ".bmp",
+                      ".svg",
+                      ".webp",
+                      ".avif",
+                      ".ico",
+                      ".tif",
+                      ".tiff",
+                      ".heic",
+                      ".heif",
+                    ].includes(ext)
+                  ) {
                     return {
                       type: "html",
-                      value: `<video src="${url}" controls${style}></video>`,
+                      value: imageEmbed(url, alias),
+                    }
+                  } else if (videoExtensionRegex.test(fp)) {
+                    return {
+                      type: "html",
+                      value: videoEmbed(url, alias),
                     }
                   } else if (
                     [".mp3", ".webm", ".wav", ".m4a", ".ogg", ".3gp", ".flac"].includes(ext)
@@ -309,6 +346,11 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>>
                     return {
                       type: "html",
                       value: `<iframe src="${url}" class="pdf"></iframe>`,
+                    }
+                  } else if (opts.enableVisualEmbed && visualEmbedKind(fp)) {
+                    return {
+                      type: "html",
+                      value: visualEmbed(fp, url, alias, pathToRoot(file.data.slug!)),
                     }
                   } else {
                     const block = anchor
@@ -447,7 +489,7 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>>
               if (parent && index != undefined && videoExtensionRegex.test(node.url)) {
                 const newNode: Html = {
                   type: "html",
-                  value: `<video controls src="${node.url}"></video>`,
+                  value: videoEmbed(node.url, node.alt ?? undefined),
                 }
 
                 parent.children.splice(index, 1, newNode)
@@ -822,6 +864,20 @@ export const ObsidianFlavoredMarkdown: QuartzTransformerPlugin<Partial<Options>>
 
         css.push({
           content: mermaidStyle,
+          inline: true,
+        })
+      }
+
+      if (opts.wikilinks) {
+        js.push({
+          script: visualEmbedScript,
+          loadTime: "afterDOMReady",
+          contentType: "inline",
+          moduleType: "module",
+        })
+
+        css.push({
+          content: visualEmbedStyle,
           inline: true,
         })
       }

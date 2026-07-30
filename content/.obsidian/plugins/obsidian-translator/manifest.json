@@ -1,0 +1,11 @@
+{
+	"id": "Translator",
+	"name": "XD Translator",
+	"version": "1.2.0",
+	"minAppVersion": "0.15.0",
+	"description": "Translate selected text inside Obsidian.",
+	"author": "sdxdxx007",
+	"authorUrl": "https://obsidian.md",
+	"isDesktopOnly": false
+}
+

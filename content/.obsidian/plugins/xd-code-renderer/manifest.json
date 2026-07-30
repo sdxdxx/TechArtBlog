@@ -1,0 +1,9 @@
+{
+  "id": "xd-code-renderer",
+  "name": "XD Code Renderer",
+  "version": "0.5.13",
+  "minAppVersion": "1.5.0",
+  "description": "Fast, extensible TextMate syntax highlighting with VS Code themes.",
+  "author": "sdxdxx007",
+  "isDesktopOnly": false
+}

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "id": "asset_729b12d55b19466791e0e0c81811d365",
+  "path": "Assets/NoteAssets_Comfy Houdini/Comfy Houdini 20260305162543.png",
+  "ownerNoteId": "note_abc66b7a2b494eaf98e75f066f13f93b",
+  "ownerNotePath": "Portfolio/Comfy Houdini.md",
+  "firstSeenAt": 1772745272033,
+  "createdAt": 1772745941740,
+  "updatedAt": 1785437542362,
+  "mtime": 1772745941741,
+  "size": 728288,
+  "state": "active",
+  "references": [
+    {
+      "noteId": "note_abc66b7a2b494eaf98e75f066f13f93b",
+      "notePath": "Portfolio/Comfy Houdini.md",
+      "containerRole": "note",
+      "syntax": "wiki",
+      "firstSeenAt": 1772745272033
+    }
+  ]
+}
