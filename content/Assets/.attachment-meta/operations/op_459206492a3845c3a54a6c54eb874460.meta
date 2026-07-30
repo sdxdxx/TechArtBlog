@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 2,
+  "id": "op_459206492a3845c3a54a6c54eb874460",
+  "kind": "repair-visual-attachment-in-place",
+  "status": "failed",
+  "phase": "write-meta",
+  "affectedPaths": [
+    "Assets/NoteAssets_Genshin-Inspired Character Rendering/Drawing 2026-07-31 04.49.36/Drawing 2026-07-31 04.49.36.excalidraw.md",
+    "Assets/NoteAssets_Genshin-Inspired Character Rendering/Drawing 2026-07-31 04.49.36/Drawing 2026-07-31 04.49.36.preview.png"
+  ],
+  "startedAt": 1785448928842,
+  "updatedAt": 1785448928847,
+  "error": "UNKNOWN: unknown error, open 'E:\\GithubCloneProject\\TechArtBlog\\content\\Assets\\.attachment-meta\\folders\\_root.meta'"
+}

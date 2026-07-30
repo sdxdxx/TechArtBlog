@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 2,
+  "id": "asset_a2df6f253fa84571adef67f24aafb14d",
+  "path": "Assets/NoteAssets_Genshin-Inspired Character Rendering/Drawing 2026-07-31 04.08.32/Drawing-2026-07-31-04.00.08-20260731040116.png",
+  "ownerNoteId": null,
+  "ownerNotePath": null,
+  "firstSeenAt": 1785448920916,
+  "createdAt": 1785448920916,
+  "updatedAt": 1785448963055,
+  "mtime": 1785442578611,
+  "size": 6785799,
+  "state": "orphan",
+  "references": [
+    {
+      "noteId": "note_b103474a7fe247858fc344bd7a26e038",
+      "notePath": "Assets/NoteAssets_Genshin-Inspired Character Rendering/Drawing 2026-07-31 04.08.32/Drawing 2026-07-31 04.08.32.excalidraw.md",
+      "containerRole": "visual-attachment",
+      "syntax": "excalidraw",
+      "firstSeenAt": 1785448513967
+    }
+  ]
+}

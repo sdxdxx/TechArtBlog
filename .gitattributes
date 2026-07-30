@@ -3,3 +3,4 @@
 *.mov filter=lfs diff=lfs merge=lfs -text
 *.webm filter=lfs diff=lfs merge=lfs -text
 *.mkv filter=lfs diff=lfs merge=lfs -text
+content/Assets/NoteAssets_Genshin-Inspired[[:space:]]Character[[:space:]]Rendering/**/*.png filter=lfs diff=lfs merge=lfs -text

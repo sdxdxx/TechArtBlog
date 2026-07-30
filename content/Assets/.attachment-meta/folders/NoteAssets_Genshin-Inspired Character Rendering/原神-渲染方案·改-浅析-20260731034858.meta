@@ -2,9 +2,10 @@
   "schemaVersion": 2,
   "id": "folder_941c5871107245289048d4c23118994d",
   "path": "Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731034858",
-  "kind": "ordinary",
-  "ownerNoteId": null,
-  "ownerNotePath": null,
+  "kind": "visual-group",
+  "ownerNoteId": "note_c9a191c1ac694e3c8614db8e0aa51235",
+  "ownerNotePath": "Portfolio/Genshin-Inspired Character Rendering.md",
+  "groupId": "group_15n93k4",
   "createdAt": 1785448515174,
-  "updatedAt": 1785448515174
+  "updatedAt": 1785448949785
 }

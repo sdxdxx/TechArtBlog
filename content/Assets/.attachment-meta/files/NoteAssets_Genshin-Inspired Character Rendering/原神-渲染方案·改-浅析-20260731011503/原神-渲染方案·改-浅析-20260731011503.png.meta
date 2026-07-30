@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 2,
+  "id": "asset_17llhsg",
+  "path": "Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731011503/原神-渲染方案·改-浅析-20260731011503.png",
+  "ownerNoteId": "note_c9a191c1ac694e3c8614db8e0aa51235",
+  "ownerNotePath": "Portfolio/Genshin-Inspired Character Rendering.md",
+  "firstSeenAt": 1785448920961,
+  "createdAt": 1785448920961,
+  "updatedAt": 1785448934108,
+  "mtime": 1785431703312,
+  "size": 52397,
+  "state": "active",
+  "references": [
+    {
+      "noteId": "note_c7cbb5232cf2451e9504faed7ceb112f",
+      "notePath": "Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731011503/原神-渲染方案·改-浅析-20260731011503.excalidraw.md",
+      "containerRole": "visual-attachment",
+      "syntax": "excalidraw",
+      "firstSeenAt": 1785448513980
+    }
+  ],
+  "groupId": "group_0mwb58s",
+  "groupRole": "dependency"
+}

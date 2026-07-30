@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 2,
+  "id": "op_029938fbf29746e8b52cf99fbe3a68cc",
+  "kind": "repair-visual-attachment-in-place",
+  "status": "failed",
+  "phase": "write-meta",
+  "affectedPaths": [
+    "Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731034858/原神-渲染方案·改-浅析-20260731034858.excalidraw.md",
+    "Assets/NoteAssets_Genshin-Inspired Character Rendering/原神-渲染方案·改-浅析-20260731034858/原神-渲染方案·改-浅析-20260731034858.preview.png"
+  ],
+  "startedAt": 1785448948375,
+  "updatedAt": 1785448948412,
+  "error": "UNKNOWN: unknown error, open 'E:\\GithubCloneProject\\TechArtBlog\\content\\Assets\\.attachment-meta\\notes\\Assets\\NoteAssets_Genshin-Inspired Character Rendering\\原神-渲染方案·改-浅析-20260731034858\\原神-渲染方案·改-浅析-20260731034858.excalidraw.md.meta'"
+}

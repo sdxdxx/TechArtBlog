@@ -2,9 +2,10 @@
   "schemaVersion": 2,
   "id": "folder_1c90f5f5680545e7be48e63a7d9dba28",
   "path": "Assets/NoteAssets_Genshin-Inspired Character Rendering/Drawing 2026-07-31 04.49.36",
-  "kind": "ordinary",
-  "ownerNoteId": null,
-  "ownerNotePath": null,
+  "kind": "visual-group",
+  "ownerNoteId": "note_c9a191c1ac694e3c8614db8e0aa51235",
+  "ownerNotePath": "Portfolio/Genshin-Inspired Character Rendering.md",
+  "groupId": "group_04qz2k0",
   "createdAt": 1785448515157,
-  "updatedAt": 1785448515157
+  "updatedAt": 1785448929547
 }
